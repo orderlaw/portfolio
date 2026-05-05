@@ -6,92 +6,32 @@ import {
   useTransform,
   useSpring,
   useInView,
-  useMotionValue,
   useReducedMotion,
 } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 
-// ─── Slit Expand Image ───────────────────────────────────────────────────────
+// ─── Parallax Image ───────────────────────────────────────────────────────────
+// Image is 130 % tall inside an overflow-hidden box. Scroll moves it ±35 px
+// in both directions giving a continuous parallax feel with no reveal animation.
 
-function SlitExpandImage({ src, alt }: { src: string; alt: string }) {
-  const ref = useRef(null);
+function ParallaxImage({ src, alt }: { src: string; alt: string }) {
+  const ref     = useRef(null);
   const reduced = useReducedMotion();
-
-  const { scrollYProgress: revealProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.95", "center 0.5"],
-  });
-  const { scrollYProgress: parallaxProgress } = useScroll({
+  const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-
-  const maxReveal = useMotionValue(reduced ? 1 : 0);
-  useEffect(() => {
-    if (reduced) return;
-    return revealProgress.on("change", (v) => {
-      if (v > maxReveal.get()) maxReveal.set(v);
-    });
-  }, [revealProgress, maxReveal, reduced]);
-
-  const rawInset = useTransform(maxReveal, [0, 1], [48, 0]);
-  const inset    = useSpring(rawInset, { stiffness: 80, damping: 15 });
-  const clipPath = useTransform(inset, (v) => `inset(0 ${Math.max(0, v)}% 0 ${Math.max(0, v)}%)`);
-
-  const rawY     = useTransform(parallaxProgress, [0, 1], [35, -35]);
+  const rawY    = useTransform(scrollYProgress, [0, 1], [35, -35]);
   const parallaxY = useSpring(rawY, { stiffness: 50, damping: 20 });
 
   return (
     <div ref={ref} className="relative overflow-hidden w-full aspect-[4/3]">
-      <motion.div style={{ clipPath }} className="absolute inset-0">
-        <motion.div style={{ y: parallaxY }} className="absolute w-full h-[130%] -top-[15%]">
-          <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
-
-// ─── Diagonal Wipe Image ─────────────────────────────────────────────────────
-
-function DiagonalWipeImage({ src, alt }: { src: string; alt: string }) {
-  const ref = useRef(null);
-  const reduced = useReducedMotion();
-
-  const { scrollYProgress: revealProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.95", "center 0.5"],
-  });
-  const { scrollYProgress: parallaxProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const maxReveal = useMotionValue(reduced ? 1 : 0);
-  useEffect(() => {
-    if (reduced) return;
-    return revealProgress.on("change", (v) => {
-      if (v > maxReveal.get()) maxReveal.set(v);
-    });
-  }, [revealProgress, maxReveal, reduced]);
-
-  const rawP = useTransform(maxReveal, [0, 1], [0, 1]);
-  const p    = useSpring(rawP, { stiffness: 55, damping: 20 });
-  const clipPath = useTransform(
-    p,
-    (v) => `polygon(0% 0%, ${v * 100 + 18}% 0%, ${v * 100}% 100%, 0% 100%)`
-  );
-
-  const rawY      = useTransform(parallaxProgress, [0, 1], [35, -35]);
-  const parallaxY = useSpring(rawY, { stiffness: 50, damping: 20 });
-
-  return (
-    <div ref={ref} className="relative overflow-hidden w-full aspect-[4/3]">
-      <motion.div style={{ clipPath }} className="absolute inset-0">
-        <motion.div style={{ y: parallaxY }} className="absolute w-full h-[130%] -top-[15%]">
-          <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
-        </motion.div>
+      <motion.div
+        style={{ y: reduced ? 0 : parallaxY }}
+        className="absolute w-full h-[130%] -top-[15%]"
+      >
+        <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
       </motion.div>
     </div>
   );
@@ -199,11 +139,11 @@ export default function About() {
         </div>
 
         {/* ── Row 1: Image left · Text right ──────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] border-t border-[#e8e8e8]">
+        <div className="grid grid-cols-1 lg:grid-cols-[6fr_6fr] border-t border-[#e8e8e8]">
 
           {/* Image */}
           <div className="py-10 lg:py-14 lg:pr-12 lg:border-r border-[#e8e8e8]">
-            <SlitExpandImage
+            <ParallaxImage
               src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
               alt="Code on a screen"
             />
@@ -219,7 +159,7 @@ export default function About() {
         </div>
 
         {/* ── Row 2: Text left · Image right ──────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[7fr_5fr] border-t border-[#e8e8e8]">
+        <div className="grid grid-cols-1 lg:grid-cols-[6fr_6fr] border-t border-[#e8e8e8]">
 
           {/* Text */}
           <div className="order-2 lg:order-1 py-10 lg:py-14 lg:pr-12 lg:border-r border-[#e8e8e8] flex items-center">
@@ -231,7 +171,7 @@ export default function About() {
 
           {/* Image */}
           <div className="order-1 lg:order-2 py-10 lg:py-14 lg:pl-12">
-            <DiagonalWipeImage
+            <ParallaxImage
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80"
               alt="Dashboard and analytics"
             />
