@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useScramble } from "./ScrambleText";
 
@@ -32,15 +32,7 @@ function ScramblePill({ text, href }: { text: string; href: string }) {
 }
 
 export default function Nav() {
-  const [scrollHidden, setScrollHidden] = useState(false);
   const [galleryActive, setGalleryActive] = useState(false);
-  const [lastY, setLastY] = useState(0);
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setScrollHidden(y > lastY && y > 80);
-    setLastY(y);
-  });
 
   useEffect(() => {
     const onEnter = () => setGalleryActive(true);
@@ -53,7 +45,7 @@ export default function Nav() {
     };
   }, []);
 
-  const hidden = scrollHidden || galleryActive;
+  const hidden = galleryActive;
 
   return (
     <motion.header
