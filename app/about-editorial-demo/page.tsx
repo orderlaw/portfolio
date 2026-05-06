@@ -22,13 +22,22 @@ function Grain({ id }: { id: string }) {
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
-function Label({ children, light = false }: { children: string; light?: boolean }) {
+function Label({
+  children,
+  light = false,
+  themeable = false,
+}: {
+  children: string;
+  light?: boolean;
+  themeable?: boolean;
+}) {
   return (
     <p
       className={`text-[9px] tracking-[0.28em] uppercase ${
         light ? "text-white/50" : "text-[#78746c]"
       }`}
       style={{ fontFamily: "var(--font-fauna)" }}
+      {...(themeable ? { "data-theme-label": "" } : {})}
     >
       {children}
     </p>
@@ -60,7 +69,7 @@ function VerticalFallback() {
         </h1>
       </div>
 
-      {/* Panel 1 — image + text */}
+      {/* Panel 1 */}
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 border-b border-[#d2cec4]">
         <div className="relative h-[60vw] md:h-auto min-h-[380px] overflow-hidden">
           <Image
@@ -70,10 +79,9 @@ function VerticalFallback() {
         </div>
         <div className="relative bg-[#eceae4] px-6 md:px-12 py-14 overflow-hidden">
           <Grain id="grain-vf1" />
-          {/* Ghost number */}
           <span
             aria-hidden
-            className="absolute pointer-events-none select-none leading-none"
+            className="absolute pointer-events-none select-none"
             style={{
               ...didot,
               fontSize: "clamp(10rem,22vw,26rem)",
@@ -81,6 +89,7 @@ function VerticalFallback() {
               WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
               bottom: "-0.1em",
               left: "-0.05em",
+              lineHeight: 1,
             }}
           >
             01
@@ -96,7 +105,7 @@ function VerticalFallback() {
         </div>
       </div>
 
-      {/* Panel 2 — full-bleed image + card */}
+      {/* Panel 2 */}
       <div className="relative z-10 h-[70vw] min-h-[320px] md:h-[65vh] overflow-hidden border-b border-[#d2cec4]">
         <Image
           src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
@@ -117,12 +126,12 @@ function VerticalFallback() {
         </div>
       </div>
 
-      {/* Panel 3 — text */}
+      {/* Panel 3 */}
       <div className="relative z-10 bg-[#eceae4] px-6 md:px-20 py-16 md:py-20 overflow-hidden border-b border-[#d2cec4] flex justify-end">
         <Grain id="grain-vf3" />
         <span
           aria-hidden
-          className="absolute pointer-events-none select-none leading-none"
+          className="absolute pointer-events-none select-none"
           style={{
             ...didot,
             fontSize: "clamp(10rem,22vw,26rem)",
@@ -130,6 +139,7 @@ function VerticalFallback() {
             WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
             bottom: "-0.1em",
             left: "-0.04em",
+            lineHeight: 1,
           }}
         >
           02
@@ -146,7 +156,7 @@ function VerticalFallback() {
         </div>
       </div>
 
-      {/* Panel 4 — quote */}
+      {/* Panel 4 */}
       <div className="relative z-10 px-6 md:px-20 py-16 md:py-24">
         <Label>The Signature</Label>
         <p
@@ -170,15 +180,27 @@ function VerticalFallback() {
 
 // ─── Gallery (desktop horizontal scroll) ─────────────────────────────────────
 
+// Light → dark theme palette
+const LIGHT = {
+  bg:    "#eceae4",
+  text:  "#2a2822",
+  label: "#78746c",
+};
+const DARK = {
+  bg:    "#111110",
+  text:  "#ede9e3",
+  label: "#a8a49e",
+};
+
 export default function EditorialDemo() {
-  const reduced    = useReducedMotion();
+  const reduced            = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
 
   const wrapperRef  = useRef<HTMLDivElement>(null);
   const trackRef    = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
-  // Detect mobile — show vertical stack below lg breakpoint
+  // Show vertical stack on anything below lg
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1023px)");
     setIsMobile(mq.matches);
@@ -187,7 +209,7 @@ export default function EditorialDemo() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // GSAP horizontal scroll — desktop only
+  // GSAP: horizontal scroll + dark-theme inversion
   useEffect(() => {
     if (reduced || isMobile) return;
 
@@ -209,6 +231,8 @@ export default function EditorialDemo() {
       const totalScroll = () => track.scrollWidth - window.innerWidth;
 
       ctx = gsap.context(() => {
+
+        // ── Main horizontal scrub ─────────────────────────────────────────
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: wrapper,
@@ -223,10 +247,9 @@ export default function EditorialDemo() {
             },
           },
         });
-
         tl.to(track, { x: () => -totalScroll(), ease: "none" });
 
-        // Ghost 01 — drifts left
+        // ── Ghost 01 — drifts left ────────────────────────────────────────
         const ghost1 = wrapper.querySelector<HTMLElement>("[data-ghost='1']");
         if (ghost1) {
           gsap.to(ghost1, {
@@ -241,7 +264,7 @@ export default function EditorialDemo() {
           });
         }
 
-        // Ghost 02 — drifts right
+        // ── Ghost 02 — drifts right ───────────────────────────────────────
         const ghost3 = wrapper.querySelector<HTMLElement>("[data-ghost='3']");
         if (ghost3) {
           gsap.to(ghost3, {
@@ -256,7 +279,7 @@ export default function EditorialDemo() {
           });
         }
 
-        // Panel 2 card — slides in from right
+        // ── Panel 2 card — slides in ──────────────────────────────────────
         const card2 = wrapper.querySelector<HTMLElement>("[data-card='2']");
         if (card2) {
           gsap.fromTo(
@@ -275,6 +298,35 @@ export default function EditorialDemo() {
             }
           );
         }
+
+        // ── Dark theme inversion ──────────────────────────────────────────
+        // Callbacks fire the instant the section enters/leaves — no scrub lag.
+        // A 0.4s power2.inOut tween does the actual color work.
+        const bgs    = wrapper.querySelectorAll<HTMLElement>("[data-theme-bg]");
+        const texts  = wrapper.querySelectorAll<HTMLElement>("[data-theme-text]");
+        const labels = wrapper.querySelectorAll<HTMLElement>("[data-theme-label]");
+
+        const goDark = () => {
+          gsap.to(bgs,    { backgroundColor: DARK.bg,    duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+          gsap.to(texts,  { color: DARK.text,            duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+          gsap.to(labels, { color: DARK.label,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+        };
+        const goLight = () => {
+          gsap.to(bgs,    { backgroundColor: LIGHT.bg,   duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+          gsap.to(texts,  { color: LIGHT.text,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+          gsap.to(labels, { color: LIGHT.label,          duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+        };
+
+        ScrollTrigger.create({
+          trigger: wrapper,
+          start:       "top top",
+          end:         () => `+=${totalScroll()}`,
+          onEnter:     goDark,
+          onEnterBack: goDark,
+          onLeave:     goLight,
+          onLeaveBack: goLight,
+        });
+
       }, wrapper);
     })();
 
@@ -288,7 +340,7 @@ export default function EditorialDemo() {
 
   return (
     <>
-      {/* Progress line — left edge */}
+      {/* Vertical progress line — left edge */}
       <div className="fixed left-0 top-0 w-[1px] h-screen bg-[#d2cec4] z-50" aria-hidden />
       <div
         ref={progressRef}
@@ -297,7 +349,7 @@ export default function EditorialDemo() {
         aria-hidden
       />
 
-      {/* Static heading */}
+      {/* Static heading — light, stays above the gallery */}
       <div className="relative bg-[#eceae4] px-10 md:px-20 pt-20 pb-14 border-b border-[#d2cec4] overflow-hidden">
         <Grain id="grain-head" />
         <div className="relative z-10">
@@ -320,10 +372,13 @@ export default function EditorialDemo() {
         {/* Horizontal track */}
         <div ref={trackRef} className="flex h-screen will-change-transform">
 
-          {/* ═══ PANEL 1 — 01 / The Setup ═══ */}
+          {/* ═══════════════════════════════════════════════════════
+              PANEL 1 — 01 / The Setup
+              Left: image   Right: text + ghost 01
+          ═══════════════════════════════════════════════════════ */}
           <div className="relative flex flex-shrink-0 w-screen h-full border-r border-[#d2cec4]">
 
-            {/* Left — image */}
+            {/* Image */}
             <div className="relative w-1/2 h-full overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
@@ -332,8 +387,11 @@ export default function EditorialDemo() {
               />
             </div>
 
-            {/* Right — text + ghost */}
-            <div className="relative w-1/2 h-full bg-[#eceae4] flex items-center overflow-hidden">
+            {/* Text + ghost */}
+            <div
+              data-theme-bg
+              className="relative w-1/2 h-full bg-[#eceae4] flex items-center overflow-hidden"
+            >
               <Grain id="grain-p1" />
               <span
                 data-ghost="1"
@@ -352,8 +410,9 @@ export default function EditorialDemo() {
                 01
               </span>
               <div className="relative z-10 px-12 lg:px-16 max-w-lg">
-                <Label>01 / The Setup</Label>
+                <Label themeable>01 / The Setup</Label>
                 <p
+                  data-theme-text
                   className="mt-8 text-[#2a2822] text-[clamp(1rem,1.3vw,1.3rem)] leading-loose"
                   style={serif}
                 >
@@ -365,18 +424,22 @@ export default function EditorialDemo() {
             </div>
           </div>
 
-          {/* ═══ PANEL 2 — The Stack ═══ */}
+          {/* ═══════════════════════════════════════════════════════
+              PANEL 2 — The Stack
+              Full-bleed image, bordered card slides in
+          ═══════════════════════════════════════════════════════ */}
           <div className="relative flex-shrink-0 w-screen h-full overflow-hidden border-r border-[#d2cec4]">
             <Image
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
               alt="Analytics dashboard"
               fill className="object-cover" sizes="100vw"
             />
-            <div className="absolute inset-0 bg-[#2a2822]/20" />
+            <div className="absolute inset-0 bg-[#111110]/30" />
 
-            {/* Sliding card */}
+            {/* Sliding bordered card */}
             <div
               data-card="2"
+              data-theme-bg
               className="absolute right-12 lg:right-20 top-1/2 -translate-y-1/2
                          w-[min(420px,42vw)] border border-[#d2cec4]
                          bg-[#eceae4] px-10 py-10"
@@ -384,8 +447,12 @@ export default function EditorialDemo() {
             >
               <Grain id="grain-card2" />
               <div className="relative z-10">
-                <Label>Stack</Label>
-                <p className="mt-5 text-[#2a2822] text-sm leading-loose" style={serif}>
+                <Label themeable>Stack</Label>
+                <p
+                  data-theme-text
+                  className="mt-5 text-[#2a2822] text-sm leading-loose"
+                  style={serif}
+                >
                   My stack: ERPNext, WooCommerce, n8n, Supabase. I connect the
                   tools you rely on into workflows that communicate without
                   manual intervention.
@@ -394,8 +461,14 @@ export default function EditorialDemo() {
             </div>
           </div>
 
-          {/* ═══ PANEL 3 — 02 / The Process ═══ */}
-          <div className="relative flex-shrink-0 w-screen h-full bg-[#eceae4] border-r border-[#d2cec4] overflow-hidden flex items-center justify-end">
+          {/* ═══════════════════════════════════════════════════════
+              PANEL 3 — 02 / The Process
+              Cream → dark panel, right-aligned text, ghost 02
+          ═══════════════════════════════════════════════════════ */}
+          <div
+            data-theme-bg
+            className="relative flex-shrink-0 w-screen h-full bg-[#eceae4] border-r border-[#d2cec4] overflow-hidden flex items-center justify-end"
+          >
             <Grain id="grain-p3" />
             <span
               data-ghost="3"
@@ -414,8 +487,9 @@ export default function EditorialDemo() {
               02
             </span>
             <div className="relative z-10 px-12 lg:px-20 max-w-xl text-right">
-              <Label>02 / The Process</Label>
+              <Label themeable>02 / The Process</Label>
               <p
+                data-theme-text
                 className="mt-8 text-[#2a2822] text-[clamp(1rem,1.3vw,1.3rem)] leading-loose"
                 style={serif}
               >
@@ -428,14 +502,21 @@ export default function EditorialDemo() {
             </div>
           </div>
 
-          {/* ═══ PANEL 4 — The Signature ═══ */}
-          <div className="relative flex-shrink-0 w-screen h-full bg-[#eceae4] flex items-center overflow-hidden">
+          {/* ═══════════════════════════════════════════════════════
+              PANEL 4 — The Signature
+              Oversized italic quote — closing beat
+          ═══════════════════════════════════════════════════════ */}
+          <div
+            data-theme-bg
+            className="relative flex-shrink-0 w-screen h-full bg-[#eceae4] flex items-center overflow-hidden"
+          >
             <Grain id="grain-p4" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#d2cec4]" />
             <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#d2cec4]" />
             <div className="relative z-10 px-12 lg:px-20 max-w-5xl">
-              <Label>The Signature</Label>
+              <Label themeable>The Signature</Label>
               <p
+                data-theme-text
                 className="mt-10 text-[#2a2822] text-[clamp(2.4rem,6.5vw,7rem)] leading-[1.05] tracking-tight"
                 style={{ ...serif, fontStyle: "italic" }}
               >
@@ -444,6 +525,7 @@ export default function EditorialDemo() {
                 <br />is running."
               </p>
               <p
+                data-theme-label
                 className="mt-10 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
                 style={{ fontFamily: "var(--font-fauna)" }}
               >
@@ -452,8 +534,8 @@ export default function EditorialDemo() {
             </div>
           </div>
 
-        </div>
-      </div>
+        </div>{/* end track */}
+      </div>{/* end wrapper */}
     </>
   );
 }
