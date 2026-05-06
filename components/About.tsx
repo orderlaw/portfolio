@@ -1,472 +1,228 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 // ─── Grain ────────────────────────────────────────────────────────────────────
 
-function Grain({ id }: { id: string }) {
+function Grain() {
   return (
-    <div className="absolute inset-0 pointer-events-none" aria-hidden>
+    <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <filter id={id}>
+        <filter id="grain-about">
           <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
           <feColorMatrix type="saturate" values="0" />
         </filter>
-        <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.28" />
+        <rect width="100%" height="100%" filter="url(#grain-about)" opacity="0.28" />
       </svg>
     </div>
   );
 }
 
-// ─── Label ────────────────────────────────────────────────────────────────────
+// ─── Kinetic primitives ───────────────────────────────────────────────────────
 
-function Label({
-  children,
-  themeable = false,
-}: {
-  children: string;
-  themeable?: boolean;
-}) {
+function AnimLabel({ children }: { children: string }) {
+  const ref     = useRef<HTMLParagraphElement>(null);
+  const reduced = useReducedMotion();
+  const inView  = useInView(ref, { once: true, margin: "-5%" });
   return (
-    <p
-      className="text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
+    <motion.p
+      ref={ref}
+      className="text-[9px] uppercase text-[#78746c]"
       style={{ fontFamily: "var(--font-fauna)" }}
-      {...(themeable ? { "data-theme-label": "" } : {})}
+      initial={{ opacity: 0, letterSpacing: reduced ? "0.28em" : "0.55em" }}
+      animate={inView ? { opacity: 1, letterSpacing: "0.28em" } : {}}
+      transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {children}
-    </p>
+    </motion.p>
   );
 }
 
-// ─── Theme palette ────────────────────────────────────────────────────────────
-
-const LIGHT = { bg: "#ffffff", text: "#2a2822", label: "#78746c" };
-const DARK  = { bg: "#111110", text: "#ede9e3", label: "#a8a49e" };
-
-// ─── Mobile / reduced-motion vertical fallback ────────────────────────────────
-
-function VerticalFallback() {
-  const serif = { fontFamily: "var(--font-playfair)" };
-  const didot = { fontFamily: "var(--font-didot)" };
+function WordFlow({
+  text,
+  className,
+  style,
+  baseDelay = 0,
+}: {
+  text: string;
+  className?: string;
+  style?: React.CSSProperties;
+  baseDelay?: number;
+}) {
+  const ref     = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const inView  = useInView(ref, { once: true, margin: "-8%" });
 
   return (
-    <section id="about" className="relative bg-white overflow-hidden">
-      <Grain id="abt-grain-vf" />
-
-      {/* ── Heading ─────────────────────────────────────────────────────── */}
-      <div className="relative z-10 px-6 md:px-14 pt-14 pb-10 border-b border-[#e8e8e8]">
-        <Label>About</Label>
-        <h2
-          className="mt-4 text-[#2a2822] text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.92] tracking-tight uppercase"
-          style={didot}
-        >
-          I build the infrastructure{" "}
-          <span style={{ color: "#7c3aed", fontStyle: "italic", textTransform: "none" }}>
-            of momentum.
-          </span>
-        </h2>
-      </div>
-
-      {/* ── 01 / The Setup ──────────────────────────────────────────────── */}
-      <div className="relative z-10 border-b border-[#e8e8e8]">
-        {/* Image */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
-            alt="Code on a screen" fill className="object-cover" priority
-          />
-        </div>
-        {/* Text */}
-        <div className="px-6 md:px-14 py-10">
-          <Label>01 / The Setup</Label>
-          <p
-            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
-            style={serif}
+    <div
+      ref={ref}
+      className={className}
+      style={{ ...style, display: "flex", flexWrap: "wrap", columnGap: "0.28em" }}
+    >
+      {text.split(" ").map((word, i) => (
+        <div key={i} style={{ overflow: "hidden" }}>
+          <motion.span
+            style={{ display: "inline-block" }}
+            initial={{ y: reduced ? "0%" : "108%", opacity: reduced ? 1 : 0 }}
+            animate={inView ? { y: "0%", opacity: 1 } : {}}
+            transition={{ duration: 0.65, delay: baseDelay + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
           >
-            I'm a freelance automation developer working with founders and ops
-            teams to build systems that remove the repetitive work —
-            permanently.
-          </p>
+            {word}
+          </motion.span>
         </div>
-      </div>
-
-      {/* ── Stack ───────────────────────────────────────────────────────── */}
-      <div className="relative z-10 border-b border-[#e8e8e8]">
-        {/* Image */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
-            alt="Analytics dashboard" fill className="object-cover"
-          />
-        </div>
-        {/* Card — sits below image, not on top of it */}
-        <div className="px-6 md:px-14 py-10">
-          <Label>Stack</Label>
-          <p
-            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
-            style={serif}
-          >
-            My stack: ERPNext, WooCommerce, n8n, Supabase. I connect the tools
-            you rely on into workflows that communicate without manual
-            intervention.
-          </p>
-        </div>
-      </div>
-
-      {/* ── 02 / The Process ────────────────────────────────────────────── */}
-      <div className="relative z-10 px-6 md:px-14 py-10 border-b border-[#e8e8e8]">
-        <Label>02 / The Process</Label>
-        <p
-          className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
-          style={serif}
-        >
-          If you don't catch me building a workflow, I'm probably designing the
-          architecture behind it. I take on a small number of projects at a
-          time — every integration gets the same care I'd apply to my own
-          tools. The best automation is the one that's still running six months
-          from now, silently.
-        </p>
-      </div>
-
-      {/* ── The Signature ───────────────────────────────────────────────── */}
-      <div className="relative z-10 px-6 md:px-14 py-14 md:py-20">
-        <Label>The Signature</Label>
-        <p
-          className="mt-6 text-[#2a2822] text-[clamp(1.7rem,5vw,3.5rem)] leading-[1.1] tracking-tight"
-          style={{ ...serif, fontStyle: "italic" }}
-        >
-          "The best automation
-          <br />is the one you forget
-          <br />is running."
-        </p>
-        <p
-          className="mt-6 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
-          style={{ fontFamily: "var(--font-fauna)" }}
-        >
-          — Law Levisay, Automation Developer
-        </p>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 }
 
-// ─── About (desktop horizontal gallery) ──────────────────────────────────────
+function BlurReveal({
+  children,
+  className,
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const ref     = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const inView  = useInView(ref, { once: true, margin: "-10%" });
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      style={style}
+      initial={{ opacity: 0, filter: reduced ? "blur(0px)" : "blur(14px)", scale: reduced ? 1 : 0.96 }}
+      animate={inView ? { opacity: 1, filter: "blur(0px)", scale: 1 } : {}}
+      transition={{ duration: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ─── About ────────────────────────────────────────────────────────────────────
 
 export default function About() {
-  const reduced = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
+  const reduced    = useReducedMotion();
+  const headingRef = useRef<HTMLDivElement>(null);
+  const headingIn  = useInView(headingRef, { once: true, margin: "-5%" });
 
-  const wrapperRef  = useRef<HTMLDivElement>(null);
-  const trackRef    = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-
-  // Vertical stack on tablet + mobile (below lg = 1024px)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
-    setIsMobile(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  // GSAP: horizontal scroll + instant dark-theme inversion
-  useEffect(() => {
-    if (reduced || isMobile) return;
-
-    let ctx: { revert: () => void } | null = null;
-
-    (async () => {
-      const gsapMod = await import("gsap");
-      const stMod   = await import("gsap/ScrollTrigger");
-      const gsap    = gsapMod.default;
-      const { ScrollTrigger } = stMod;
-
-      gsap.registerPlugin(ScrollTrigger);
-
-      const wrapper = wrapperRef.current;
-      const track   = trackRef.current;
-      const bar     = progressRef.current;
-      if (!wrapper || !track || !bar) return;
-
-      const totalScroll = () => track.scrollWidth - window.innerWidth;
-
-      ctx = gsap.context(() => {
-
-        // ── Horizontal scrub ──────────────────────────────────────────────
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: wrapper,
-            start:   "top top",
-            end:     () => `+=${totalScroll()}`,
-            scrub:   1,
-            pin:     true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              if (bar) bar.style.height = `${self.progress * 100}%`;
-            },
-          },
-        });
-        tl.to(track, { x: () => -totalScroll(), ease: "none" });
-
-        // ── Ghost 01 drifts left ──────────────────────────────────────────
-        const ghost1 = wrapper.querySelector<HTMLElement>("[data-ghost='1']");
-        if (ghost1) {
-          gsap.to(ghost1, {
-            x: "-8%", ease: "none",
-            scrollTrigger: {
-              trigger: wrapper,
-              start: "top top",
-              end:   () => `+=${totalScroll() * 0.4}`,
-              scrub: 2,
-            },
-          });
-        }
-
-        // ── Ghost 02 drifts right ─────────────────────────────────────────
-        const ghost3 = wrapper.querySelector<HTMLElement>("[data-ghost='3']");
-        if (ghost3) {
-          gsap.to(ghost3, {
-            x: "8%", ease: "none",
-            scrollTrigger: {
-              trigger: wrapper,
-              start: () => `top+=${totalScroll() * 0.55} top`,
-              end:   () => `top+=${totalScroll()} top`,
-              scrub: 2,
-            },
-          });
-        }
-
-        // ── Panel 2 card slides in ────────────────────────────────────────
-        const card2 = wrapper.querySelector<HTMLElement>("[data-card='2']");
-        if (card2) {
-          gsap.fromTo(
-            card2,
-            { x: "60%", opacity: 0 },
-            {
-              x: "0%", opacity: 1, ease: "none",
-              scrollTrigger: {
-                trigger: wrapper,
-                start: () => `top+=${totalScroll() * 0.28} top`,
-                end:   () => `top+=${totalScroll() * 0.52} top`,
-                scrub: 1.5,
-              },
-            }
-          );
-        }
-
-        // ── Dark theme — fires instantly on enter/leave ───────────────────
-        const bgs    = wrapper.querySelectorAll<HTMLElement>("[data-theme-bg]");
-        const texts  = wrapper.querySelectorAll<HTMLElement>("[data-theme-text]");
-        const labels = wrapper.querySelectorAll<HTMLElement>("[data-theme-label]");
-
-        const goDark = () => {
-          window.dispatchEvent(new CustomEvent("gallery-enter"));
-          gsap.to(bgs,    { backgroundColor: DARK.bg,    duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-          gsap.to(texts,  { color: DARK.text,            duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-          gsap.to(labels, { color: DARK.label,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-        };
-        const goLight = () => {
-          window.dispatchEvent(new CustomEvent("gallery-leave"));
-          gsap.to(bgs,    { backgroundColor: LIGHT.bg,   duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-          gsap.to(texts,  { color: LIGHT.text,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-          gsap.to(labels, { color: LIGHT.label,          duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-        };
-
-        ScrollTrigger.create({
-          trigger:     wrapper,
-          start:       "top top",
-          end:         () => `+=${totalScroll()}`,
-          onEnter:     goDark,
-          onEnterBack: goDark,
-          onLeave:     goLight,
-          onLeaveBack: goLight,
-        });
-
-      }, wrapper);
-    })();
-
-    return () => { ctx?.revert(); };
-  }, [reduced, isMobile]);
-
-  if (reduced || isMobile) return <VerticalFallback />;
-
-  const serif = { fontFamily: "var(--font-playfair)" };
   const didot = { fontFamily: "var(--font-didot)" };
+  const serif = { fontFamily: "var(--font-playfair)" };
 
   return (
-    <section id="about">
+    <section id="about" className="relative bg-white">
+      <Grain />
 
-      {/* Progress line — only visible during the gallery */}
-      <div className="fixed left-0 top-0 w-[1px] h-screen bg-[#d2cec4] z-50 pointer-events-none" aria-hidden />
-      <div
-        ref={progressRef}
-        className="fixed left-0 top-0 w-[1px] bg-[#7c3aed] z-50 origin-top pointer-events-none"
-        style={{ height: "0%" }}
-        aria-hidden
-      />
-
-      {/* Heading — stays light, scrolls away as gallery pins */}
-      <div className="relative bg-white px-10 md:px-20 pt-20 pb-14 border-b border-[#e8e8e8] overflow-hidden">
-        <Grain id="abt-grain-head" />
-        <div className="relative z-10">
-          <Label>About</Label>
-          <h2
-            className="mt-5 text-[#2a2822] text-[clamp(2rem,5vw,4.5rem)] leading-[0.92] tracking-tight uppercase"
-            style={didot}
-          >
-            I build the infrastructure{" "}
-            <span style={{ color: "#7c3aed", fontStyle: "italic", textTransform: "none" }}>
+      {/* ── Heading ─────────────────────────────────────────────────────── */}
+      <div className="relative z-10 px-8 md:px-16 pt-16 md:pt-24 pb-10 border-b border-[#e8e8e8]">
+        <AnimLabel>About</AnimLabel>
+        <div ref={headingRef} className="mt-4">
+          {[
+            { text: "I build the", delay: 0.05 },
+            { text: "infrastructure", delay: 0.18 },
+          ].map(({ text, delay }) => (
+            <div key={text} className="overflow-hidden leading-[0.95]">
+              <motion.div
+                className="text-[#2a2822] text-[clamp(2.4rem,6.5vw,5.5rem)] tracking-tight uppercase"
+                style={didot}
+                initial={{ y: reduced ? "0%" : "108%" }}
+                animate={headingIn ? { y: "0%" } : {}}
+                transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {text}
+              </motion.div>
+            </div>
+          ))}
+          <div className="overflow-hidden leading-[0.95]">
+            <motion.div
+              className="text-[clamp(2.4rem,6.5vw,5.5rem)] tracking-tight"
+              style={{ ...didot, color: "#7c3aed", fontStyle: "italic" }}
+              initial={{ y: reduced ? "0%" : "108%" }}
+              animate={headingIn ? { y: "0%" } : {}}
+              transition={{ duration: 0.9, delay: 0.31, ease: [0.22, 1, 0.36, 1] }}
+            >
               of momentum.
-            </span>
-          </h2>
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* GSAP wrapper — pinned while scrolling */}
-      <div ref={wrapperRef} className="overflow-hidden bg-white">
-        <div ref={trackRef} className="flex h-screen will-change-transform">
+      {/* ── Image — magazine offset ─────────────────────────────────────── */}
+      {/* Replace src with your own photo when ready */}
+      <div className="relative z-10 py-12 md:py-16 border-b border-[#e8e8e8]">
 
-          {/* ═══ PANEL 1 — image top/left | text bottom/right ═══ */}
-          <div className="relative flex flex-col lg:flex-row flex-shrink-0 w-screen h-full border-r border-[#e8e8e8]">
-
-            <div className="relative w-full h-1/2 lg:w-1/2 lg:h-full overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
-                alt="Code on a screen"
-                fill className="object-cover" priority sizes="(max-width:1024px) 100vw, 50vw"
-              />
-            </div>
-
-            <div
-              data-theme-bg
-              className="relative w-full h-1/2 lg:w-1/2 lg:h-full bg-white flex items-center overflow-hidden"
-            >
-              <Grain id="abt-grain-p1" />
-              <span
-                data-ghost="1" aria-hidden
-                className="absolute pointer-events-none select-none"
-                style={{
-                  ...didot,
-                  fontSize: "clamp(8rem,20vw,36rem)",
-                  color: "transparent",
-                  WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
-                  bottom: "-0.12em", left: "-0.06em", lineHeight: 1,
-                }}
-              >01</span>
-              <div className="relative z-10 px-6 lg:px-16 max-w-lg">
-                <Label themeable>01 / The Setup</Label>
-                <p
-                  data-theme-text
-                  className="mt-4 lg:mt-8 text-[#2a2822] text-[clamp(0.85rem,1.3vw,1.3rem)] leading-loose"
-                  style={serif}
-                >
-                  I'm a freelance automation developer working with founders
-                  and ops teams to build systems that remove the repetitive
-                  work — permanently.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ═══ PANEL 2 — full-bleed image + sliding card ═══ */}
-          <div className="relative flex-shrink-0 w-screen h-full overflow-hidden border-r border-[#e8e8e8]">
+        {/* Full-width on mobile, editorial column on desktop */}
+        <div className="w-[92vw] md:w-[62vw] lg:w-[58vw]">
+          <div className="relative overflow-hidden h-[52vh] md:h-[68vh] lg:h-[72vh]">
             <Image
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
-              alt="Analytics dashboard"
-              fill className="object-cover" sizes="100vw"
+              src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
+              alt="Law Levisay"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="(max-width: 768px) 92vw, (max-width: 1024px) 62vw, 58vw"
             />
-            <div className="absolute inset-0 bg-[#111110]/30" />
-
-            <div
-              data-card="2"
-              data-theme-bg
-              className="absolute right-4 lg:right-20 top-1/2 -translate-y-1/2
-                         w-[min(420px,82vw)] border border-[#d2cec4]
-                         bg-white px-6 py-6 lg:px-10 lg:py-10"
-              style={{ opacity: 0 }}
-            >
-              <Grain id="abt-grain-card2" />
-              <div className="relative z-10">
-                <Label themeable>Stack</Label>
-                <p
-                  data-theme-text
-                  className="mt-5 text-[#2a2822] text-sm leading-loose"
-                  style={serif}
-                >
-                  My stack: ERPNext, WooCommerce, n8n, Supabase. I connect the
-                  tools you rely on into workflows that communicate without
-                  manual intervention.
-                </p>
-              </div>
-            </div>
           </div>
-
-          {/* ═══ PANEL 3 — right-aligned text + ghost 02 ═══ */}
-          <div
-            data-theme-bg
-            className="relative flex-shrink-0 w-screen h-full bg-white border-r border-[#e8e8e8] overflow-hidden flex items-center justify-end"
+          {/* Caption aligned with the content column */}
+          <p
+            className="mt-3 text-[9px] tracking-[0.28em] uppercase text-[#78746c] pl-8 md:pl-16"
+            style={{ fontFamily: "var(--font-fauna)" }}
           >
-            <Grain id="abt-grain-p3" />
-            <span
-              data-ghost="3" aria-hidden
-              className="absolute pointer-events-none select-none"
-              style={{
-                ...didot,
-                fontSize: "clamp(14rem,28vw,36rem)",
-                color: "transparent",
-                WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
-                bottom: "-0.12em", left: "-0.04em", lineHeight: 1,
-              }}
-            >02</span>
-            <div className="relative z-10 px-6 lg:px-20 max-w-xl text-right">
-              <Label themeable>02 / The Process</Label>
-              <p
-                data-theme-text
-                className="mt-8 text-[#2a2822] text-[clamp(1rem,1.3vw,1.3rem)] leading-loose"
-                style={serif}
-              >
-                If you don't catch me building a workflow, I'm probably
-                designing the architecture behind it. I take on a small number
-                of projects at a time — every integration gets the same care
-                I'd apply to my own tools. The best automation is the one
-                that's still running six months from now, silently.
-              </p>
-            </div>
-          </div>
-
-          {/* ═══ PANEL 4 — oversized italic quote ═══ */}
-          <div
-            data-theme-bg
-            className="relative flex-shrink-0 w-screen h-full bg-white flex items-center overflow-hidden"
-          >
-            <Grain id="abt-grain-p4" />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#d2cec4]" />
-            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#d2cec4]" />
-            <div className="relative z-10 px-6 lg:px-20 max-w-5xl">
-              <Label themeable>The Signature</Label>
-              <p
-                data-theme-text
-                className="mt-10 text-[#2a2822] text-[clamp(2.4rem,6.5vw,7rem)] leading-[1.05] tracking-tight"
-                style={{ ...serif, fontStyle: "italic" }}
-              >
-                "The best automation
-                <br />is the one you forget
-                <br />is running."
-              </p>
-              <p
-                data-theme-label
-                className="mt-10 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
-                style={{ fontFamily: "var(--font-fauna)" }}
-              >
-                — Law Levisay, Automation Developer
-              </p>
-            </div>
-          </div>
-
+            Remote · Since 2022
+          </p>
         </div>
+
+      </div>
+
+      {/* ── Body ────────────────────────────────────────────────────────── */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 border-b border-[#e8e8e8]">
+
+        {/* Left — The Setup */}
+        <div className="px-8 md:px-16 py-12 lg:border-r border-[#e8e8e8]">
+          <AnimLabel>01 / The Setup</AnimLabel>
+          <WordFlow
+            text="I'm a freelance automation developer working with founders and ops teams to build systems that remove the repetitive work — permanently. My stack: ERPNext, WooCommerce, n8n, Supabase."
+            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
+            style={serif}
+            baseDelay={0.05}
+          />
+        </div>
+
+        {/* Right — The Process */}
+        <div className="px-8 md:px-16 py-12">
+          <AnimLabel>02 / The Process</AnimLabel>
+          <WordFlow
+            text="If you don't catch me building a workflow, I'm probably designing the architecture behind it. I take on a small number of projects at a time — every integration gets the same care I'd apply to my own tools."
+            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
+            style={serif}
+            baseDelay={0.05}
+          />
+        </div>
+      </div>
+
+      {/* ── Quote ───────────────────────────────────────────────────────── */}
+      <div className="relative z-10 px-8 md:px-16 py-16 md:py-24">
+        <AnimLabel>The Signature</AnimLabel>
+        <BlurReveal
+          className="mt-6 text-[#2a2822] text-[clamp(1.8rem,5vw,4rem)] leading-[1.1] tracking-tight"
+          style={{ ...serif, fontStyle: "italic" }}
+        >
+          "The best automation is the one you forget is running."
+        </BlurReveal>
+        <motion.p
+          className="mt-6 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
+          style={{ fontFamily: "var(--font-fauna)" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          — Law Levisay, Automation Developer
+        </motion.p>
       </div>
     </section>
   );
