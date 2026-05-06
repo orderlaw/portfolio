@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 // ─── Grain ────────────────────────────────────────────────────────────────────
@@ -169,14 +169,24 @@ function VerticalFallback() {
 
 export default function About() {
   const reduced = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
 
   const wrapperRef  = useRef<HTMLDivElement>(null);
   const trackRef    = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
+  // Vertical stack on tablet + mobile (below lg = 1024px)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    setIsMobile(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   // GSAP: horizontal scroll + instant dark-theme inversion
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || isMobile) return;
 
     let ctx: { revert: () => void } | null = null;
 
@@ -292,9 +302,9 @@ export default function About() {
     })();
 
     return () => { ctx?.revert(); };
-  }, [reduced]);
+  }, [reduced, isMobile]);
 
-  if (reduced) return <VerticalFallback />;
+  if (reduced || isMobile) return <VerticalFallback />;
 
   const serif = { fontFamily: "var(--font-playfair)" };
   const didot = { fontFamily: "var(--font-didot)" };
