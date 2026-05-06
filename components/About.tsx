@@ -159,10 +159,11 @@ export default function About() {
         <div className="w-[92vw] md:w-[62vw] lg:w-[58vw]">
           <div className="relative overflow-hidden h-[52vh] md:h-[68vh] lg:h-[72vh]">
             <Image
-              src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
+              src="/me.jpg"
               alt="Law Levisay"
               fill
-              className="object-cover object-center"
+              unoptimized
+              className="object-cover object-top"
               priority
               sizes="(max-width: 768px) 92vw, (max-width: 1024px) 62vw, 58vw"
             />

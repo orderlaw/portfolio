@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const heroStyles = `
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(18px); }
@@ -48,8 +46,6 @@ function CharReveal({
     </div>
   );
 }
-
-const TAGS = ["n8n", "WooCommerce", "Supabase", "ERPNext"];
 
 export default function Hero() {
   return (
@@ -100,42 +96,63 @@ export default function Hero() {
           I build systems that run without you — n8n workflows, WooCommerce
           integrations, and ERPNext automations.
         </p>
-      </div>
 
-      {/* BLOCK 3 */}
-      <div
-        className="relative z-10 flex items-center justify-between gap-3 px-8 md:px-16 border-t border-[#e8e8e8] shrink-0 py-3 sm:py-0 sm:h-14"
-        style={{
-          opacity: 0,
-          animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 1.4s forwards",
-        }}
-      >
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-          {TAGS.map((tag) => (
-            <span
-              key={tag}
-              className="text-[#2a2822] text-[9px] sm:text-[10px] tracking-[0.15em] uppercase"
-              style={{ fontFamily: "var(--font-fauna)" }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center gap-2 shrink-0"
+        {/* ── Email CTA ──────────────────────────────────────────────────── */}
+        <div
+          className="w-full max-w-[20rem] sm:max-w-sm md:max-w-md mt-2 flex flex-col gap-3"
+          style={{
+            opacity: 0,
+            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 1.38s forwards",
+          }}
         >
-          <div className="w-px h-5 bg-gradient-to-b from-[#7c3aed] to-transparent" />
-          <span
-            className="text-[#2a2822] text-[9px] tracking-[0.2em] uppercase hidden sm:inline"
-            style={{ fontFamily: "var(--font-fauna)" }}
+          {/* Underline input row */}
+          <div className="flex items-end gap-4">
+            <div
+              className="flex items-end gap-2 flex-1 pb-1.5"
+              style={{ borderBottom: "1px solid rgba(42,40,34,0.35)" }}
+            >
+              <span
+                className="text-[9px] tracking-[0.28em] uppercase text-[#78746c] leading-none shrink-0"
+                style={{ fontFamily: "var(--font-fauna)" }}
+              >
+                Email
+              </span>
+              <input
+                type="email"
+                placeholder="you@company.com"
+                className="flex-1 min-w-0 bg-transparent text-[#2a2822] text-[11px] outline-none placeholder:text-[#c4c0b8] leading-none"
+                style={{ fontFamily: "var(--font-fauna)" }}
+              />
+            </div>
+
+            {/* Sliding-text pill button */}
+            <button
+              className="group relative shrink-0 border border-[#2a2822] text-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.4rem" }}
+            >
+              {/* Default label — slides out upward */}
+              <span className="block group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+                Commission Work
+              </span>
+              {/* Hover label — slides in from below */}
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+                → Let's Build
+              </span>
+            </button>
+          </div>
+
+          {/* Footnote */}
+          <p
+            className="text-[9px] text-[#78746c]"
+            style={{ fontFamily: "var(--font-fauna)", fontStyle: "italic" }}
           >
-            Scroll
-          </span>
-        </motion.div>
+            Selective with projects — one slot currently open.
+          </p>
+        </div>
       </div>
+
+      {/* Separator */}
+      <div className="relative z-10 border-t border-[#e8e8e8] shrink-0" />
     </section>
   );
 }
