@@ -50,17 +50,16 @@ const DARK  = { bg: "#111110", text: "#ede9e3", label: "#a8a49e" };
 function VerticalFallback() {
   const serif = { fontFamily: "var(--font-playfair)" };
   const didot = { fontFamily: "var(--font-didot)" };
-  const body  = "text-[#2a2822] text-[clamp(1rem,1.5vw,1.3rem)] leading-loose";
 
   return (
-    <section id="about" className="relative bg-white">
+    <section id="about" className="relative bg-white overflow-hidden">
       <Grain id="abt-grain-vf" />
 
-      {/* Heading */}
-      <div className="relative z-10 px-6 md:px-16 pt-16 md:pt-24 pb-12 border-b border-[#e8e8e8]">
+      {/* ── Heading ─────────────────────────────────────────────────────── */}
+      <div className="relative z-10 px-6 md:px-14 pt-14 pb-10 border-b border-[#e8e8e8]">
         <Label>About</Label>
         <h2
-          className="mt-5 text-[#2a2822] text-[clamp(2rem,5vw,4.5rem)] leading-[0.92] tracking-tight uppercase"
+          className="mt-4 text-[#2a2822] text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.92] tracking-tight uppercase"
           style={didot}
         >
           I build the infrastructure{" "}
@@ -70,49 +69,45 @@ function VerticalFallback() {
         </h2>
       </div>
 
-      {/* Panel 1 — image + text */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 border-b border-[#e8e8e8]">
-        <div className="relative h-[60vw] md:h-auto min-h-[380px] overflow-hidden">
+      {/* ── 01 / The Setup ──────────────────────────────────────────────── */}
+      <div className="relative z-10 border-b border-[#e8e8e8]">
+        {/* Image */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80"
             alt="Code on a screen" fill className="object-cover" priority
           />
         </div>
-        <div className="relative bg-white px-6 md:px-12 py-14 overflow-hidden">
-          <Grain id="abt-grain-vf1" />
-          <span
-            aria-hidden className="absolute pointer-events-none select-none"
-            style={{
-              ...didot,
-              fontSize: "clamp(10rem,22vw,26rem)",
-              color: "transparent",
-              WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
-              bottom: "-0.1em", left: "-0.05em", lineHeight: 1,
-            }}
-          >01</span>
-          <div className="relative z-10">
-            <Label>01 / The Setup</Label>
-            <p className={`mt-6 ${body}`} style={serif}>
-              I'm a freelance automation developer working with founders and ops
-              teams to build systems that remove the repetitive work —
-              permanently.
-            </p>
-          </div>
+        {/* Text */}
+        <div className="px-6 md:px-14 py-10">
+          <Label>01 / The Setup</Label>
+          <p
+            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
+            style={serif}
+          >
+            I'm a freelance automation developer working with founders and ops
+            teams to build systems that remove the repetitive work —
+            permanently.
+          </p>
         </div>
       </div>
 
-      {/* Panel 2 — full-bleed image + card */}
-      <div className="relative z-10 h-[70vw] min-h-[320px] md:h-[65vh] overflow-hidden border-b border-[#e8e8e8]">
-        <Image
-          src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
-          alt="Analytics dashboard" fill className="object-cover"
-        />
-        <div className="absolute inset-0 bg-[#2a2822]/30" />
-        <div className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2
-                        w-[min(340px,80vw)] border border-[#d2cec4]
-                        bg-white px-6 md:px-8 py-8">
+      {/* ── Stack ───────────────────────────────────────────────────────── */}
+      <div className="relative z-10 border-b border-[#e8e8e8]">
+        {/* Image */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80"
+            alt="Analytics dashboard" fill className="object-cover"
+          />
+        </div>
+        {/* Card — sits below image, not on top of it */}
+        <div className="px-6 md:px-14 py-10">
           <Label>Stack</Label>
-          <p className="mt-4 text-[#2a2822] text-sm leading-loose" style={serif}>
+          <p
+            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
+            style={serif}
+          >
             My stack: ERPNext, WooCommerce, n8n, Supabase. I connect the tools
             you rely on into workflows that communicate without manual
             intervention.
@@ -120,44 +115,36 @@ function VerticalFallback() {
         </div>
       </div>
 
-      {/* Panel 3 — text */}
-      <div className="relative z-10 bg-white px-6 md:px-20 py-16 md:py-20 overflow-hidden border-b border-[#e8e8e8] flex justify-end">
-        <Grain id="abt-grain-vf3" />
-        <span
-          aria-hidden className="absolute pointer-events-none select-none"
-          style={{
-            ...didot,
-            fontSize: "clamp(10rem,22vw,26rem)",
-            color: "transparent",
-            WebkitTextStroke: "1.5px rgba(124,58,237,0.10)",
-            bottom: "-0.1em", left: "-0.04em", lineHeight: 1,
-          }}
-        >02</span>
-        <div className="relative z-10 max-w-xl text-right">
-          <Label>02 / The Process</Label>
-          <p className={`mt-6 ${body}`} style={serif}>
-            If you don't catch me building a workflow, I'm probably designing
-            the architecture behind it. I take on a small number of projects at
-            a time — every integration gets the same care I'd apply to my own
-            tools. The best automation is the one that's still running six
-            months from now, silently.
-          </p>
-        </div>
+      {/* ── 02 / The Process ────────────────────────────────────────────── */}
+      <div className="relative z-10 px-6 md:px-14 py-10 border-b border-[#e8e8e8]">
+        <Label>02 / The Process</Label>
+        <p
+          className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
+          style={serif}
+        >
+          If you don't catch me building a workflow, I'm probably designing the
+          architecture behind it. I take on a small number of projects at a
+          time — every integration gets the same care I'd apply to my own
+          tools. The best automation is the one that's still running six months
+          from now, silently.
+        </p>
       </div>
 
-      {/* Panel 4 — quote */}
-      <div className="relative z-10 px-6 md:px-20 py-16 md:py-24">
+      {/* ── The Signature ───────────────────────────────────────────────── */}
+      <div className="relative z-10 px-6 md:px-14 py-14 md:py-20">
         <Label>The Signature</Label>
         <p
-          className="mt-8 text-[#2a2822] text-[clamp(1.8rem,5.5vw,5.5rem)] leading-[1.05] tracking-tight"
+          className="mt-6 text-[#2a2822] text-[clamp(1.7rem,5vw,3.5rem)] leading-[1.1] tracking-tight"
           style={{ ...serif, fontStyle: "italic" }}
         >
           "The best automation
           <br />is the one you forget
           <br />is running."
         </p>
-        <p className="mt-8 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
-          style={{ fontFamily: "var(--font-fauna)" }}>
+        <p
+          className="mt-6 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
+          style={{ fontFamily: "var(--font-fauna)" }}
+        >
           — Law Levisay, Automation Developer
         </p>
       </div>
