@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useScramble } from "./ScrambleText";
 
 const links = [
@@ -32,31 +32,54 @@ function ScramblePill({ text, href }: { text: string; href: string }) {
 }
 
 export default function Nav() {
-  const [hidden, setHidden] = useState(false);
+  const [scrollHidden, setScrollHidden] = useState(false);
+  const [galleryActive, setGalleryActive] = useState(false);
   const [lastY, setLastY] = useState(0);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => {
-    setHidden(y > lastY && y > 80);
+    setScrollHidden(y > lastY && y > 80);
     setLastY(y);
   });
+
+  useEffect(() => {
+    const onEnter = () => setGalleryActive(true);
+    const onLeave = () => setGalleryActive(false);
+    window.addEventListener("gallery-enter", onEnter);
+    window.addEventListener("gallery-leave", onLeave);
+    return () => {
+      window.removeEventListener("gallery-enter", onEnter);
+      window.removeEventListener("gallery-leave", onLeave);
+    };
+  }, []);
+
+  const hidden = scrollHidden || galleryActive;
 
   return (
     <motion.header
       animate={{ y: hidden ? "-100%" : "0%" }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      /* h-14 = 56px — this exact value is mirrored in Hero's pt-14 and block-3 h-14 */
-      className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 border-b border-[#e8e8e8]"
+      className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden"
     >
+      {/* Grain — matches Hero */}
+      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <filter id="grain-nav">
+            <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#grain-nav)" opacity="0.28" />
+        </svg>
+      </div>
       <a
         href="#"
-        className="text-[#2a2822] font-black text-sm tracking-widest uppercase select-none"
+        className="relative z-10 text-[#2a2822] font-black text-sm tracking-widest uppercase select-none"
         style={{ fontFamily: "var(--font-didot)" }}
       >
         LL
       </a>
 
-      <nav className="hidden md:block">
+      <nav className="relative z-10 hidden md:block">
         <ul className="flex gap-10">
           {links.map((l) => (
             <li key={l.href}>
@@ -72,7 +95,9 @@ export default function Nav() {
         </ul>
       </nav>
 
-      <ScramblePill text="Let's Talk" href="#contact" />
+      <div className="relative z-10">
+        <ScramblePill text="Let's Talk" href="#contact" />
+      </div>
     </motion.header>
   );
 }

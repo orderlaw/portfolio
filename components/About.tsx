@@ -266,11 +266,13 @@ export default function About() {
         const labels = wrapper.querySelectorAll<HTMLElement>("[data-theme-label]");
 
         const goDark = () => {
+          window.dispatchEvent(new CustomEvent("gallery-enter"));
           gsap.to(bgs,    { backgroundColor: DARK.bg,    duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
           gsap.to(texts,  { color: DARK.text,            duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
           gsap.to(labels, { color: DARK.label,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
         };
         const goLight = () => {
+          window.dispatchEvent(new CustomEvent("gallery-leave"));
           gsap.to(bgs,    { backgroundColor: LIGHT.bg,   duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
           gsap.to(texts,  { color: LIGHT.text,           duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
           gsap.to(labels, { color: LIGHT.label,          duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
