@@ -70,55 +70,72 @@ const BIO =
   "I'm a freelance automation developer — the kind who reads the docs, tests the edge cases, and doesn't ghost you after deployment. I work with founders and ops teams who are tired of doing the same thing twice. If a human is repeating it, a system should own it.";
 
 function AboutBody() {
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const imgRef  = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const imgRef     = useRef<HTMLDivElement>(null);
+  const textRef    = useRef<HTMLParagraphElement>(null);
+  const reduced    = useReducedMotion();
 
   useEffect(() => {
-    const img  = imgRef.current;
-    const text = textRef.current;
-    if (!img || !text) return;
+    if (reduced) return;
 
-    if (reduced) {
-      img.style.filter = "none";
-      text.querySelectorAll<HTMLElement>(".l").forEach((el) => { el.style.opacity = "1"; });
-      return;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let ctx: any;
 
-    // Image: snap blur off when it enters the viewport
-    const imgObs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      img.style.transition = "filter 0.4s cubic-bezier(0.25,0.46,0.45,0.94)";
-      img.style.filter = "none";
-      imgObs.disconnect();
-    }, { threshold: 0.1 });
-    imgObs.observe(img);
+    const init = async () => {
+      const gsap              = (await import("gsap")).default;
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Text: reveal letters when paragraph enters the viewport
-    let timerId: ReturnType<typeof setInterval>;
-    const textObs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      const letters = text.querySelectorAll<HTMLElement>(".l");
-      let i = 0;
-      timerId = setInterval(() => {
-        const end = Math.min(i + 12, letters.length);
-        for (let j = i; j < end; j++) letters[j].style.opacity = "1";
-        i = end;
-        if (i >= letters.length) clearInterval(timerId);
-      }, 8);
-      textObs.disconnect();
-    }, { threshold: 0.1 });
-    textObs.observe(text);
+      ctx = gsap.context(() => {
+        if (imgRef.current) {
+          gsap.fromTo(
+            imgRef.current,
+            { filter: "blur(22px)" },
+            {
+              filter: "blur(0px)",
+              duration: 0.35,
+              ease: "power4.out",
+              scrollTrigger: {
+                trigger:             imgRef.current,
+                start:               "top 88%",
+                toggleActions:       "play none none none",
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        }
 
-    return () => {
-      imgObs.disconnect();
-      textObs.disconnect();
-      clearInterval(timerId);
+        if (textRef.current) {
+          const letters = textRef.current.querySelectorAll(".l");
+          gsap.fromTo(
+            letters,
+            { opacity: 0.08 },
+            {
+              opacity:   1,
+              stagger:   0.01,
+              ease:      "none",
+              scrollTrigger: {
+                trigger:             sectionRef.current,
+                start:               "top 85%",
+                end:                 "bottom 30%",
+                scrub:               false,
+                toggleActions:       "play none none none",
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        }
+
+        ScrollTrigger.refresh();
+      }, sectionRef);
     };
+
+    init();
+    return () => ctx?.revert();
   }, [reduced]);
 
   return (
-    <div className="relative z-10 border-b border-[#e8e8e8] px-6 md:px-16 py-8 md:py-24">
+    <div ref={sectionRef} className="relative z-10 border-b border-[#e8e8e8] px-6 md:px-16 py-8 md:py-24">
       <div className="flex flex-col gap-6 md:flex-row md:gap-14 items-start">
 
         {/* Left — image + caption */}
