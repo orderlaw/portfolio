@@ -167,7 +167,7 @@ function AboutBody() {
         <div className="flex-1 flex flex-col justify-between gap-10">
           <p
             ref={textRef}
-            className="text-[#2a2822] text-[clamp(1.2rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
+            className="text-[#2a2822] text-[clamp(1.35rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
             style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", overflowWrap: "break-word" }}
           >
             {BIO.split(" ").map((word, wi) => (
