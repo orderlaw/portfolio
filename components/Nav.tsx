@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
 import { useScramble } from "./ScrambleText";
 
 const links = [
@@ -32,21 +30,8 @@ function ScramblePill({ text, href }: { text: string; href: string }) {
 }
 
 export default function Nav() {
-  const [hidden, setHidden] = useState(false);
-  const [lastY, setLastY]   = useState(0);
-  const { scrollY }         = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setHidden(y > lastY && y > 80);
-    setLastY(y);
-  });
-
   return (
-    <motion.header
-      animate={{ y: hidden ? "-100%" : "0%" }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden"
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden">
       {/* Grain — matches Hero */}
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -84,6 +69,6 @@ export default function Nav() {
       <div className="relative z-10">
         <ScramblePill text="Let's Talk" href="#contact" />
       </div>
-    </motion.header>
+    </header>
   );
 }

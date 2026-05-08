@@ -24,10 +24,11 @@ function CharReveal({
     <div
       style={{
         fontFamily: "var(--font-didot)",
-        fontSize: "clamp(2.8rem, 11vw, 11rem)",
+        fontSize: "clamp(3rem, 18vw, 11rem)",
         lineHeight: 0.88,
         color,
         textTransform: "uppercase" as const,
+        whiteSpace: "nowrap",
       }}
     >
       {text.split("").map((char, i) => (
@@ -66,10 +67,10 @@ export default function Hero() {
       </div>
 
       {/* BLOCK 2 */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-4 sm:gap-5 px-8 md:px-16">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-3 sm:gap-5 px-6 md:px-16">
 
         <p
-          className="text-[#2a2822] text-[9px] sm:text-[10px] tracking-[0.18em] sm:tracking-[0.32em] uppercase"
+          className="text-[#2a2822] text-[10px] tracking-[0.32em] uppercase"
           style={{
             fontFamily: "var(--font-fauna)",
             opacity: 0,
@@ -85,7 +86,7 @@ export default function Hero() {
         </div>
 
         <p
-          className="text-[#2a2822] text-xs sm:text-sm md:text-base leading-relaxed max-w-[260px] sm:max-w-xs md:max-w-sm"
+          className="text-[#2a2822] text-sm md:text-base leading-relaxed max-w-[320px] md:max-w-sm"
           style={{
             fontFamily: "var(--font-fauna)",
             fontStyle: "italic",
@@ -99,46 +100,29 @@ export default function Hero() {
 
         {/* ── Email CTA ──────────────────────────────────────────────────── */}
         <div
-          className="w-full max-w-[20rem] sm:max-w-sm md:max-w-md mt-2 flex flex-col gap-3"
+          className="w-full max-w-[22rem] mt-2 flex flex-col gap-5"
           style={{
             opacity: 0,
             animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 1.38s forwards",
           }}
         >
-          {/* Underline input row */}
-          <div className="flex items-end gap-4">
-            <div
-              className="flex items-end gap-2 flex-1 pb-1.5"
-              style={{ borderBottom: "1px solid rgba(42,40,34,0.35)" }}
+          {/* Full-width underline input */}
+          <div
+            className="flex items-end gap-3 w-full pb-2"
+            style={{ borderBottom: "1px solid rgba(42,40,34,0.55)" }}
+          >
+            <span
+              className="text-[11px] tracking-[0.18em] uppercase text-[#2a2822] shrink-0 leading-none"
+              style={{ fontFamily: "var(--font-fauna)" }}
             >
-              <span
-                className="text-[9px] tracking-[0.28em] uppercase text-[#78746c] leading-none shrink-0"
-                style={{ fontFamily: "var(--font-fauna)" }}
-              >
-                Email
-              </span>
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="flex-1 min-w-0 bg-transparent text-[#2a2822] text-[11px] outline-none placeholder:text-[#c4c0b8] leading-none"
-                style={{ fontFamily: "var(--font-fauna)" }}
-              />
-            </div>
-
-            {/* Sliding-text pill button */}
-            <button
-              className="group relative shrink-0 border border-[#2a2822] text-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
-              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.4rem" }}
-            >
-              {/* Default label — slides out upward */}
-              <span className="block group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-                Commission Work
-              </span>
-              {/* Hover label — slides in from below */}
-              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-                → Let's Build
-              </span>
-            </button>
+              Email:
+            </span>
+            <input
+              type="email"
+              placeholder="you@company.com"
+              className="flex-1 min-w-0 bg-transparent text-[#2a2822] text-xs outline-none placeholder:text-[#c4c0b8] leading-none"
+              style={{ fontFamily: "var(--font-fauna)" }}
+            />
           </div>
 
           {/* Footnote */}
@@ -148,6 +132,21 @@ export default function Hero() {
           >
             Selective with projects — one slot currently open.
           </p>
+
+          {/* Centered pill button */}
+          <div className="flex justify-center">
+            <button
+              className="group relative inline-block border border-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.55rem 2rem" }}
+            >
+              <span className="block text-[#2a2822] group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+                Commission Work
+              </span>
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] text-[#2a2822]">
+                → Let's Build
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 

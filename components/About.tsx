@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
 // ─── Grain ────────────────────────────────────────────────────────────────────
@@ -20,10 +20,8 @@ function Grain() {
   );
 }
 
-// ─── Kinetic primitives ───────────────────────────────────────────────────────
-
 function AnimLabel({ children }: { children: string }) {
-  const ref     = useRef<HTMLParagraphElement>(null);
+  const ref    = useRef<HTMLParagraphElement>(null);
   const reduced = useReducedMotion();
   const inView  = useInView(ref, { once: true, margin: "-5%" });
   return (
@@ -40,43 +38,6 @@ function AnimLabel({ children }: { children: string }) {
   );
 }
 
-function WordFlow({
-  text,
-  className,
-  style,
-  baseDelay = 0,
-}: {
-  text: string;
-  className?: string;
-  style?: React.CSSProperties;
-  baseDelay?: number;
-}) {
-  const ref     = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-  const inView  = useInView(ref, { once: true, margin: "-8%" });
-
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{ ...style, display: "flex", flexWrap: "wrap", columnGap: "0.28em" }}
-    >
-      {text.split(" ").map((word, i) => (
-        <div key={i} style={{ overflow: "hidden" }}>
-          <motion.span
-            style={{ display: "inline-block" }}
-            initial={{ y: reduced ? "0%" : "108%", opacity: reduced ? 1 : 0 }}
-            animate={inView ? { y: "0%", opacity: 1 } : {}}
-            transition={{ duration: 0.65, delay: baseDelay + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {word}
-          </motion.span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function BlurReveal({
   children,
   className,
@@ -86,7 +47,7 @@ function BlurReveal({
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const ref     = useRef<HTMLDivElement>(null);
+  const ref    = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const inView  = useInView(ref, { once: true, margin: "-10%" });
   return (
@@ -100,6 +61,133 @@ function BlurReveal({
     >
       {children}
     </motion.div>
+  );
+}
+
+// ─── Bio section ─────────────────────────────────────────────────────────────
+
+const BIO =
+  "I'm a freelance automation developer — the kind who reads the docs, tests the edge cases, and doesn't ghost you after deployment. I work with founders and ops teams who are tired of doing the same thing twice. If a human is repeating it, a system should own it.";
+
+function AboutBody() {
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const imgRef  = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    const img  = imgRef.current;
+    const text = textRef.current;
+    if (!img || !text) return;
+
+    if (reduced) {
+      img.style.filter = "none";
+      text.querySelectorAll<HTMLElement>(".l").forEach((el) => { el.style.opacity = "1"; });
+      return;
+    }
+
+    // Image: snap blur off when it enters the viewport
+    const imgObs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      img.style.transition = "filter 0.4s cubic-bezier(0.25,0.46,0.45,0.94)";
+      img.style.filter = "none";
+      imgObs.disconnect();
+    }, { threshold: 0.1 });
+    imgObs.observe(img);
+
+    // Text: reveal letters when paragraph enters the viewport
+    let timerId: ReturnType<typeof setInterval>;
+    const textObs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      const letters = text.querySelectorAll<HTMLElement>(".l");
+      let i = 0;
+      timerId = setInterval(() => {
+        const end = Math.min(i + 12, letters.length);
+        for (let j = i; j < end; j++) letters[j].style.opacity = "1";
+        i = end;
+        if (i >= letters.length) clearInterval(timerId);
+      }, 8);
+      textObs.disconnect();
+    }, { threshold: 0.1 });
+    textObs.observe(text);
+
+    return () => {
+      imgObs.disconnect();
+      textObs.disconnect();
+      clearInterval(timerId);
+    };
+  }, [reduced]);
+
+  return (
+    <div className="relative z-10 border-b border-[#e8e8e8] px-6 md:px-16 py-8 md:py-24">
+      <div className="flex flex-col gap-6 md:flex-row md:gap-14 items-start">
+
+        {/* Left — image + caption */}
+        <div
+          ref={imgRef}
+          className="shrink-0 w-full max-w-[220px] md:w-52"
+          style={{ filter: reduced ? "none" : "blur(22px)" }}
+        >
+          <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
+            <Image
+              src="/me.jpg"
+              alt="Law Levisay"
+              fill
+              unoptimized
+              className="object-cover object-top"
+              priority
+              sizes="(max-width: 768px) 220px, 208px"
+            />
+          </div>
+          <p
+            className="mt-4 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
+            style={{ fontFamily: "var(--font-fauna)" }}
+          >
+            Remote · Since 2022
+          </p>
+        </div>
+
+        {/* Right — bio text + LinkedIn */}
+        <div className="flex-1 flex flex-col justify-between gap-10">
+          <p
+            ref={textRef}
+            className="text-[#2a2822] text-[clamp(1.2rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
+            style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", overflowWrap: "break-word" }}
+          >
+            {BIO.split(" ").map((word, wi) => (
+              <span
+                key={wi}
+                style={{ display: "inline-block", marginRight: "0.28em", whiteSpace: "nowrap" }}
+              >
+                {word.split("").map((char, ci) => (
+                  <span key={ci} className="l" style={{ opacity: reduced ? 1 : 0.08, transition: "opacity 0.15s" }}>
+                    {char}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </p>
+
+          {/* LinkedIn pill */}
+          <div>
+            <a
+              href="https://linkedin.com/in/lawlevisay"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-block border border-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem" }}
+            >
+              <span className="block text-[#2a2822] group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+                Connect on LinkedIn
+              </span>
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] text-[#2a2822]">
+                → View Profile
+              </span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
   );
 }
 
@@ -118,7 +206,7 @@ export default function About() {
       <Grain />
 
       {/* ── Heading ─────────────────────────────────────────────────────── */}
-      <div className="relative z-10 px-8 md:px-16 pt-16 md:pt-24 pb-10 border-b border-[#e8e8e8]">
+      <div className="relative z-10 px-6 md:px-16 pt-10 md:pt-24 pb-6 md:pb-10 border-b border-[#e8e8e8]">
         <AnimLabel>About</AnimLabel>
         <div ref={headingRef} className="mt-4">
           {[
@@ -127,7 +215,7 @@ export default function About() {
           ].map(({ text, delay }) => (
             <div key={text} className="overflow-hidden leading-[0.95]">
               <motion.div
-                className="text-[#2a2822] text-[clamp(2.4rem,6.5vw,5.5rem)] tracking-tight uppercase"
+                className="text-[#2a2822] text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase"
                 style={didot}
                 initial={{ y: reduced ? "0%" : "108%" }}
                 animate={headingIn ? { y: "0%" } : {}}
@@ -139,7 +227,7 @@ export default function About() {
           ))}
           <div className="overflow-hidden leading-[0.95]">
             <motion.div
-              className="text-[clamp(2.4rem,6.5vw,5.5rem)] tracking-tight"
+              className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight"
               style={{ ...didot, color: "#7c3aed", fontStyle: "italic" }}
               initial={{ y: reduced ? "0%" : "108%" }}
               animate={headingIn ? { y: "0%" } : {}}
@@ -151,65 +239,14 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── Image — magazine offset ─────────────────────────────────────── */}
-      {/* Replace src with your own photo when ready */}
-      <div className="relative z-10 py-12 md:py-16 border-b border-[#e8e8e8]">
-
-        {/* Full-width on mobile, editorial column on desktop */}
-        <div className="w-[92vw] md:w-[62vw] lg:w-[58vw]">
-          <div className="relative overflow-hidden h-[52vh] md:h-[68vh] lg:h-[72vh]">
-            <Image
-              src="/me.jpg"
-              alt="Law Levisay"
-              fill
-              unoptimized
-              className="object-cover object-top"
-              priority
-              sizes="(max-width: 768px) 92vw, (max-width: 1024px) 62vw, 58vw"
-            />
-          </div>
-          {/* Caption aligned with the content column */}
-          <p
-            className="mt-3 text-[9px] tracking-[0.28em] uppercase text-[#78746c] pl-8 md:pl-16"
-            style={{ fontFamily: "var(--font-fauna)" }}
-          >
-            Remote · Since 2022
-          </p>
-        </div>
-
-      </div>
-
-      {/* ── Body ────────────────────────────────────────────────────────── */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 border-b border-[#e8e8e8]">
-
-        {/* Left — The Setup */}
-        <div className="px-8 md:px-16 py-12 lg:border-r border-[#e8e8e8]">
-          <AnimLabel>01 / The Setup</AnimLabel>
-          <WordFlow
-            text="I'm a freelance automation developer working with founders and ops teams to build systems that remove the repetitive work — permanently. My stack: ERPNext, WooCommerce, n8n, Supabase."
-            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
-            style={serif}
-            baseDelay={0.05}
-          />
-        </div>
-
-        {/* Right — The Process */}
-        <div className="px-8 md:px-16 py-12">
-          <AnimLabel>02 / The Process</AnimLabel>
-          <WordFlow
-            text="If you don't catch me building a workflow, I'm probably designing the architecture behind it. I take on a small number of projects at a time — every integration gets the same care I'd apply to my own tools."
-            className="mt-5 text-[#2a2822] text-base md:text-lg leading-relaxed"
-            style={serif}
-            baseDelay={0.05}
-          />
-        </div>
-      </div>
+      {/* ── Image + Bio ─────────────────────────────────────────────────── */}
+      <AboutBody />
 
       {/* ── Quote ───────────────────────────────────────────────────────── */}
-      <div className="relative z-10 px-8 md:px-16 py-16 md:py-24">
+      <div className="relative z-10 px-6 md:px-16 py-8 md:py-24">
         <AnimLabel>The Signature</AnimLabel>
         <BlurReveal
-          className="mt-6 text-[#2a2822] text-[clamp(1.8rem,5vw,4rem)] leading-[1.1] tracking-tight"
+          className="mt-6 text-[#2a2822] text-[clamp(2rem,5vw,4rem)] leading-[1.1] tracking-tight"
           style={{ ...serif, fontStyle: "italic" }}
         >
           "The best automation is the one you forget is running."
