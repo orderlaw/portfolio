@@ -2,21 +2,6 @@
 
 import Image from "next/image";
 
-function Grain({ id, opacity = 0.28 }: { id: string; opacity?: number }) {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
-      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <filter id={`grain-sw-${id}`}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter={`url(#grain-sw-${id})`} opacity={opacity} />
-      </svg>
-    </div>
-  );
-}
-
-
 const WORKS = [
   {
     id: "1",
@@ -59,9 +44,6 @@ const WORKS = [
 export default function SelectedWorks() {
   return (
     <section id="work" className="relative bg-white pt-16 md:pt-24 pb-0">
-      {/* Section grain — matches About / Nav / Hero */}
-      <Grain id="section-bg" opacity={0.28} />
-
       <div className="relative z-10 px-6 md:px-16 pb-10 md:pb-16 border-b border-[#e8e8e8]">
         <p
           className="text-[9px] uppercase text-[#78746c] tracking-[0.28em] mb-4"
@@ -102,8 +84,6 @@ export default function SelectedWorks() {
               (e.currentTarget as HTMLDivElement).style.transform = `rotate(${work.rotation})`;
             }}
           >
-            {/* Grain covers entire card — header + padding strips around image */}
-            <Grain id={`card${work.id}`} opacity={0.32} />
 
             {/* Header */}
             <div
@@ -176,7 +156,6 @@ export default function SelectedWorks() {
                     className="object-cover"
                     sizes="82vw"
                   />
-                  <Grain id={`img${work.id}`} opacity={0.48} />
                 </div>
               </div>
             )}

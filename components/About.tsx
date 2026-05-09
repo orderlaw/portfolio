@@ -4,22 +4,6 @@ import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
-// ─── Grain ────────────────────────────────────────────────────────────────────
-
-function Grain() {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
-      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <filter id="grain-about">
-          <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#grain-about)" opacity="0.28" />
-      </svg>
-    </div>
-  );
-}
-
 function AnimLabel({ children }: { children: string }) {
   const ref    = useRef<HTMLParagraphElement>(null);
   const reduced = useReducedMotion();
@@ -220,8 +204,6 @@ export default function About() {
 
   return (
     <section id="about" className="relative bg-white">
-      <Grain />
-
       {/* ── Heading ─────────────────────────────────────────────────────── */}
       <div className="relative z-10 px-6 md:px-16 pt-10 md:pt-24 pb-6 md:pb-10 border-b border-[#e8e8e8]">
         <AnimLabel>About</AnimLabel>

@@ -55,17 +55,6 @@ export default function Hero() {
       style={{ minHeight: "100dvh" }}
     >
       <style dangerouslySetInnerHTML={{ __html: heroStyles }} />
-      {/* Grain */}
-      <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#grain)" opacity="0.28" />
-        </svg>
-      </div>
-
       {/* BLOCK 2 */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-3 sm:gap-5 px-6 md:px-16">
 

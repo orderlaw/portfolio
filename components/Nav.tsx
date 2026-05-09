@@ -31,16 +31,6 @@ function ScramblePill({ text, href }: { text: string; href: string }) {
 export default function Nav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden">
-      {/* Grain — matches Hero */}
-      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden>
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <filter id="grain-nav">
-            <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#grain-nav)" opacity="0.28" />
-        </svg>
-      </div>
       <a
         href="#"
         className="relative z-10 text-[#2a2822] font-black text-sm tracking-widest uppercase select-none"

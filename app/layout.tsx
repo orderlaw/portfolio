@@ -35,7 +35,18 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${gfsDidot.variable} ${faunaOne.variable} ${playfair.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <div className="fixed inset-0 pointer-events-none z-[9999]" aria-hidden>
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <filter id="grain-global">
+              <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
+              <feColorMatrix type="saturate" values="0" />
+            </filter>
+            <rect width="100%" height="100%" filter="url(#grain-global)" opacity="0.28" />
+          </svg>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
