@@ -68,22 +68,21 @@ export default function SelectedWorks() {
         {WORKS.map((work, i) => (
           <div
             key={work.id}
-            className={i === 0 ? "" : "mt-6 md:-mt-[160px]"}
-            style={{ zIndex: work.zIndex }}
-          >
-          <div
-            className="work-card mx-6 md:mx-16 relative"
+            className="mx-6 md:mx-16 relative"
             style={{
-              "--rot": work.rotation,
+              zIndex: work.zIndex,
+              marginTop: i === 0 ? 0 : "-160px",
+              transform: `rotate(${work.rotation})`,
+              transition: "transform 0.35s cubic-bezier(0.65, 0, 0.35, 1)",
               background: work.headerBg,
               boxShadow: "-7px 0px 10px rgba(0,0,0,0.35), 2px 2px 6px rgba(0,0,0,0.07)",
               willChange: "transform",
-            } as React.CSSProperties}
+            }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLDivElement).style.transform = "rotate(0deg) translateY(-44px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLDivElement).style.transform = "";
+              (e.currentTarget as HTMLDivElement).style.transform = `rotate(${work.rotation})`;
             }}
           >
 
@@ -163,7 +162,6 @@ export default function SelectedWorks() {
                 </div>
               </div>
             )}
-          </div>
           </div>
         ))}
       </div>

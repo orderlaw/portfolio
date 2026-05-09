@@ -77,8 +77,51 @@ export default function HowItWorks() {
         />
       </div>
 
-      {/* Tall scroll container — one viewport per step */}
+      {/* Mobile — flat list */}
+      <div className="md:hidden px-6 py-10 flex flex-col divide-y divide-[#e8e8e8]">
+        {STEPS.map((step) => (
+          <div key={step.number} className="py-8">
+            <span
+              style={{
+                fontFamily: "var(--font-fauna)",
+                fontSize: "0.6rem",
+                letterSpacing: "0.22em",
+                color: "#7c3aed",
+                display: "block",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {step.number}
+            </span>
+            <p
+              className="uppercase mb-4"
+              style={{
+                fontFamily: "var(--font-didot)",
+                fontSize: "clamp(2.2rem, 10vw, 3rem)",
+                lineHeight: 1.05,
+                letterSpacing: "-0.02em",
+                color: "#2a2822",
+              }}
+            >
+              {step.title}
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-fauna)",
+                fontSize: "0.95rem",
+                lineHeight: 1.75,
+                color: "#78746c",
+              }}
+            >
+              {step.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop — tall scroll container */}
       <div
+        className="hidden md:block"
         ref={containerRef}
         style={{ height: `calc(${STEPS.length + 1} * (100dvh - ${NAV_H}px))` }}
       >
