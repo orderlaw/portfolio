@@ -1,8 +1,18 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import HeadingReveal from "./HeadingReveal";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as number[] } },
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
 
 const SERVICES = [
   "n8n Workflow Automation",
@@ -218,13 +228,9 @@ function UnderlineTextarea({
 }
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-10%" });
-
   return (
     <section
       id="contact"
-      ref={sectionRef}
       className="relative bg-[#0e0c08]"
     >
       {/* ── Top: heading + badge ───────────────────────────────────── */}
@@ -254,19 +260,20 @@ export default function Contact() {
         {/* Form */}
         <motion.form
           onSubmit={(e) => e.preventDefault()}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-5%" }}
           className="flex flex-col gap-8"
         >
-          <UnderlineInput num="01" label="What's your name?" name="name" placeholder="John Smith" />
-          <UnderlineInput num="02" label="What's your email address?" name="email" type="email" placeholder="you@company.com" />
-          <UnderlineInput num="03" label="What's your company or organisation?" name="company" placeholder="Acme Corp" />
-          <UnderlineSelect num="04" label="What services are you looking for?" name="service" options={SERVICES} />
-          <UnderlineSelect num="05" label="What have you budgeted for this project?" name="budget" options={BUDGETS} />
-          <UnderlineTextarea num="06" label="Tell us about your project." name="message" placeholder="Walk me through what you're trying to automate..." />
+          <motion.div variants={fadeUp}><UnderlineInput num="01" label="What's your name?" name="name" placeholder="John Smith" /></motion.div>
+          <motion.div variants={fadeUp}><UnderlineInput num="02" label="What's your email address?" name="email" type="email" placeholder="you@company.com" /></motion.div>
+          <motion.div variants={fadeUp}><UnderlineInput num="03" label="What's your company or organisation?" name="company" placeholder="Acme Corp" /></motion.div>
+          <motion.div variants={fadeUp}><UnderlineSelect num="04" label="What services are you looking for?" name="service" options={SERVICES} /></motion.div>
+          <motion.div variants={fadeUp}><UnderlineSelect num="05" label="What have you budgeted for this project?" name="budget" options={BUDGETS} /></motion.div>
+          <motion.div variants={fadeUp}><UnderlineTextarea num="06" label="Tell us about your project." name="message" placeholder="Walk me through what you're trying to automate..." /></motion.div>
 
-          <div className="pt-2">
+          <motion.div variants={fadeUp} className="pt-2">
             <button
               type="submit"
               className="group relative inline-flex items-center gap-3 border border-[#eceae4] text-[#eceae4] text-xs md:text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-300"
@@ -277,17 +284,18 @@ export default function Contact() {
                 <path d="M7 17L17 7M17 7H7M17 7v10" />
               </svg>
             </button>
-          </div>
+          </motion.div>
         </motion.form>
 
         {/* Contact info */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-5%" }}
           className="flex flex-col gap-10 md:pt-2"
         >
-          <div className="flex flex-col gap-2">
+          <motion.div variants={fadeUp} className="flex flex-col gap-2">
             <p
               className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
@@ -301,9 +309,9 @@ export default function Contact() {
             >
               lawlevisay@gmail.com
             </a>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col gap-2">
+          <motion.div variants={fadeUp} className="flex flex-col gap-2">
             <p
               className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
@@ -322,9 +330,9 @@ export default function Contact() {
             >
               Typically respond within 24h. Happy to jump on a short discovery call first.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col gap-3">
+          <motion.div variants={fadeUp} className="flex flex-col gap-3">
             <p
               className="text-[11px] md:text-[9px] uppercase tracking-[0.28em]"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
@@ -367,7 +375,7 @@ export default function Contact() {
               </svg>
               X (Twitter)
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
