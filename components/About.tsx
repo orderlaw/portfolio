@@ -258,27 +258,6 @@ export default function About() {
 
       {/* ── Image + Bio ─────────────────────────────────────────────────── */}
       <AboutBody />
-
-      {/* ── Quote ───────────────────────────────────────────────────────── */}
-      <div className="relative z-10 px-6 md:px-16 py-8 md:py-24">
-        <AnimLabel>The Signature</AnimLabel>
-        <BlurReveal
-          className="mt-6 text-[#2a2822] text-[clamp(2rem,5vw,4rem)] leading-[1.1] tracking-tight"
-          style={{ ...serif, fontStyle: "italic" }}
-        >
-          "The best automation is the one you forget is running."
-        </BlurReveal>
-        <motion.p
-          className="mt-6 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
-          style={{ fontFamily: "var(--font-fauna)" }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          — Law Levisay, Automation Developer
-        </motion.p>
-      </div>
     </section>
   );
 }
