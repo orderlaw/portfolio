@@ -5,48 +5,7 @@ const heroStyles = `
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  @keyframes charUp {
-    from { opacity: 0; transform: translateY(60%); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
 `;
-
-function CharReveal({
-  text,
-  startDelay,
-  color = "#2a2822",
-}: {
-  text: string;
-  startDelay: number;
-  color?: string;
-}) {
-  return (
-    <div
-      style={{
-        fontFamily: "var(--font-didot)",
-        fontSize: "clamp(3rem, 18vw, 11rem)",
-        lineHeight: 0.88,
-        color,
-        textTransform: "uppercase" as const,
-        whiteSpace: "nowrap",
-      }}
-    >
-      {text.split("").map((char, i) => (
-        <span
-          key={i}
-          style={{
-            display: "inline-block",
-            opacity: 0,
-            animation: "charUp 0.75s cubic-bezier(0.22,1,0.36,1) forwards",
-            animationDelay: `${startDelay + i * 0.055}s`,
-          }}
-        >
-          {char}
-        </span>
-      ))}
-    </div>
-  );
-}
 
 export default function Hero() {
   return (
@@ -55,88 +14,58 @@ export default function Hero() {
       style={{ minHeight: "100dvh" }}
     >
       <style dangerouslySetInnerHTML={{ __html: heroStyles }} />
-      {/* BLOCK 2 */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-3 sm:gap-5 px-6 md:px-16">
 
-        <p
-          className="text-[#2a2822] text-[10px] tracking-[0.32em] uppercase"
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-16">
+
+        {/* Name */}
+        <h1
+          className="text-[#2a2822] uppercase leading-[0.9] tracking-tight mb-10 md:mb-14"
           style={{
-            fontFamily: "var(--font-fauna)",
+            fontFamily: "var(--font-didot)",
+            fontSize: "clamp(4.5rem, 18vw, 18rem)",
             opacity: 0,
-            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s forwards",
+            animation: "fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s forwards",
           }}
         >
-          Freelance · Automation Developer
-        </p>
+          Law<br />
+          <span style={{ color: "#7c3aed", fontStyle: "italic" }}>Levisay</span>
+        </h1>
 
-        <div>
-          <CharReveal text="LAW"     startDelay={0.3} />
-          <CharReveal text="LEVISAY" startDelay={0.5} color="#7c3aed" />
-        </div>
-
+        {/* Description */}
         <p
-          className="text-[#2a2822] text-sm md:text-base leading-relaxed max-w-[320px] md:max-w-sm"
+          className="text-[#2a2822] text-sm md:text-base leading-relaxed max-w-sm md:max-w-md mb-10 md:mb-14"
           style={{
             fontFamily: "var(--font-fauna)",
             fontStyle: "italic",
             opacity: 0,
-            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 1.2s forwards",
+            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s forwards",
           }}
         >
-          I build systems that run without you — n8n workflows, WooCommerce
-          integrations, and ERPNext automations.
+          A freelance automation developer building systems that run without you — n8n workflows, WooCommerce integrations, and ERPNext automations.
         </p>
 
-        {/* ── Email CTA ──────────────────────────────────────────────────── */}
+        {/* Let's Talk + email */}
         <div
-          className="w-full max-w-[22rem] mt-2 flex flex-col gap-5"
           style={{
             opacity: 0,
-            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 1.38s forwards",
+            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.8s forwards",
           }}
         >
-          {/* Full-width underline input */}
-          <div
-            className="flex items-end gap-3 w-full pb-2"
-            style={{ borderBottom: "1px solid rgba(42,40,34,0.55)" }}
-          >
-            <span
-              className="text-[11px] tracking-[0.18em] uppercase text-[#2a2822] shrink-0 leading-none"
-              style={{ fontFamily: "var(--font-fauna)" }}
-            >
-              Email:
-            </span>
-            <input
-              type="email"
-              placeholder="you@company.com"
-              className="flex-1 min-w-0 bg-transparent text-[#2a2822] text-xs outline-none placeholder:text-[#c4c0b8] leading-none"
-              style={{ fontFamily: "var(--font-fauna)" }}
-            />
-          </div>
-
-          {/* Footnote */}
           <p
-            className="text-[9px] text-[#78746c]"
-            style={{ fontFamily: "var(--font-fauna)", fontStyle: "italic" }}
+            className="text-[#2a2822] font-bold text-sm md:text-base mb-1"
+            style={{ fontFamily: "var(--font-fauna)" }}
           >
-            Selective with projects — one slot currently open.
+            Let&apos;s Talk
           </p>
-
-          {/* Centered pill button */}
-          <div className="flex justify-center">
-            <button
-              className="group relative inline-block border border-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
-              style={{ fontFamily: "var(--font-fauna)", padding: "0.55rem 2rem" }}
-            >
-              <span className="block text-[#2a2822] group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-                Commission Work
-              </span>
-              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] text-[#2a2822]">
-                → Let's Build
-              </span>
-            </button>
-          </div>
+          <a
+            href="mailto:lawlevisay@gmail.com"
+            className="text-[#78746c] text-sm md:text-base hover:text-[#7c3aed] transition-colors duration-200"
+            style={{ fontFamily: "var(--font-fauna)" }}
+          >
+            lawlevisay@gmail.com
+          </a>
         </div>
+
       </div>
 
       {/* Separator */}
