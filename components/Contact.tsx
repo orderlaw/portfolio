@@ -89,13 +89,13 @@ function UnderlineInput({
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-3">
         <span
-          className="text-[9px] tracking-[0.22em] shrink-0"
+          className="text-[11px] md:text-[9px] tracking-[0.22em] shrink-0"
           style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
         >
           {num}
         </span>
         <span
-          className="text-[0.78rem]"
+          className="text-sm md:text-[0.78rem]"
           style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
         >
           {label}
@@ -133,13 +133,13 @@ function UnderlineSelect({
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-3">
         <span
-          className="text-[9px] tracking-[0.22em] shrink-0"
+          className="text-[11px] md:text-[9px] tracking-[0.22em] shrink-0"
           style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
         >
           {num}
         </span>
         <span
-          className="text-[0.78rem]"
+          className="text-sm md:text-[0.78rem]"
           style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
         >
           {label}
@@ -189,13 +189,13 @@ function UnderlineTextarea({
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-3">
         <span
-          className="text-[9px] tracking-[0.22em] shrink-0"
+          className="text-[11px] md:text-[9px] tracking-[0.22em] shrink-0"
           style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
         >
           {num}
         </span>
         <span
-          className="text-[0.78rem]"
+          className="text-sm md:text-[0.78rem]"
           style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
         >
           {label}
@@ -231,7 +231,7 @@ export default function Contact() {
       <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14 border-b border-[#4e4a44] flex items-end justify-between gap-6">
         <div>
           <p
-            className="text-[9px] uppercase tracking-[0.28em] mb-4"
+            className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-4"
             style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
           >
             Contact
@@ -269,7 +269,7 @@ export default function Contact() {
           <div className="pt-2">
             <button
               type="submit"
-              className="group relative inline-flex items-center gap-3 border border-[#eceae4] text-[#eceae4] text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-300"
+              className="group relative inline-flex items-center gap-3 border border-[#eceae4] text-[#eceae4] text-xs md:text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-300"
               style={{ fontFamily: "var(--font-fauna)", padding: "0.65rem 1.75rem" }}
             >
               Send Message
@@ -289,7 +289,7 @@ export default function Contact() {
         >
           <div className="flex flex-col gap-2">
             <p
-              className="text-[9px] uppercase tracking-[0.28em] mb-3"
+              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
             >
               Email
@@ -305,7 +305,7 @@ export default function Contact() {
 
           <div className="flex flex-col gap-2">
             <p
-              className="text-[9px] uppercase tracking-[0.28em] mb-3"
+              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
             >
               Availability
@@ -317,7 +317,7 @@ export default function Contact() {
               One slot currently open
             </p>
             <p
-              className="text-[#a8a49e] text-[0.78rem] leading-relaxed max-w-[22ch]"
+              className="text-[#a8a49e] text-sm md:text-[0.78rem] leading-relaxed max-w-[22ch]"
               style={{ fontFamily: "var(--font-fauna)" }}
             >
               Typically respond within 24h. Happy to jump on a short discovery call first.
@@ -326,7 +326,7 @@ export default function Contact() {
 
           <div className="flex flex-col gap-3">
             <p
-              className="text-[9px] uppercase tracking-[0.28em]"
+              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em]"
               style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
             >
               Connect
@@ -335,7 +335,7 @@ export default function Contact() {
               href="https://linkedin.com/in/lawlevisay"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-[#eceae4] text-[0.78rem] hover:text-[#7c3aed] transition-colors duration-200"
+              className="inline-flex items-center gap-2 text-[#eceae4] text-sm md:text-[0.78rem] hover:text-[#7c3aed] transition-colors duration-200"
               style={{ fontFamily: "var(--font-fauna)" }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
