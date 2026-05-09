@@ -37,3 +37,14 @@ body {
 ::-webkit-scrollbar       { width: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+
+/* ── Selected Works cards ─────────────────────────────────────── */
+.work-card {
+  transform: rotate(0deg);
+  transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+@media (min-width: 768px) {
+  .work-card {
+    transform: rotate(var(--rot, 0deg));
+  }
+}
