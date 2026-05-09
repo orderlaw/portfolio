@@ -7,22 +7,22 @@ import HeadingReveal from "./HeadingReveal";
 const STEPS = [
   {
     number: "01",
-    title: "Talk",
+    title: "Consult",
     desc: "You walk me through how your business operates — what's working, what isn't, and where your team is losing time to repetitive work. No prep needed. Just an honest conversation.",
   },
   {
     number: "02",
-    title: "Scope",
+    title: "Architect",
     desc: "After the call, I map out your operations and come back with a clear breakdown: the problem, the solution, timeline, and cost. Plain English. No vague estimates. You approve everything before I start.",
   },
   {
     number: "03",
-    title: "Build",
+    title: "Execute",
     desc: "I handle the entire build. When it's ready, we test it with your actual data — real orders, real scenarios — before anything goes live. Nothing ships without your sign-off.",
   },
   {
     number: "04",
-    title: "Deploy",
+    title: "Launch",
     desc: "Once live, I walk you through how it works with a recorded demo and a one-pager for your team. I'm available for the first 30 days to adjust anything. Then it just runs.",
   },
 ];
@@ -31,8 +31,8 @@ const NAV_H = 56;
 
 export default function HowItWorks() {
   const [active, setActive] = useState(0);
-  const [stepProgress, setStepProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -46,7 +46,7 @@ export default function HowItWorks() {
       const currentStep = Math.min(Math.floor(p * STEPS.length), STEPS.length - 1);
       const sp = Math.max(0, Math.min(1, p * STEPS.length - currentStep));
       setActive(currentStep);
-      setStepProgress(sp);
+      if (barRef.current) barRef.current.style.width = `${sp * 100}%`;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -84,8 +84,19 @@ export default function HowItWorks() {
       {/* Mobile — flat list */}
       <div className="md:hidden px-6 py-10 flex flex-col divide-y divide-[#e8e8e8]">
         {STEPS.map((step) => (
-          <div key={step.number} className="py-8">
-            <span
+          <motion.div
+            key={step.number}
+            className="py-8"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-8%" }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.span
+              initial={{ opacity: 0, letterSpacing: "0.55em" }}
+              whileInView={{ opacity: 1, letterSpacing: "0.22em" }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
               style={{
                 fontFamily: "var(--font-fauna)",
                 fontSize: "0.6rem",
@@ -96,19 +107,24 @@ export default function HowItWorks() {
               }}
             >
               {step.number}
-            </span>
-            <p
-              className="uppercase mb-4"
-              style={{
-                fontFamily: "var(--font-didot)",
-                fontSize: "clamp(2.2rem, 10vw, 3rem)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.02em",
-                color: "#2a2822",
-              }}
-            >
-              {step.title}
-            </p>
+            </motion.span>
+            <div className="overflow-hidden mb-4">
+              <motion.p
+                className="uppercase italic"
+                initial={{ y: "108%" }}
+                animate={{ y: "0%" }}
+                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  fontFamily: "var(--font-didot)",
+                  fontSize: "clamp(2.2rem, 10vw, 3rem)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                  color: "#2a2822",
+                }}
+              >
+                {step.title}
+              </motion.p>
+            </div>
             <p
               style={{
                 fontFamily: "var(--font-fauna)",
@@ -119,7 +135,7 @@ export default function HowItWorks() {
             >
               {step.desc}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -186,6 +202,7 @@ export default function HowItWorks() {
                         lineHeight: 1.05,
                         letterSpacing: "-0.02em",
                         textTransform: "uppercase",
+                        fontStyle: "italic",
                         color: isActive ? "#2a2822" : "#78746c",
                         opacity: isActive ? 1 : 0.5,
                         transition: "color 0.5s ease, opacity 0.5s ease",
@@ -211,11 +228,9 @@ export default function HowItWorks() {
             </div>
             <div className="relative w-full overflow-hidden" style={{ height: "1px", background: "#e8e8e8" }}>
               <div
+                ref={barRef}
                 className="absolute inset-y-0 left-0 bg-[#7c3aed]"
-                style={{
-                  width: `${stepProgress * 100}%`,
-                  transition: "width 0.08s linear",
-                }}
+                style={{ width: "0%", willChange: "width" }}
               />
             </div>
           </div>
@@ -229,26 +244,23 @@ export default function HowItWorks() {
               className="absolute inset-0 flex items-center justify-start pointer-events-none"
               style={{ paddingBottom: "6rem" }}
             >
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={active}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  style={{
-                    fontFamily: "var(--font-didot)",
-                    fontSize: "clamp(12rem, 26vw, 22rem)",
-                    color: "transparent",
-                    WebkitTextStroke: "1px #e2ddd6",
-                    lineHeight: 1,
-                    userSelect: "none",
-                    letterSpacing: "-0.04em",
-                  }}
-                >
-                  {STEPS[active].number}
-                </motion.span>
-              </AnimatePresence>
+              <motion.span
+                key={active}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15 }}
+                style={{
+                  fontFamily: "var(--font-didot)",
+                  fontSize: "clamp(12rem, 26vw, 22rem)",
+                  color: "transparent",
+                  WebkitTextStroke: "1px #e2ddd6",
+                  lineHeight: 1,
+                  userSelect: "none",
+                  letterSpacing: "-0.04em",
+                }}
+              >
+                {STEPS[active].number}
+              </motion.span>
             </div>
 
             <AnimatePresence mode="wait">
