@@ -31,6 +31,7 @@ const NAV_H = 56;
 
 export default function HowItWorks() {
   const [active, setActive] = useState(0);
+  const [stepProgress, setStepProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,8 +42,11 @@ export default function HowItWorks() {
       const scrolledIn = -(rect.top - NAV_H);
       const scrollable = el.offsetHeight - (window.innerHeight - NAV_H);
       if (scrollable <= 0) return;
-      const progress = Math.max(0, Math.min(1, scrolledIn / scrollable));
-      setActive(Math.min(Math.floor(progress * STEPS.length), STEPS.length - 1));
+      const p = Math.max(0, Math.min(1, scrolledIn / scrollable));
+      const currentStep = Math.min(Math.floor(p * STEPS.length), STEPS.length - 1);
+      const sp = Math.max(0, Math.min(1, p * STEPS.length - currentStep));
+      setActive(currentStep);
+      setStepProgress(sp);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -123,16 +127,16 @@ export default function HowItWorks() {
       <div
         className="hidden md:block"
         ref={containerRef}
-        style={{ height: `calc(${STEPS.length + 1} * (100dvh - ${NAV_H}px))` }}
+        style={{ height: `calc(2.5 * (100dvh - ${NAV_H}px))` }}
       >
         {/* Sticky panel */}
         <div
-          className="sticky px-6 md:px-16 flex flex-col md:flex-row md:gap-16"
+          className="sticky relative px-6 md:px-16 flex flex-col md:flex-row md:gap-16"
           style={{ top: `${NAV_H}px`, height: `calc(100dvh - ${NAV_H}px)` }}
         >
           {/* Left — steps */}
           <div
-            className="flex flex-col justify-between md:w-[45%] py-10"
+            className="flex flex-col justify-between md:w-[45%] pt-10 pb-24"
             style={{ height: "100%" }}
           >
             {STEPS.map((step, i) => {
@@ -195,9 +199,30 @@ export default function HowItWorks() {
             })}
           </div>
 
+          {/* Bottom ticker — per-step progress */}
+          <div className="hidden md:block absolute bottom-0 left-6 md:left-16 right-6 md:right-16 pb-12">
+            <div className="flex items-center justify-between mb-2">
+              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#7c3aed" }}>
+                {STEPS[active].number}
+              </span>
+              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#b8b4ae" }}>
+                {active < STEPS.length - 1 ? STEPS[active + 1].number : "—"}
+              </span>
+            </div>
+            <div className="relative w-full overflow-hidden" style={{ height: "1px", background: "#e8e8e8" }}>
+              <div
+                className="absolute inset-y-0 left-0 bg-[#7c3aed]"
+                style={{
+                  width: `${stepProgress * 100}%`,
+                  transition: "width 0.08s linear",
+                }}
+              />
+            </div>
+          </div>
+
           {/* Right — background number + description */}
           <div
-            className="hidden md:flex md:w-[55%] flex-col justify-end py-10 relative"
+            className="hidden md:flex md:w-[55%] flex-col justify-end pt-10 pb-24 relative"
             style={{ height: "100%" }}
           >
             <div
@@ -210,7 +235,7 @@ export default function HowItWorks() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.15 }}
                   style={{
                     fontFamily: "var(--font-didot)",
                     fontSize: "clamp(12rem, 26vw, 22rem)",
@@ -232,7 +257,7 @@ export default function HowItWorks() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="relative z-10"
                 style={{ maxWidth: "420px", marginLeft: "auto" }}
               >

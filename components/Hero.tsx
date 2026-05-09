@@ -22,7 +22,7 @@ export default function Hero() {
           className="text-[#2a2822] uppercase leading-[0.9] tracking-tight mb-10 md:mb-14"
           style={{
             fontFamily: "var(--font-didot)",
-            fontSize: "clamp(4.5rem, 18vw, 18rem)",
+            fontSize: "clamp(4.5rem, 13vw, 11rem)",
             opacity: 0,
             animation: "fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s forwards",
           }}
