@@ -1,71 +1,216 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import MagneticButton from "./MagneticButton";
-import { useScramble } from "./ScrambleText";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import HeadingReveal from "./HeadingReveal";
 
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
-};
+const SERVICES = [
+  "n8n Workflow Automation",
+  "WooCommerce Integration",
+  "ERPNext Customisation",
+  "Supabase / Database Sync",
+  "Custom Backend Automation",
+  "Other",
+];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
-};
+const BUDGETS = [
+  "Under $1,000",
+  "$1,000 – $3,000",
+  "$3,000 – $7,000",
+  "$7,000 – $15,000",
+  "$15,000+",
+  "Not sure yet",
+];
 
-function SubmitButton() {
-  const { display, scramble, reset } = useScramble("Send Message", 16);
+function RotatingBadge() {
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const text = "GET IN TOUCH · GET IN TOUCH · ";
   return (
-    <MagneticButton strength={0.3}>
-      <button
-        type="submit"
-        onMouseEnter={scramble}
-        onMouseLeave={reset}
-        className="group border border-[#2a2822] text-[#2a2822] text-[10px] tracking-[0.2em] uppercase px-8 py-4 hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-250 flex items-center gap-3"
-        style={{ fontFamily: "var(--font-fauna)", minWidth: "12rem" }}
+    <div
+      className="relative shrink-0"
+      style={{ width: "9rem", height: "9rem" }}
+    >
+      <svg
+        viewBox="0 0 140 140"
+        width="144"
+        height="144"
+        style={{ animation: "spin 12s linear infinite", display: "block" }}
       >
-        {display}
-        <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+        <defs>
+          <path
+            id="badge-circle"
+            d={`M 70,70 m -${radius},0 a ${radius},${radius} 0 1,1 ${radius * 2},0 a ${radius},${radius} 0 1,1 -${radius * 2},0`}
+          />
+        </defs>
+        <text
+          style={{
+            fontFamily: "var(--font-fauna)",
+            fontSize: "10.5",
+            fill: "#eceae4",
+            letterSpacing: "3.2",
+          }}
+        >
+          <textPath href="#badge-circle">{text}</textPath>
+        </text>
+      </svg>
+      {/* Center arrow */}
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ animation: "spin-reverse 12s linear infinite" }}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eceae4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M7 17L17 7M17 7H7M17 7v10" />
         </svg>
-      </button>
-    </MagneticButton>
+      </div>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-reverse { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+      `}</style>
+    </div>
   );
 }
 
-function Field({
+function UnderlineInput({
+  num,
   label,
   name,
   type = "text",
-  textarea,
+  placeholder,
 }: {
+  num: string;
   label: string;
   name: string;
   type?: string;
-  textarea?: boolean;
+  placeholder: string;
 }) {
   const [focused, setFocused] = useState(false);
-  const Tag = textarea ? "textarea" : "input";
   return (
-    <div className="relative group">
-      <label
-        className="block text-[#a8a49e] text-[9px] tracking-[0.22em] uppercase mb-2.5 transition-colors duration-200"
-        style={{ fontFamily: "var(--font-fauna)", color: focused ? "#7c3aed" : "#a8a49e" }}
-      >
-        {label}
-      </label>
-      <Tag
+    <div className="flex flex-col gap-2">
+      <div className="flex items-baseline gap-3">
+        <span
+          className="text-[9px] tracking-[0.22em] shrink-0"
+          style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+        >
+          {num}
+        </span>
+        <span
+          className="text-[0.78rem]"
+          style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
+        >
+          {label}
+        </span>
+      </div>
+      <input
         name={name}
         type={type}
-        rows={textarea ? 4 : undefined}
+        placeholder={placeholder}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="w-full bg-transparent border-b pb-3 text-[#2a2822] text-sm outline-none resize-none transition-colors duration-200 placeholder-[#d2cec4]"
+        className="w-full bg-transparent pb-2.5 text-[#eceae4] text-sm outline-none placeholder-[#6a6660] transition-colors duration-200"
         style={{
           fontFamily: "var(--font-fauna)",
-          borderBottomColor: focused ? "#7c3aed" : "#d2cec4",
+          borderBottom: `1px solid ${focused ? "#7c3aed" : "#4e4a44"}`,
+        }}
+      />
+    </div>
+  );
+}
+
+function UnderlineSelect({
+  num,
+  label,
+  name,
+  options,
+}: {
+  num: string;
+  label: string;
+  name: string;
+  options: string[];
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-baseline gap-3">
+        <span
+          className="text-[9px] tracking-[0.22em] shrink-0"
+          style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+        >
+          {num}
+        </span>
+        <span
+          className="text-[0.78rem]"
+          style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
+        >
+          {label}
+        </span>
+      </div>
+      <div className="relative">
+        <select
+          name={name}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className="w-full bg-transparent pb-2.5 text-sm outline-none appearance-none cursor-pointer transition-colors duration-200"
+          style={{
+            fontFamily: "var(--font-fauna)",
+            color: "#eceae4",
+            borderBottom: `1px solid ${focused ? "#7c3aed" : "#4e4a44"}`,
+          }}
+        >
+          <option value="" style={{ background: "#2a2822" }}>Choose from a list here</option>
+          {options.map((o) => (
+            <option key={o} value={o} style={{ background: "#2a2822" }}>{o}</option>
+          ))}
+        </select>
+        <svg
+          className="absolute right-0 bottom-3 pointer-events-none"
+          width="10" height="10" viewBox="0 0 10 10" fill="none"
+        >
+          <path d="M2 3.5L5 6.5L8 3.5" stroke="#a8a49e" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function UnderlineTextarea({
+  num,
+  label,
+  name,
+  placeholder,
+}: {
+  num: string;
+  label: string;
+  name: string;
+  placeholder: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-baseline gap-3">
+        <span
+          className="text-[9px] tracking-[0.22em] shrink-0"
+          style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+        >
+          {num}
+        </span>
+        <span
+          className="text-[0.78rem]"
+          style={{ fontFamily: "var(--font-fauna)", color: focused ? "#eceae4" : "#c4c0b8" }}
+        >
+          {label}
+        </span>
+      </div>
+      <textarea
+        name={name}
+        rows={3}
+        placeholder={placeholder}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className="w-full bg-transparent pb-2.5 text-[#eceae4] text-sm outline-none resize-none placeholder-[#6a6660] transition-colors duration-200"
+        style={{
+          fontFamily: "var(--font-fauna)",
+          borderBottom: `1px solid ${focused ? "#7c3aed" : "#4e4a44"}`,
         }}
       />
     </div>
@@ -73,102 +218,149 @@ function Field({
 }
 
 export default function Contact() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-10%" });
+
   return (
-    <section id="contact" className="bg-[#eceae4] px-6 sm:px-10 md:px-16 lg:px-24 py-20 md:py-28">
-      {/* Header */}
-      <div className="flex items-baseline justify-between border-b border-[#d2cec4] pb-6 mb-14">
-        <div className="overflow-hidden">
-          <motion.h2
-            initial={{ y: "105%" }}
-            whileInView={{ y: "0%" }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[#2a2822] leading-none"
-            style={{ fontFamily: "var(--font-cinzel)", fontWeight: 700, fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)", textTransform: "uppercase" }}
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="relative bg-[#0e0c08]"
+    >
+      {/* ── Top: heading + badge ───────────────────────────────────── */}
+      <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14 border-b border-[#4e4a44] flex items-end justify-between gap-6">
+        <div>
+          <p
+            className="text-[9px] uppercase tracking-[0.28em] mb-4"
+            style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
           >
             Contact
-          </motion.h2>
+          </p>
+          <HeadingReveal
+            lines={[
+              { text: "Let's work", color: "#eceae4", delay: 0.05 },
+              { text: "together.", color: "#7c3aed", italic: true, delay: 0.18 },
+            ]}
+          />
         </div>
-        <motion.span
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-[#7c3aed] text-[10px] tracking-[0.25em] uppercase"
-          style={{ fontFamily: "var(--font-fauna)" }}
-        >
-          Open to projects
-        </motion.span>
+        <div className="hidden md:block mb-2">
+          <RotatingBadge />
+        </div>
       </div>
 
-      <div className="grid md:grid-cols-[1fr_1.1fr] gap-14 md:gap-20 items-start">
-        {/* Left — headline + info */}
-        <div className="flex flex-col gap-10">
-          <div>
-            {["Got a process", "that needs to", "disappear?"].map((line, i) => (
-              <div key={i} className="overflow-hidden">
-                <motion.span
-                  initial={{ y: "110%" }}
-                  whileInView={{ y: "0%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.07 * i, ease: [0.22, 1, 0.36, 1] }}
-                  className="block leading-[0.9]"
-                  style={{
-                    fontFamily: "var(--font-playfair)",
-                    fontWeight: 700,
-                    fontSize: "clamp(2.2rem, 5vw, 4.5rem)",
-                    color: i === 2 ? "#7c3aed" : "#2a2822",
-                  }}
-                >
-                  {line}
-                </motion.span>
-              </div>
-            ))}
+      {/* ── Main: form + info ─────────────────────────────────────── */}
+      <div className="px-6 md:px-16 py-12 md:py-16 grid md:grid-cols-[1.55fr_1fr] gap-14 md:gap-20 items-start">
+
+        {/* Form */}
+        <motion.form
+          onSubmit={(e) => e.preventDefault()}
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col gap-8"
+        >
+          <UnderlineInput num="01" label="What's your name?" name="name" placeholder="John Smith" />
+          <UnderlineInput num="02" label="What's your email address?" name="email" type="email" placeholder="you@company.com" />
+          <UnderlineInput num="03" label="What's your company or organisation?" name="company" placeholder="Acme Corp" />
+          <UnderlineSelect num="04" label="What services are you looking for?" name="service" options={SERVICES} />
+          <UnderlineSelect num="05" label="What have you budgeted for this project?" name="budget" options={BUDGETS} />
+          <UnderlineTextarea num="06" label="Tell us about your project." name="message" placeholder="Walk me through what you're trying to automate..." />
+
+          <div className="pt-2">
+            <button
+              type="submit"
+              className="group relative inline-flex items-center gap-3 border border-[#eceae4] text-[#eceae4] text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-300"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.65rem 1.75rem" }}
+            >
+              Send Message
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </button>
+          </div>
+        </motion.form>
+
+        {/* Contact info */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col gap-10 md:pt-2"
+        >
+          <div className="flex flex-col gap-2">
+            <p
+              className="text-[9px] uppercase tracking-[0.28em] mb-3"
+              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+            >
+              Email
+            </p>
+            <a
+              href="mailto:lawlevisay@gmail.com"
+              className="text-[#eceae4] text-sm hover:text-[#7c3aed] transition-colors duration-200"
+              style={{ fontFamily: "var(--font-fauna)" }}
+            >
+              lawlevisay@gmail.com
+            </a>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col gap-4"
-          >
-            <p className="text-[#78746c] text-sm leading-relaxed max-w-xs" style={{ fontFamily: "var(--font-fauna)" }}>
-              Typically respond within 24h. Happy to jump on a short discovery call before any commitment.
+          <div className="flex flex-col gap-2">
+            <p
+              className="text-[9px] uppercase tracking-[0.28em] mb-3"
+              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+            >
+              Availability
             </p>
-            <div>
-              <p className="text-[#a8a49e] text-[10px] tracking-[0.2em] uppercase mb-1" style={{ fontFamily: "var(--font-fauna)" }}>
-                Availability
-              </p>
-              <p className="text-[#7c3aed] text-sm font-semibold" style={{ fontFamily: "var(--font-fauna)" }}>
-                Open to new projects
-              </p>
-            </div>
-          </motion.div>
-        </div>
+            <p
+              className="text-[#7c3aed] text-sm"
+              style={{ fontFamily: "var(--font-fauna)" }}
+            >
+              One slot currently open
+            </p>
+            <p
+              className="text-[#a8a49e] text-[0.78rem] leading-relaxed max-w-[22ch]"
+              style={{ fontFamily: "var(--font-fauna)" }}
+            >
+              Typically respond within 24h. Happy to jump on a short discovery call first.
+            </p>
+          </div>
 
-        {/* Right — form */}
-        <motion.form
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="flex flex-col gap-8"
-          onSubmit={(e) => e.preventDefault()}
+          <div className="flex flex-col gap-3">
+            <p
+              className="text-[9px] uppercase tracking-[0.28em]"
+              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+            >
+              Connect
+            </p>
+            <a
+              href="https://linkedin.com/in/lawlevisay"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[#eceae4] text-[0.78rem] hover:text-[#7c3aed] transition-colors duration-200"
+              style={{ fontFamily: "var(--font-fauna)" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0H5C2.239 0 0 2.239 0 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5V5c0-2.761-2.238-5-5-5zM8 19H5V8h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0V19h-3V8h3v1.765c1.396-2.586 7-2.777 7 2.476V19z" />
+              </svg>
+              LinkedIn → Law Levisay
+            </a>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* ── Footer strip ──────────────────────────────────────────── */}
+      <div className="px-6 md:px-16 py-5 border-t border-[#4e4a44] flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+        <p
+          className="text-[9px] uppercase tracking-[0.22em]"
+          style={{ fontFamily: "var(--font-fauna)", color: "#706c66" }}
         >
-          <motion.div variants={fadeUp} className="grid sm:grid-cols-2 gap-8">
-            <Field label="Your Name" name="name" />
-            <Field label="Email Address" name="email" type="email" />
-          </motion.div>
-
-          <motion.div variants={fadeUp}>
-            <Field label="Tell me about your project" name="message" textarea />
-          </motion.div>
-
-          <motion.div variants={fadeUp}>
-            <SubmitButton />
-          </motion.div>
-        </motion.form>
+          © 2025 Law Levisay
+        </p>
+        <p
+          className="text-[9px] uppercase tracking-[0.22em]"
+          style={{ fontFamily: "var(--font-fauna)", color: "#706c66" }}
+        >
+          Remote · Automation Developer
+        </p>
       </div>
     </section>
   );

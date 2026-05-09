@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useScramble } from "./ScrambleText";
 
 const links = [
@@ -29,8 +30,30 @@ function ScramblePill({ text, href }: { text: string; href: string }) {
 }
 
 export default function Nav() {
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const contact = document.getElementById("contact");
+      if (!contact) return;
+      const rect = contact.getBoundingClientRect();
+      setHidden(rect.top <= window.innerHeight * 0.05);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden"
+      style={{
+        transform: hidden ? "translateY(-100%)" : "translateY(0)",
+        opacity: hidden ? 0 : 1,
+        transition: "transform 0.45s cubic-bezier(0.65,0,0.35,1), opacity 0.45s ease",
+        pointerEvents: hidden ? "none" : "auto",
+      }}
+    >
       <a
         href="#"
         className="relative z-10 text-[#2a2822] font-black text-sm tracking-widest uppercase select-none"

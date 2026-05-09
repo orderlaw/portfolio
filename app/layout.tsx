@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GFS_Didot, Fauna_One, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const gfsDidot = GFS_Didot({
   subsets: ["latin"],
@@ -45,7 +46,7 @@ export default function RootLayout({
             <rect width="100%" height="100%" filter="url(#grain-global)" opacity="0.28" />
           </svg>
         </div>
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

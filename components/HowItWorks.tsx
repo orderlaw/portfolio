@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import HeadingReveal from "./HeadingReveal";
 
 const STEPS = [
   {
@@ -68,16 +69,12 @@ export default function HowItWorks() {
         >
           Process
         </p>
-        <h2
-          className="text-[#2a2822] text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase leading-[0.95]"
-          style={{ fontFamily: "var(--font-didot)" }}
-        >
-          How it
-          <br />
-          <span style={{ fontFamily: "var(--font-didot)", fontStyle: "italic", color: "#7c3aed" }}>
-            works.
-          </span>
-        </h2>
+        <HeadingReveal
+          lines={[
+            { text: "How it", color: "#2a2822", delay: 0.05 },
+            { text: "works.", color: "#7c3aed", italic: true, delay: 0.18 },
+          ]}
+        />
       </div>
 
       {/* Tall scroll container — one viewport per step */}
@@ -187,22 +184,49 @@ export default function HowItWorks() {
             </div>
 
             <AnimatePresence mode="wait">
-              <motion.p
+              <motion.div
                 key={active}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative z-10 text-[#2a2822]"
-                style={{
-                  fontFamily: "var(--font-fauna)",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.8,
-                  maxWidth: "380px",
-                }}
+                className="relative z-10"
+                style={{ maxWidth: "420px", marginLeft: "auto" }}
               >
-                {STEPS[active].desc}
-              </motion.p>
+                <div className="flex items-center gap-3 mb-4">
+                  <span
+                    style={{
+                      fontFamily: "var(--font-fauna)",
+                      fontSize: "0.6rem",
+                      letterSpacing: "0.22em",
+                      color: "#7c3aed",
+                    }}
+                  >
+                    {STEPS[active].number}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-didot)",
+                      fontSize: "0.85rem",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "#2a2822",
+                    }}
+                  >
+                    {STEPS[active].title}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    fontFamily: "var(--font-fauna)",
+                    fontSize: "1.05rem",
+                    lineHeight: 1.75,
+                    color: "#2a2822",
+                  }}
+                >
+                  {STEPS[active].desc}
+                </p>
+              </motion.div>
             </AnimatePresence>
           </div>
         </div>

@@ -1,0 +1,61 @@
+export const metadata = {
+  title: "Supabase + ERPNext Workflow — Law Levisay",
+  description: "Real-time sync layer between ERPNext operations and a Supabase analytics instance, giving the team one source of truth.",
+};
+
+# Supabase + ERPNext Workflow
+
+### Overview
+
+A growing wholesale operation had accumulated data in the right places but understanding in none of them. ERPNext handled sales, purchases, and stock. A separate accounting tool handled margins. Someone ran a weekly report by hand that pulled from both and pasted the numbers into a deck.
+
+The deck was always out of date by the time anyone read it.
+
+---
+
+## The Problem
+
+The business was making decisions on week-old data in an industry where margins shift daily. The ops director could tell you last week's best-selling SKU. She couldn't tell you today's.
+
+The underlying data existed — it just lived in silos that didn't talk to each other, and the only bridge between them was a person with a spreadsheet and three hours to spare on a Friday.
+
+**The gap:**
+
+- No real-time visibility across sales, stock, and purchasing simultaneously
+- Margin analysis required manual joins between two systems
+- Reporting was a deliverable, not a capability — it happened when someone made it happen
+
+---
+
+## What Was Built
+
+The goal was a single Supabase instance that stayed in sync with ERPNext in real time, without replacing ERPNext as the operational system of record.
+
+### Event-Driven Sync Layer
+
+ERPNext server scripts fire on document submission events: Sales Invoices, Purchase Invoices, Stock Entries, and Delivery Notes. Each script formats the relevant data and pushes it to a webhook endpoint. n8n receives the payload, validates it, and upserts the corresponding record in Supabase.
+
+The sync is unidirectional by design — ERPNext stays authoritative, Supabase stays analytical. No risk of data conflicts.
+
+### Schema Design
+
+Supabase tables were designed around the questions the business actually asks, not around ERPNext's document structure. A `sales_movements` table joins invoice lines, item metadata, and margin data at insert time, so queries stay fast and simple on the analytics side.
+
+Supplier performance, slow-moving stock, and margin by category are all single-table queries.
+
+### Dashboard Layer
+
+With clean, live data in Supabase, the team connected their existing BI tool directly to the database. The Friday deck became a live dashboard. The ops director now checks margin by category every morning in under thirty seconds.
+
+---
+
+## Results
+
+- **Real-time visibility** across sales, stock, and purchasing — updated within seconds of any ERPNext transaction
+- Weekly manual report eliminated — replaced by a live dashboard requiring no maintenance
+- Margin analysis reduced from **3 hours** to a self-serve query taking seconds
+- New hires can understand the business's performance on day one without requiring a walkthrough
+
+---
+
+> "I used to wait until Friday to know how the week went. Now I know by 9am every day."

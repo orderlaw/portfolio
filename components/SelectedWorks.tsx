@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import HeadingReveal from "./HeadingReveal";
 
 const WORKS = [
   {
     id: "1",
+    slug: "erpnext-inventory-automation",
     title: "ERPNext Inventory Automation",
     desc: "Automated stock sync and procurement across 3 retail locations. Built custom doctypes, scripted reorder triggers, and eliminated manual purchase orders entirely. Stock discrepancies dropped to near zero within the first month.",
     pill: "Case Study →",
@@ -17,6 +20,7 @@ const WORKS = [
   },
   {
     id: "2",
+    slug: "woocommerce-n8n-integration",
     title: "WooCommerce + n8n Integration",
     desc: "End-to-end order automation from checkout through warehouse dispatch. n8n handles routing, status updates, and fulfilment triggers — no human touchpoints, no missed orders, no support tickets about shipping delays.",
     pill: "Case Study →",
@@ -29,6 +33,7 @@ const WORKS = [
   },
   {
     id: "3",
+    slug: "supabase-erpnext-workflow",
     title: "Supabase + ERPNext Workflow",
     desc: "Real-time sync layer between operations and analytics. Every sale, stock movement, and supplier invoice flows into a single Supabase instance — giving the team one source of truth across every dashboard and report.",
     pill: "Case Study →",
@@ -51,16 +56,12 @@ export default function SelectedWorks() {
         >
           Selected Works
         </p>
-        <h2
-          className="text-[#2a2822] text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase leading-[0.95]"
-          style={{ fontFamily: "var(--font-didot)" }}
-        >
-          Projects that
-          <br />
-          <span style={{ fontFamily: "var(--font-didot)", fontStyle: "italic", color: "#7c3aed" }}>
-            stayed running.
-          </span>
-        </h2>
+        <HeadingReveal
+          lines={[
+            { text: "Projects that", color: "#2a2822", delay: 0.05 },
+            { text: "stayed running.", color: "#7c3aed", italic: true, delay: 0.18 },
+          ]}
+        />
       </div>
 
       <div className="relative z-10 pt-16 md:pt-24">
@@ -124,7 +125,8 @@ export default function SelectedWorks() {
                   </p>
 
                   <div className="flex md:justify-end">
-                    <button
+                    <Link
+                      href={`/work/${work.slug}`}
                       style={{
                         border: `1px solid ${work.textColor}`,
                         color: work.textColor,
@@ -134,12 +136,13 @@ export default function SelectedWorks() {
                         letterSpacing: "0.12em",
                         fontFamily: "var(--font-fauna)",
                         background: "transparent",
-                        cursor: "pointer",
                         opacity: 0.9,
+                        display: "inline-block",
+                        textDecoration: "none",
                       }}
                     >
                       {work.pill}
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

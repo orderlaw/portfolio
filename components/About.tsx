@@ -100,10 +100,9 @@ function AboutBody() {
               ease:      "none",
               scrollTrigger: {
                 trigger:             sectionRef.current,
-                start:               "top 85%",
-                end:                 "bottom 30%",
-                scrub:               false,
-                toggleActions:       "play none none none",
+                start:               "top bottom",
+                end:                 "center center",
+                scrub:               1,
                 invalidateOnRefresh: true,
               },
             }
