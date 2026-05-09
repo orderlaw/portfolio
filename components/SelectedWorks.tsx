@@ -108,62 +108,59 @@ export default function SelectedWorks() {
             {/* Header */}
             <div
               className="relative overflow-hidden"
-              style={{
-                height: "220px",
-                padding: "1.75rem 2.5rem 1.75rem 2rem",
-                display: "grid",
-                gridTemplateColumns: "34% 1fr",
-                gap: "2.5rem",
-                alignItems: "start",
-              }}
+              style={{ padding: "1.5rem 1.5rem" }}
             >
-              {/* Title */}
-              <h3
-                className="relative z-10"
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  fontSize: "clamp(1.4rem, 2.4vw, 2.2rem)",
-                  color: work.textColor,
-                  lineHeight: 1.1,
-                  margin: 0,
-                }}
+              {/* Mobile: stack. Desktop: 2-col grid */}
+              <div className="relative z-10 flex flex-col gap-3 md:grid md:gap-10 md:items-start"
+                style={{ gridTemplateColumns: "34% 1fr" }}
               >
-                {work.title}
-              </h3>
-
-              {/* Right col — desc + button */}
-              <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingBottom: "0.25rem" }}>
-                <p
+                {/* Title */}
+                <h3
                   style={{
-                    fontFamily: "var(--font-fauna)",
-                    fontSize: "0.78rem",
-                    lineHeight: 1.7,
+                    fontFamily: "var(--font-playfair)",
+                    fontSize: "clamp(1.3rem, 2.4vw, 2.2rem)",
                     color: work.textColor,
-                    opacity: 0.85,
+                    lineHeight: 1.1,
                     margin: 0,
-                    maxWidth: "58ch",
                   }}
                 >
-                  {work.desc}
-                </p>
+                  {work.title}
+                </h3>
 
-                <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "0.5rem" }}>
-                  <button
+                {/* Desc + button */}
+                <div className="flex flex-col gap-4">
+                  <p
                     style={{
-                      border: `1px solid ${work.textColor}`,
-                      color: work.textColor,
-                      borderRadius: 9999,
-                      padding: "0.3rem 1rem",
-                      fontSize: "0.6rem",
-                      letterSpacing: "0.12em",
                       fontFamily: "var(--font-fauna)",
-                      background: "transparent",
-                      cursor: "pointer",
-                      opacity: 0.9,
+                      fontSize: "0.78rem",
+                      lineHeight: 1.7,
+                      color: work.textColor,
+                      opacity: 0.85,
+                      margin: 0,
+                      maxWidth: "58ch",
                     }}
                   >
-                    {work.pill}
-                  </button>
+                    {work.desc}
+                  </p>
+
+                  <div className="flex md:justify-end">
+                    <button
+                      style={{
+                        border: `1px solid ${work.textColor}`,
+                        color: work.textColor,
+                        borderRadius: 9999,
+                        padding: "0.35rem 1rem",
+                        fontSize: "0.6rem",
+                        letterSpacing: "0.12em",
+                        fontFamily: "var(--font-fauna)",
+                        background: "transparent",
+                        cursor: "pointer",
+                        opacity: 0.9,
+                      }}
+                    >
+                      {work.pill}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
