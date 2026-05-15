@@ -82,10 +82,11 @@ function ServiceNode({ data }: { data: { label: string } }) {
 function HubNode({ data }: { data: { label: string } }) {
   return (
     <>
-      <Handle type="target" position={Position.Left}  id="target-left"  style={HANDLE} />
-      <Handle type="source" position={Position.Left}  id="source-left"  style={HANDLE} />
-      <Handle type="target" position={Position.Right} id="target-right" style={HANDLE} />
-      <Handle type="source" position={Position.Right} id="source-right" style={HANDLE} />
+      <Handle type="target" position={Position.Left}   id="target-left"   style={HANDLE} />
+      <Handle type="source" position={Position.Left}   id="source-left"   style={HANDLE} />
+      <Handle type="target" position={Position.Right}  id="target-right"  style={HANDLE} />
+      <Handle type="source" position={Position.Right}  id="source-right"  style={HANDLE} />
+      <Handle type="target" position={Position.Top}    id="target-top"    style={HANDLE} />
       <div
         style={{
           width: 68,
@@ -109,10 +110,53 @@ function HubNode({ data }: { data: { label: string } }) {
   );
 }
 
+function NoteNode({ data }: { data: { text: string } }) {
+  return (
+    <>
+      <Handle type="source" position={Position.Right}  id="right"  style={HANDLE} />
+      <Handle type="source" position={Position.Bottom} id="bottom" style={HANDLE} />
+      <div
+        style={{
+          background: "#faf9f7",
+          border: "1px solid #e0ddd7",
+          borderRadius: "4px",
+          padding: "8px 11px",
+          maxWidth: 165,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: "var(--font-fauna)",
+            fontSize: "0.44rem",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "#a8a49e",
+            marginBottom: 5,
+          }}
+        >
+          Note
+        </div>
+        <div
+          style={{
+            fontFamily: "var(--font-fauna)",
+            fontSize: "0.62rem",
+            lineHeight: 1.55,
+            color: "#5c574f",
+          }}
+        >
+          {data.text}
+        </div>
+      </div>
+    </>
+  );
+}
+
 const nodeTypes: NodeTypes = {
   group:   GroupNode,
   service: ServiceNode,
   hub:     HubNode,
+  note:    NoteNode,
 };
 
 // ── Edge defaults ─────────────────────────────────────────────────────────────
@@ -168,8 +212,38 @@ const DIAGRAMS: Record<string, DiagramDef> = {
       { id: "SHEETS", type: "service", parentId: "g-data", extent: "parent", position: { x: 12, y: 160 }, data: { label: "Google Sheets" } },
       // Hub
       { id: "N8N", type: "hub", position: { x: 255, y: 162 }, data: { label: "n8n" } },
+      // Notes
+      {
+        id: "note-raz",
+        type: "note",
+        position: { x: -205, y: 148 },
+        data: { text: "Each webhook is HMAC-SHA256 verified before any order update fires." },
+      },
+      {
+        id: "note-hub",
+        type: "note",
+        position: { x: 218, y: -100 },
+        data: { text: "11 active workflows — every event resolved in under 30 seconds." },
+      },
     ],
     edges: [
+      // Annotation edges (dashed, no arrow)
+      {
+        id: "e-note-raz",
+        source: "note-raz", sourceHandle: "right",
+        target: "RAZ",      targetHandle: "target-left",
+        type: "straight",
+        style: { stroke: "#3a3f4a", strokeWidth: 1, strokeDasharray: "4 4" },
+        markerEnd: undefined,
+      },
+      {
+        id: "e-note-hub",
+        source: "note-hub", sourceHandle: "bottom",
+        target: "N8N",      targetHandle: "target-top",
+        type: "straight",
+        style: { stroke: "#3a3f4a", strokeWidth: 1, strokeDasharray: "4 4" },
+        markerEnd: undefined,
+      },
       { id: "e-woo-n8n",   source: "WOO",   sourceHandle: "source-right", target: "N8N",   targetHandle: "target-left",  label: "order events"    },
       { id: "e-raz-n8n",   source: "RAZ",   sourceHandle: "source-right", target: "N8N",   targetHandle: "target-left",  label: "HMAC webhook"    },
       { id: "e-ship-n8n",  source: "SHIP",  sourceHandle: "source-left",  target: "N8N",   targetHandle: "target-right", label: "status webhooks" },
