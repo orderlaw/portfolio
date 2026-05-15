@@ -418,7 +418,7 @@ function FlowCanvas({ id }: { id: string }) {
   const [edges, , onEdgesChange] = useEdgesState(diagram?.edges ?? []);
 
   return (
-    <div style={{ height: 480, background: "#13161c" }}>
+    <div style={{ height: 480, background: "#13161c", position: "relative", zIndex: 10000, isolation: "isolate" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
