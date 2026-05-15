@@ -48,7 +48,7 @@ export default function Nav() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden"
+      className="fixed top-0 left-0 right-0 z-[10001] h-14 flex items-center justify-between px-8 md:px-16 bg-white border-b border-[#e8e8e8] overflow-hidden"
       style={{
         transform: hidden ? "translateY(-100%)" : "translateY(0)",
         opacity: hidden ? 0 : 1,
@@ -56,6 +56,14 @@ export default function Nav() {
         pointerEvents: hidden ? "none" : "auto",
       }}
     >
+      {/* Nav-local grain so it matches the rest of the page regardless of z-index */}
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        <filter id="grain-nav">
+          <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain-nav)" opacity="0.28" />
+      </svg>
       <a
         href="#"
         className="relative z-10 text-[#2a2822] font-black text-sm tracking-widest uppercase select-none"
