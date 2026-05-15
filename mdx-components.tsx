@@ -1,7 +1,22 @@
 import type { MDXComponents } from "mdx/types";
+import ImageSlider from "@/components/ImageSlider";
+import MermaidDiagram from "@/components/MermaidDiagram";
+import FlowDiagram from "@/components/FlowDiagram";
 
 export function useMDXComponents(): MDXComponents {
   return {
+    ImageSlider,
+    MermaidDiagram,
+    FlowDiagram,
+    img: ({ src, alt }) => (
+      <span className="block my-8">
+        <img
+          src={src}
+          alt={alt ?? ""}
+          style={{ width: "100%", height: "auto", display: "block" }}
+        />
+      </span>
+    ),
     h1: ({ children }) => (
       <h1
         style={{
