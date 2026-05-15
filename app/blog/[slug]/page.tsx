@@ -44,21 +44,6 @@ export default async function BlogPostPage({
         {/* Article — everything in the centered reading column */}
         <article className="px-6 py-12 md:py-16">
           <div className="max-w-[680px] mx-auto">
-            {/* Back */}
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200 mb-10 block"
-              style={{
-                fontFamily: "var(--font-fauna)",
-                fontSize: "0.65rem",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-              }}
-            >
-              <span>←</span>
-              <span>All posts</span>
-            </Link>
-
             {/* Meta */}
             <p
               className="mb-5"
