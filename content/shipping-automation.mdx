@@ -1,0 +1,48 @@
+export const metadata = {
+  title: "After the Order Shipped, the Store Went Silent — Law Levisay",
+  description: "How connecting Shiprocket to WhatsApp and the ops system turned every shipment status change into an automatic customer notification, an instant admin alert, and a self-filing payment record.",
+};
+
+Shiprocket was doing its job.
+
+Packages were getting picked up, moving through the network, reaching customers. The logistics side was fine. But the moment an order left the warehouse, it disappeared into a black box — for the customer and for the team.
+
+Customers had no idea where their order was. They'd get a tracking link buried in an email, click it, land on a courier website with cryptic status codes that meant nothing to them, and give up. Then they'd message support. "Where is my order?" Same question, dozens of times a day, every day.
+
+The team wasn't in a much better position. Returns showed up in the Shiprocket dashboard whenever someone checked. RTO shipments — packages rejected and headed back to the warehouse — got noticed late, handled late, cost the business money. Nobody was watching the dashboard all day. Nobody could be.
+
+And for cash on delivery orders, delivery was technically when payment happened — the courier collected cash at the door. But nobody was recording that automatically. It was another manual step waiting to be forgotten.
+
+---
+
+## What I Built
+
+Shiprocket fires a webhook every time a shipment status changes. I connected that to n8n and built a routing system that handles each status differently — because pickup, out for delivery, delivered, and returned are completely different events that need completely different responses.
+
+**Pickup.** Order collected by the courier. Customer gets a WhatsApp message immediately — your order is on its way. Short, simple, sets the expectation. Kills the anxiety that builds when customers hear nothing after placing an order.
+
+**Out for delivery.** Courier is running deliveries today and this order is on the route. Customer gets a message — your order is being delivered today. This is the single notification that wipes out most of the "where is my order?" support messages. When customers know it's coming today, they stop asking.
+
+**Delivered.** This is where the most happens. Customer gets a confirmation message. For COD orders, the system automatically marks the order as paid in the ops sheet and logs it to the settlements record — because delivery means the courier collected the cash, and that needs to be recorded. And the system writes a date exactly 3 days out into the order record. A separate workflow picks that up and sends a review request at that exact moment — after the customer has actually used the product, not before.
+
+**RTO or cancellation.** Shipment is coming back. The admin gets a Telegram alert immediately with the full order details. Not tomorrow. Not when someone checks the dashboard. Right now, so they can act on it.
+
+---
+
+## What Changed
+
+The "where is my order?" messages dropped dramatically. Customers were being told what was happening before they had a chance to wonder.
+
+Returns stopped being invisible. The moment Shiprocket flagged an RTO, the admin knew.
+
+COD payment reconciliation became automatic — delivery confirmation handled it.
+
+And review requests started going out consistently for the first time, timed perfectly, without anyone scheduling them.
+
+---
+
+The shipping platform was always working. It just wasn't talking to anyone. Once it was connected to everything else, an entire category of problems quietly disappeared.
+
+---
+
+If your shipping platform is an island — disconnected from your ops, your customers, your team — that's worth fixing. [Let's talk.](/#contact)

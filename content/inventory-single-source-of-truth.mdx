@@ -1,0 +1,72 @@
+export const metadata = {
+  title: "The Inventory Number Was a Lie — Law Levisay",
+  description: "How we replaced a manually-updated, always-drifting WooCommerce stock count with a single source of truth — real-time sync, safety buffers, and hourly reconciliation so the number on the storefront is always right.",
+};
+
+The stock count said 50 units.
+
+There were 38.
+
+Nobody had done anything wrong exactly. Stock had moved — a bulk order here, a manual adjustment there, a return that got restocked without anyone updating the number. WooCommerce never found out. It kept selling confidently against a number that hadn't been accurate in weeks.
+
+Then a customer ordered something that didn't exist anymore. Got a confirmation. Waited two days. Got an apology.
+
+That's not a logistics problem. That's a trust problem. And trust is hard to rebuild.
+
+---
+
+## The Real Issue
+
+WooCommerce tracks stock perfectly for orders that go through WooCommerce. That's it. The moment inventory moves anywhere else — adjustments, returns, bulk pulls, new stock arriving — WooCommerce doesn't know unless someone tells it manually.
+
+So the number drifts. Quietly. Consistently. And the team deals with it by correcting it manually when they notice, which means there's always a lag, which means it's always at least a little wrong.
+
+The fix isn't to update manually faster. It's to stop having two systems that are supposed to agree — and just have one system that's always right.
+
+---
+
+## The Architecture
+
+One system holds the truth. Everything else is downstream of it.
+
+Not "two systems syncing with each other" — that's exactly where drift comes from, two sources of truth fighting each other. One system, one number, everything else reads from it. That's the SSoT — Single Source of Truth.
+
+---
+
+## What I Built
+
+The inventory management system became the source of truth. That's where stock is physically managed, received, and adjusted. n8n sits in the middle and keeps WooCommerce in sync with it — automatically, in real time.
+
+**Fast stock deduction.** Order comes in through WooCommerce. The system pulls the current count from the source of truth, deducts what was sold, pushes the updated number back. WooCommerce always shows the real number, not a number that was accurate three hours ago.
+
+**Safety buffers.** The system doesn't sync the raw count. It syncs actual stock minus a buffer. 10 units in the warehouse — WooCommerce shows 7. That buffer absorbs the tiny timing gap that exists in any real-time system — the window between a purchase and the stock update — and prevents overselling completely. Buffer size is configurable per product category.
+
+**Hourly detective sync.** Every hour, a background job compares WooCommerce stock against the source of truth for every single product. If anything is off beyond the allowed tolerance, it gets corrected automatically. This is the safety net for whatever the real-time system missed.
+
+**Idempotency on every write.** Every stock update carries a unique ID. If the same update fires twice — network retry, duplicate webhook — the second one gets dropped. The count can't drift from a race condition.
+
+**Real-time webhook handler.** When stock changes in the source of truth — new shipment received, bulk adjustment made — a webhook fires instantly. n8n catches it and updates WooCommerce within seconds.
+
+---
+
+## The Dashboard
+
+Once the data is clean and flowing through one system, you can actually build something useful on top of it.
+
+We built an operations dashboard. Current stock levels across every product category with low-stock flags. Order velocity per SKU so reorder timing stops being a guess. Sync health — when the last successful sync ran, whether anything drifted. Settlement overview with discrepancies flagged.
+
+One page. Always current. Built in days because the data underneath it was already reliable.
+
+That's the thing about dashboards — they're only as good as the data feeding them. A dashboard built on manually-updated spreadsheets shows you someone's best guess. A dashboard built on a system that's been enforcing data integrity since day one actually tells you something true.
+
+---
+
+## What Changed
+
+Oversells stopped. The number in WooCommerce became a number the team could actually trust. Reorder decisions started getting made on real velocity data instead of gut feeling. And the ops dashboard meant nobody had to dig through spreadsheets to understand what was happening in the business.
+
+The inventory problem didn't get managed better. It got solved.
+
+---
+
+If your stock numbers are a guess and your team is constantly correcting them manually, there's a better way. [Let's talk.](/#contact)

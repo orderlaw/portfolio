@@ -1,0 +1,46 @@
+export const metadata = {
+  title: "The Order That Nobody Confirmed — Law Levisay",
+  description: "How a WhatsApp-based COD confirmation system with four security checks turned ghost orders from a constant drain on inventory and ops into a problem that handles itself.",
+};
+
+Every day, orders were coming in that weren't real.
+
+Not fraud exactly. Just customers who clicked through checkout, got distracted, changed their mind, moved on — but never actually said "yes, I want this." The store kept those orders alive, held the inventory, and waited. Sometimes for days. Nobody was cancelling them. Nobody was following up. They just sat there, quietly breaking the numbers.
+
+The founder knew it was a problem. They didn't know how bad it was because there was no way to measure it. Ghost orders don't announce themselves.
+
+---
+
+## What I Built
+
+The moment an order comes in without upfront payment, the system generates a unique confirmation token — cryptographically tied to that specific order, that specific customer, with a 3-day expiry built in.
+
+A WhatsApp message goes out immediately. Two buttons. Confirm or Cancel. The customer taps one.
+
+Simple on the surface. But what happens before anything gets processed is where the real work is.
+
+Four checks, every single time:
+
+**Already handled?** If the order was already confirmed or cancelled, the system stops. Nothing gets processed twice.
+
+**Still valid?** If the 3-day window has passed, the customer gets a clear message explaining the link expired. Not an error. Not silence. An explanation.
+
+**Right token?** Every confirmation link is unique to its order. It can't be copied, reused, or pointed at a different order.
+
+**Right person?** The phone number sending the confirmation has to match the phone number on the order. Someone else can't confirm your order.
+
+All four pass — order moves to processing, customer gets a confirmation, invoice gets generated. Any one fails — nothing happens and nobody gets through.
+
+At 4pm every day, a scheduled job runs and finds every order whose 3-day window has expired with no response. Cancels them in WooCommerce. Sends the customer a message explaining what happened. Frees up the inventory.
+
+---
+
+## What Changed
+
+Ghost orders stopped being invisible. The system knew exactly which orders were pending, for how long, and when to kill them. Inventory stopped being held against orders that were never going to convert. The ops sheet reflected reality instead of wishful thinking.
+
+And the founder stopped thinking about it entirely — because there was nothing left to think about. It just handled itself.
+
+---
+
+That's what this kind of system does at its best. Not just automate a task. Make an entire category of problem disappear.

@@ -7,40 +7,40 @@ import HeadingReveal from "./HeadingReveal";
 const WORKS = [
   {
     id: "1",
-    slug: "erpnext-inventory-automation",
-    title: "ERPNext Inventory Automation",
-    desc: "Automated stock sync and procurement across 3 retail locations. Built custom doctypes, scripted reorder triggers, and eliminated manual purchase orders entirely. Stock discrepancies dropped to near zero within the first month.",
+    slug: "the-store-that-ran-itself",
+    title: "The Store That Ran Itself",
+    desc: "How I turned five disconnected tools into one operating system for a D2C electronics store — so orders, payments, shipping, and customer messages all handled themselves without anyone in the middle.",
     pill: "Case Study →",
-    headerBg: "#6B5C4E",
-    textColor: "#F5F0E8",
+    headerBg: "#2a2822",
+    textColor: "#eceae4",
     hasImage: true,
-    imgSrc: "https://picsum.photos/seed/shelves/1400/500",
+    imgSrc: "/images/work/the-store-that-ran-itself/google-datacenter.jpg",
     rotation: "-1.8deg",
     zIndex: 10,
   },
   {
     id: "2",
-    slug: "woocommerce-n8n-integration",
-    title: "WooCommerce + n8n Integration",
-    desc: "End-to-end order automation from checkout through warehouse dispatch. n8n handles routing, status updates, and fulfilment triggers — no human touchpoints, no missed orders, no support tickets about shipping delays.",
+    slug: "razorpay-payment-automation",
+    title: "The Money Was Coming In. Nobody Knew Where It Was Going.",
+    desc: "How I made every payment log itself automatically — fees, net amount, and all — so the daily copy-paste ritual disappeared and the numbers were always right without anyone checking.",
     pill: "Case Study →",
-    headerBg: "#3D5C4A",
-    textColor: "#F0F5F0",
+    headerBg: "#302832",
+    textColor: "#ede8f0",
     hasImage: true,
-    imgSrc: "https://picsum.photos/seed/ecommerce/1400/500",
+    imgSrc: "/images/work/razorpay-payment-automation/payments.jpg",
     rotation: "1.2deg",
     zIndex: 20,
   },
   {
     id: "3",
-    slug: "supabase-erpnext-workflow",
-    title: "Supabase + ERPNext Workflow",
-    desc: "Real-time sync layer between operations and analytics. Every sale, stock movement, and supplier invoice flows into a single Supabase instance — giving the team one source of truth across every dashboard and report.",
+    slug: "cod-order-confirmation",
+    title: "The Order That Nobody Confirmed",
+    desc: "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
     pill: "Case Study →",
-    headerBg: "#7A5C2E",
-    textColor: "#FAF5EC",
+    headerBg: "#3d3028",
+    textColor: "#f0ebe0",
     hasImage: true,
-    imgSrc: "https://picsum.photos/seed/database/1400/500",
+    imgSrc: "/images/work/cod-order-confirmation/order-confirmatoin.jpg",
     rotation: "-0.7deg",
     zIndex: 30,
   },
@@ -164,6 +164,34 @@ export default function SelectedWorks() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* View all */}
+      <div className="relative z-10 px-6 md:px-16 py-8 flex justify-end border-b border-[#e8e8e8]">
+        <Link
+          href="/work"
+          className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200"
+          style={{
+            fontFamily: "var(--font-fauna)",
+            fontSize: "0.65rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+          }}
+        >
+          View all works
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M7 17L17 7M17 7H7M17 7v10" />
+          </svg>
+        </Link>
       </div>
     </section>
   );

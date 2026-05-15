@@ -1,0 +1,122 @@
+export const metadata = {
+  title: "The Store That Ran Itself — Law Levisay",
+  description: "How I connected WooCommerce, Razorpay, Shiprocket, and WhatsApp into a single operating system for a D2C electronics store — eleven workflows, one central database, every system talking to every other in real time.",
+};
+
+There's a moment every growing store hits.
+
+Orders are coming in. Revenue is up. On paper, things are good. But behind the scenes, the founder is drowning. Not in one big problem — in a hundred small ones. Someone forgot to update the spreadsheet. A customer is asking where their order is and nobody knows. A payment came through Razorpay but the ops sheet doesn't reflect it. A Shiprocket shipment got returned and the team found out three days later.
+
+Nothing is broken exactly. Everything is just leaking.
+
+This is the story of how I fixed that for a D2C electronics store — and what I learned building a system that didn't just automate tasks, but actually started making decisions on its own.
+
+---
+
+## The Store
+
+Direct-to-consumer electronics. Components, dev boards, robotics parts, STEM kits. Selling to hobbyists, students, and makers — people who know exactly what they want and have zero patience for a bad experience.
+
+The store was growing. That was the good news.
+
+The bad news was that the operation behind it was held together with spreadsheets and goodwill. Every order that came in created a small chain of manual tasks. Someone logged it. Someone checked Razorpay. Someone followed up with the customer. Someone updated the sheet again when Shiprocket picked it up. Someone noticed — eventually — when something went wrong.
+
+They had tools. WooCommerce for the store. Razorpay for payments. Shiprocket for shipping. Google Sheets for operations. A basic automation flow connecting a couple of them.
+
+But tools aren't a system. They had six tools and five gaps between them. And in those gaps, humans were doing the work that software should have been doing.
+
+---
+
+## The Decision
+
+I didn't come in and replace their tools.
+
+That's the instinct — see a mess, blow it up, start fresh. But their tools were fine. WooCommerce was doing its job. Razorpay was processing payments correctly. Shiprocket was managing fulfillment.
+
+The problem wasn't the tools. The problem was that nothing connected them. Data lived in silos. Events happened in one system and never made it to the others. Decisions that should have been automatic required a human to notice something and do something about it.
+
+So instead of replacing anything, I built the layer in between. A nervous system that connected everything, moved data where it needed to go, and started making the routine decisions automatically.
+
+Eleven workflows. One central operations database. Every system talking to every other system in real time.
+
+---
+
+## Act One — The Foundation
+
+The first thing I built was the order pipeline.
+
+Every time a customer placed an order, a chain of things needed to happen immediately — log it, identify the customer, figure out what kind of order it was, and take the right next step. Before, a person was doing all of that. After, it happened in under 30 seconds without anyone touching it.
+
+New customer? Tagged in WooCommerce automatically, added to the leads sheet. Returning customer? Tagged differently, messaging adjusted. Every order landed in the central Google Sheet the moment it was placed — not when someone got around to entering it.
+
+Then payments. Every Razorpay confirmation fired into the system, got verified using HMAC-SHA256 signature checking, matched to the right WooCommerce order, had the fees and GST calculated, updated the ops sheet, and sent the customer a WhatsApp confirmation. All of it. Automatically. In seconds.
+
+When payments failed — card declined, bank error, UPI timeout — the customer got a WhatsApp message immediately asking them to retry. Most stores do nothing here. The customer sees an error and leaves. This kept them in the flow.
+
+Shipping worked the same way. Every status change from Shiprocket — pickup, out for delivery, delivered, returned — triggered the right action automatically. Customers got WhatsApp messages at every milestone. RTO shipments fired an instant Telegram alert to the admin. Delivery automatically updated the payment records for COD orders and calculated exactly when to send a review request.
+
+That's the foundation. Everything connected. Data flowing. No humans in the middle doing jobs software could do.
+
+---
+
+## Act Two — The Intelligence
+
+This is where it got interesting.
+
+Connecting tools is one thing. Building logic that protects the business and makes decisions — that's different.
+
+The biggest example was the COD confirmation system.
+
+A large chunk of their orders were cash on delivery — customers who needed to confirm their intent before the store committed to fulfilling. Before, someone was manually chasing these. Half of them were probably never real. Ghost orders sitting in the system, tying up inventory, breaking the numbers.
+
+I built a confirmation flow over WhatsApp. Customer places an order, gets a message with two buttons — Confirm or Cancel. Simple enough. But the intelligence is in what happens before anything gets processed.
+
+Four checks, every single time:
+
+Has this order already been confirmed or cancelled? If yes, stop — don't process it twice. Is the confirmation link still valid? Links expire after 3 days — past that, the customer gets a clear explanation, not silence. Does the token match? Every link is cryptographically tied to that specific order — it can't be reused or pointed at a different order. Does the phone number match? The person tapping Confirm has to be the person who placed the order.
+
+All four pass — order confirmed. Any one fails — nothing happens.
+
+That's not automation. That's a system making a security decision 24 hours a day without anyone watching it.
+
+The same thinking went into payments. Razorpay sometimes fires a webhook before WooCommerce has fully created the order — a race condition that breaks naive automation silently. The system retries automatically at 15 seconds, then 30 seconds, then alerts the admin if it still can't find the match. It never just fails and moves on.
+
+And inventory. Instead of syncing the raw stock number to WooCommerce, the system syncs stock minus a safety buffer. If there are 10 units, WooCommerce shows 7. That buffer absorbs the timing gap between a purchase and the stock update — and prevents overselling completely.
+
+Every piece of logic like this came from asking the same question: what happens when things go slightly wrong, and how does the system handle it without a human?
+
+---
+
+## Act Three — What Became Possible
+
+Once the foundation was solid and the intelligence was in place, a new category of things became possible.
+
+A live operations dashboard. Because the data was clean, reliable, and flowing through one central system — building reporting on top of it took days, not months. Current stock levels, order velocity, sync health, settlement overviews. One page. Always current. Built on data that actually means something because the system underneath it has been enforcing integrity since day one.
+
+Automated reconciliation. Every day, a job runs and cross-checks every Razorpay transaction against the ops sheet. Anything missing gets flagged in a separate tab for review. The answer to "did we capture every payment?" stopped being a prayer and started being a guarantee.
+
+Review automation. Because the system knew the exact moment every order was delivered by Shiprocket, it could calculate the perfect time to ask for a review — 3 days later, when the customer has actually used the product. Not estimated. Exact. Fired automatically. Every time.
+
+The business didn't change overnight. But it became capable of things it couldn't do before — handling more orders without more headcount, catching problems before they became customer complaints, and making decisions that used to require someone paying attention.
+
+---
+
+## What This Is Really About
+
+Most of what I described — notifications, logging, syncing — you can cobble together a version of with the right app stack. Some of it exists in SaaS tools in some form.
+
+But here's what you can't buy off the shelf:
+
+A system built specifically around your stack, your data, your business rules. Logic that handles your edge cases, not the average store's edge cases. Intelligence in the middle that makes decisions based on what's actually happening in your operation right now.
+
+And more importantly — a foundation solid enough to put AI on top of.
+
+Because that's where this goes next. Reorder prediction based on actual velocity data. WhatsApp customer support that triages, resolves, and escalates automatically. Return pattern detection that tells you which products are problems before they become refund spikes. Post-purchase recommendations timed and personalized per customer.
+
+None of that is possible when your data lives in six disconnected tools and humans are filling the gaps.
+
+All of it is possible when the foundation is right.
+
+---
+
+*Built with n8n, WooCommerce, Razorpay, Shiprocket, WhatsApp Business API, Google Sheets, Supabase, Redis, Telegram.*

@@ -3,9 +3,11 @@ import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
 const SLUGS = [
-  "erpnext-inventory-automation",
-  "woocommerce-n8n-integration",
-  "supabase-erpnext-workflow",
+  "the-store-that-ran-itself",
+  "inventory-single-source-of-truth",
+  "shipping-automation",
+  "razorpay-payment-automation",
+  "cod-order-confirmation",
 ];
 
 export function generateStaticParams() {
@@ -30,21 +32,28 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { default: CaseStudy } = await import(`@/content/${slug}.mdx`);
+  const { default: CaseStudy, metadata } = await import(
+    `@/content/${slug}.mdx`
+  );
+
+  const displayTitle = (metadata.title as string).replace(
+    / — Law Levisay$/,
+    ""
+  );
 
   return (
     <>
       <Nav />
       <main className="pt-14 bg-white min-h-screen">
-        <div>
-          {/* Back link */}
-          <div className="px-6 md:px-16 pt-10 pb-0">
+        <article className="px-6 py-12 md:py-16">
+          <div className="max-w-[680px] mx-auto">
+            {/* Back */}
             <Link
-              href="/#work"
-              className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200"
+              href="/work"
+              className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200 mb-10 block"
               style={{
                 fontFamily: "var(--font-fauna)",
-                fontSize: "0.7rem",
+                fontSize: "0.65rem",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
               }}
@@ -52,32 +61,79 @@ export default async function CaseStudyPage({
               <span>←</span>
               <span>Selected Works</span>
             </Link>
-          </div>
 
-          {/* Divider */}
-          <div className="mt-8 border-t border-[#e8e8e8]" />
+            {/* Label */}
+            <p
+              className="mb-5"
+              style={{
+                fontFamily: "var(--font-fauna)",
+                fontSize: "0.6rem",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "#a8a49e",
+              }}
+            >
+              Case Study
+            </p>
 
-          {/* Content */}
-          <article className="px-6 md:px-16 py-16 md:py-24">
+            {/* Title */}
+            <h1
+              style={{
+                fontFamily: "var(--font-didot)",
+                fontSize: "clamp(2rem, 4.5vw, 4rem)",
+                lineHeight: 1.0,
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
+                fontStyle: "italic",
+                color: "#2a2822",
+                marginBottom: "1.25rem",
+              }}
+            >
+              {displayTitle}
+            </h1>
+
+            {/* Description */}
+            <p
+              style={{
+                fontFamily: "var(--font-fauna)",
+                fontSize: "1rem",
+                lineHeight: 1.7,
+                color: "#78746c",
+                marginBottom: "1.5rem",
+              }}
+            >
+              {metadata.description}
+            </p>
+
+            {/* Divider */}
+            <hr
+              style={{
+                border: "none",
+                borderTop: "1px solid #e8e8e8",
+                marginBottom: "3rem",
+              }}
+            />
+
+            {/* Content */}
             <CaseStudy />
-          </article>
-
-          {/* Footer strip */}
-          <div className="border-t border-[#e8e8e8] px-6 md:px-16 py-10 flex items-center justify-between">
-            <span
-              className="text-[#a8a49e] text-[9px] tracking-[0.2em] uppercase"
-              style={{ fontFamily: "var(--font-fauna)" }}
-            >
-              © {new Date().getFullYear()} Law Levisay
-            </span>
-            <Link
-              href="/#contact"
-              className="text-[#2a2822] hover:text-[#7c3aed] transition-colors duration-200 text-[9px] tracking-[0.2em] uppercase"
-              style={{ fontFamily: "var(--font-fauna)" }}
-            >
-              Get in touch →
-            </Link>
           </div>
+        </article>
+
+        {/* Footer */}
+        <div className="border-t border-[#e8e8e8] px-6 md:px-16 py-10 flex items-center justify-between">
+          <span
+            className="text-[9px] uppercase tracking-[0.2em]"
+            style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+          >
+            © {new Date().getFullYear()} Law Levisay
+          </span>
+          <Link
+            href="/#contact"
+            className="text-[9px] uppercase tracking-[0.2em] text-[#2a2822] hover:text-[#7c3aed] transition-colors duration-200"
+            style={{ fontFamily: "var(--font-fauna)" }}
+          >
+            Get in touch →
+          </Link>
         </div>
       </main>
     </>
