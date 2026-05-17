@@ -59,7 +59,7 @@ export default function Nav() {
       {/* Nav-local grain so it matches the rest of the page regardless of z-index */}
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <filter id="grain-nav">
-          <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="8" stitchTiles="stitch" />
           <feColorMatrix type="saturate" values="0" />
         </filter>
         <rect width="100%" height="100%" filter="url(#grain-nav)" opacity="0.28" />
