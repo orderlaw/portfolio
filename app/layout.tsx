@@ -70,15 +70,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${gfsDidot.variable} ${faunaOne.variable} ${playfair.variable}`}>
       <body className="antialiased">
-        <div className="fixed inset-0 pointer-events-none z-[9999]" aria-hidden>
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <filter id="grain-global">
-              <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="8" stitchTiles="stitch" />
-              <feColorMatrix type="saturate" values="0" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#grain-global)" opacity="0.28" />
-          </svg>
-        </div>
+        <div className="fixed inset-0 pointer-events-none z-[9999]" aria-hidden style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23noise)' opacity='0.28'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "256px 256px",
+        }} />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

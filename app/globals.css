@@ -30,6 +30,7 @@ body {
   color: #2a2822;
   font-family: var(--font-fauna), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
+  min-height: 100dvh;
 }
 
 ::selection        { background: #7c3aed; color: #fff; }
