@@ -4,9 +4,24 @@ import { posts } from "@/content/blog/manifest";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Writing — Law Levisay",
+  title: "Writing",
   description:
     "Articles on automation, n8n workflows, ERPNext, and building systems that run without you.",
+  alternates: {
+    canonical: "https://lawlevisay.com/blog",
+  },
+  openGraph: {
+    title: "Writing — Law Levisay",
+    description:
+      "Articles on automation, n8n workflows, ERPNext, and building systems that run without you.",
+    url: "https://lawlevisay.com/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Writing — Law Levisay",
+    description:
+      "Articles on automation, n8n workflows, ERPNext, and building systems that run without you.",
+  },
 };
 
 export default function BlogPage() {

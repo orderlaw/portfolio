@@ -23,7 +23,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const { metadata } = await import(`@/content/${slug}.mdx`);
-  return { title: metadata.title, description: metadata.description };
+  const url = `https://lawlevisay.com/work/${slug}`;
+  return {
+    title: metadata.title,
+    description: metadata.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: metadata.title,
+      description: metadata.description,
+      url,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metadata.title,
+      description: metadata.description,
+    },
+  };
 }
 
 export default async function CaseStudyPage({

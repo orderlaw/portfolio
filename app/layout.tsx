@@ -25,10 +25,43 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const SITE_URL = "https://lawlevisay.com";
+const OG_TITLE = "Law Levisay — E-commerce Automation & Systems";
+const OG_DESCRIPTION =
+  "I build systems that make e-commerce operations run themselves.";
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+
 export const metadata: Metadata = {
-  title: "Law Levisay — Automation Developer",
-  description:
-    "Freelance automation developer specialising in n8n workflows, WooCommerce integrations, ERPNext sync, and backend automation.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: OG_TITLE,
+    template: "%s — Law Levisay",
+  },
+  description: OG_DESCRIPTION,
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    siteName: "Law Levisay",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Law Levisay — E-commerce Automation & Systems",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
 };
 
 export default function RootLayout({

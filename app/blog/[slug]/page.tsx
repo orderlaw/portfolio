@@ -18,9 +18,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
   if (!post) return {};
+  const title = `${post.title} — Law Levisay`;
+  const url = `https://lawlevisay.com/blog/${slug}`;
   return {
-    title: `${post.title} — Law Levisay`,
+    title,
     description: post.excerpt,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description: post.excerpt,
+      url,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: post.excerpt,
+    },
   };
 }
 

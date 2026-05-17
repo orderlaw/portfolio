@@ -3,9 +3,24 @@ import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Selected Works — Law Levisay",
+  title: "Selected Works",
   description:
     "Case studies on automation projects — n8n workflows, WooCommerce integrations, ERPNext systems, and more.",
+  alternates: {
+    canonical: "https://lawlevisay.com/work",
+  },
+  openGraph: {
+    title: "Selected Works — Law Levisay",
+    description:
+      "Case studies on automation projects — n8n workflows, WooCommerce integrations, ERPNext systems, and more.",
+    url: "https://lawlevisay.com/work",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Selected Works — Law Levisay",
+    description:
+      "Case studies on automation projects — n8n workflows, WooCommerce integrations, ERPNext systems, and more.",
+  },
 };
 
 const WORKS = [
