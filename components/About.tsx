@@ -11,8 +11,8 @@ function AnimLabel({ children }: { children: string }) {
   return (
     <motion.p
       ref={ref}
-      className="text-[9px] uppercase text-[#78746c]"
-      style={{ fontFamily: "var(--font-fauna)" }}
+      className="text-[9px] uppercase"
+      style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
       initial={{ opacity: 0, letterSpacing: reduced ? "0.28em" : "0.55em" }}
       animate={inView ? { opacity: 1, letterSpacing: "0.28em" } : {}}
       transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -48,10 +48,8 @@ function BlurReveal({
   );
 }
 
-// ─── Bio section ─────────────────────────────────────────────────────────────
-
 const BIO =
-  "I'm a freelance automation developer — the kind who reads the docs, tests the edge cases, and doesn't ghost you after deployment. I work with founders and ops teams who are tired of doing the same thing twice. If a human is repeating it, a system should own it.";
+  "I work with founders and ops teams who are tired of doing the same shit twice. I find the money being lost, the time being wasted, the opportunities slipping through, and build the automation and AI systems that stop all of it.";
 
 function AboutBody() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -118,7 +116,7 @@ function AboutBody() {
   }, [reduced]);
 
   return (
-    <div ref={sectionRef} className="relative z-10 border-b border-[#e8e8e8] px-6 md:px-16 py-8 md:py-24">
+    <div ref={sectionRef} className="relative z-10 px-6 md:px-16 py-8 md:py-24" style={{ borderBottom: "1px solid var(--border)" }}>
       <div className="flex flex-col gap-6 md:flex-row md:gap-14 items-start">
 
         {/* Left — image + caption */}
@@ -139,8 +137,8 @@ function AboutBody() {
             />
           </div>
           <p
-            className="mt-4 text-[9px] tracking-[0.28em] uppercase text-[#78746c]"
-            style={{ fontFamily: "var(--font-fauna)" }}
+            className="mt-4 text-[9px] tracking-[0.28em] uppercase"
+            style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
           >
             Remote · Since 2022
           </p>
@@ -150,8 +148,8 @@ function AboutBody() {
         <div className="flex-1 flex flex-col justify-between gap-10">
           <p
             ref={textRef}
-            className="text-[#2a2822] text-[clamp(1.35rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
-            style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", overflowWrap: "break-word" }}
+            className="text-[clamp(1.35rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
+            style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "var(--ink)", overflowWrap: "break-word" }}
           >
             {BIO.split(" ").map((word, wi) => (
               <span
@@ -173,13 +171,13 @@ function AboutBody() {
               href="https://linkedin.com/in/lawlevisay"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-block border border-[#2a2822] text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
-              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem" }}
+              className="group relative inline-block text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem", border: "1px solid var(--ink)" }}
             >
-              <span className="block text-[#2a2822] group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+              <span className="block group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
                 Connect on LinkedIn
               </span>
-              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] text-[#2a2822]">
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
                 → View Profile
               </span>
             </a>
@@ -191,53 +189,44 @@ function AboutBody() {
   );
 }
 
-// ─── About ────────────────────────────────────────────────────────────────────
-
 export default function About() {
   const reduced    = useReducedMotion();
   const headingRef = useRef<HTMLDivElement>(null);
   const headingIn  = useInView(headingRef, { once: true, margin: "-5%" });
 
   const didot = { fontFamily: "var(--font-didot)" };
-  const serif = { fontFamily: "var(--font-playfair)" };
 
   return (
-    <section id="about" className="relative bg-white">
-      {/* ── Heading ─────────────────────────────────────────────────────── */}
-      <div className="relative z-10 px-6 md:px-16 pt-10 md:pt-24 pb-6 md:pb-10 border-b border-[#e8e8e8]">
+    <section id="about" className="relative bg-transparent">
+      <div className="relative z-10 px-6 md:px-16 pt-10 md:pt-24 pb-6 md:pb-10" style={{ borderBottom: "1px solid var(--border)" }}>
         <AnimLabel>About</AnimLabel>
         <div ref={headingRef} className="mt-4">
-          {[
-            { text: "I build the", delay: 0.05 },
-            { text: "infrastructure", delay: 0.18 },
-          ].map(({ text, delay }) => (
-            <div key={text} className="overflow-hidden leading-[0.95]">
-              <motion.div
-                className="text-[#2a2822] text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase"
-                style={didot}
-                initial={{ y: reduced ? "0%" : "108%" }}
-                animate={headingIn ? { y: "0%" } : {}}
-                transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {text}
-              </motion.div>
-            </div>
-          ))}
+          <div className="overflow-hidden leading-[0.95]">
+            <motion.div
+              className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase"
+              style={{ ...didot, color: "var(--ink)" }}
+              initial={{ y: reduced ? "0%" : "108%" }}
+              animate={headingIn ? { y: "0%" } : {}}
+              transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Who you
+            </motion.div>
+          </div>
           <div className="overflow-hidden leading-[0.95]">
             <motion.div
               className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight"
-              style={{ ...didot, color: "#7c3aed", fontStyle: "italic" }}
+              style={{ ...didot }}
               initial={{ y: reduced ? "0%" : "108%" }}
               animate={headingIn ? { y: "0%" } : {}}
-              transition={{ duration: 0.9, delay: 0.31, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
             >
-              of momentum.
+              <span style={{ color: "var(--ink)", textTransform: "uppercase" }}>are </span>
+              <span style={{ color: "#7c3aed", fontStyle: "italic", textTransform: "uppercase" }}>hiring.</span>
             </motion.div>
           </div>
         </div>
       </div>
 
-      {/* ── Image + Bio ─────────────────────────────────────────────────── */}
       <AboutBody />
     </section>
   );

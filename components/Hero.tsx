@@ -1,75 +1,80 @@
 "use client";
 
-const heroStyles = `
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-`;
+import { motion, useReducedMotion } from "framer-motion";
+
 
 export default function Hero() {
+  const reduced = useReducedMotion();
+
   return (
     <section
       className="bg-white flex flex-col pt-14 relative overflow-hidden"
       style={{ minHeight: "100dvh" }}
     >
-      <style dangerouslySetInnerHTML={{ __html: heroStyles }} />
-
       <div className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-16">
 
         {/* Name */}
         <h1
-          className="text-[#2a2822] uppercase leading-[0.9] tracking-tight mb-10 md:mb-14"
-          style={{
-            fontFamily: "var(--font-didot)",
-            fontSize: "clamp(4.5rem, 13vw, 11rem)",
-            opacity: 0,
-            animation: "fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s forwards",
-          }}
+          className="uppercase leading-[0.9] tracking-tight mb-8 md:mb-10"
+          style={{ fontFamily: "var(--font-didot)", fontSize: "clamp(4.5rem, 13vw, 11rem)" }}
         >
-          Law<br />
-          <span style={{ color: "#7c3aed", fontStyle: "italic" }}>Levisay</span>
+          <div className="overflow-hidden">
+            <motion.div
+              style={{ color: "var(--ink)" }}
+              initial={{ y: reduced ? "0%" : "108%" }}
+              animate={{ y: "0%" }}
+              transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Law
+            </motion.div>
+          </div>
+          <div className="overflow-hidden">
+            <motion.div
+              style={{ color: "#7c3aed", fontStyle: "italic" }}
+              initial={{ y: reduced ? "0%" : "108%" }}
+              animate={{ y: "0%" }}
+              transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Levisay
+            </motion.div>
+          </div>
         </h1>
 
         {/* Description */}
-        <p
-          className="text-[#2a2822] text-sm md:text-base leading-relaxed max-w-sm md:max-w-md mb-10 md:mb-14"
-          style={{
-            fontFamily: "var(--font-fauna)",
-            fontStyle: "italic",
-            opacity: 0,
-            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s forwards",
-          }}
+        <motion.p
+          className="text-sm md:text-base leading-relaxed max-w-sm md:max-w-md mb-8 md:mb-10"
+          style={{ fontFamily: "var(--font-fauna)", fontStyle: "italic", color: "var(--ink)" }}
+          initial={{ opacity: 0, y: reduced ? 0 : 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          A freelance automation developer building systems that run without you — n8n workflows, WooCommerce integrations, and ERPNext automations.
-        </p>
+          Every tool you run creates a gap. Gaps need people. People make mistakes. We close the gaps. So the first thing you do every morning is actually grow your business.
+        </motion.p>
 
         {/* Let's Talk + email */}
-        <div
-          style={{
-            opacity: 0,
-            animation: "fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.8s forwards",
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: reduced ? 0 : 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p
-            className="text-[#2a2822] font-bold text-sm md:text-base mb-1"
-            style={{ fontFamily: "var(--font-fauna)" }}
-          >
-            Let&apos;s Talk
-          </p>
           <a
-            href="mailto:lawlevisay@gmail.com"
-            className="text-[#78746c] text-sm md:text-base hover:text-[#7c3aed] transition-colors duration-200"
-            style={{ fontFamily: "var(--font-fauna)" }}
+            href="#"
+            className="group relative inline-block text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+            style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem", border: "1px solid var(--ink)" }}
           >
-            lawlevisay@gmail.com
+            <span className="block group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
+              Book a Call
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
+              Book a Call
+            </span>
           </a>
-        </div>
+        </motion.div>
 
       </div>
 
       {/* Separator */}
-      <div className="relative z-10 border-t border-[#e8e8e8] shrink-0" />
+      <div className="relative z-10 shrink-0" style={{ borderTop: "1px solid var(--border)" }} />
     </section>
   );
 }

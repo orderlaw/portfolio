@@ -64,29 +64,29 @@ export default function HowItWorks() {
   };
 
   return (
-    <section id="process" className="relative bg-white">
-      {/* Heading — normal document flow */}
-      <div className="relative z-10 px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14 border-b border-[#e8e8e8]">
+    <section id="process" className="relative bg-transparent">
+      <div className="relative z-10 px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14" style={{ borderBottom: "1px solid var(--border)" }}>
         <p
-          className="text-[9px] uppercase text-[#78746c] tracking-[0.28em] mb-4"
-          style={{ fontFamily: "var(--font-fauna)" }}
+          className="text-[9px] uppercase tracking-[0.28em] mb-4"
+          style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
         >
           Process
         </p>
         <HeadingReveal
           lines={[
-            { text: "How it", color: "#2a2822", delay: 0.05 },
+            { text: "How it", color: "var(--ink)", delay: 0.05 },
             { text: "works.", color: "#7c3aed", italic: true, delay: 0.18 },
           ]}
         />
       </div>
 
       {/* Mobile — flat list */}
-      <div className="md:hidden px-6 py-10 flex flex-col divide-y divide-[#e8e8e8]">
+      <div className="md:hidden px-6 py-10 flex flex-col" style={{ borderBottom: "1px solid var(--border)" }}>
         {STEPS.map((step) => (
           <motion.div
             key={step.number}
             className="py-8"
+            style={{ borderBottom: "1px solid var(--border)" }}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-8%" }}
@@ -119,7 +119,7 @@ export default function HowItWorks() {
                   fontSize: "clamp(2.2rem, 10vw, 3rem)",
                   lineHeight: 1.05,
                   letterSpacing: "-0.02em",
-                  color: "#2a2822",
+                  color: "var(--ink)",
                 }}
               >
                 {step.title}
@@ -130,7 +130,7 @@ export default function HowItWorks() {
                 fontFamily: "var(--font-fauna)",
                 fontSize: "0.95rem",
                 lineHeight: 1.75,
-                color: "#78746c",
+                color: "var(--muted)",
               }}
             >
               {step.desc}
@@ -170,7 +170,7 @@ export default function HowItWorks() {
                       letterSpacing: "0.22em",
                       display: "block",
                       marginBottom: "0.25rem",
-                      color: isActive ? "#2a2822" : "#b8b4ae",
+                      color: isActive ? "var(--ink)" : "var(--faint)",
                       transition: "color 0.5s ease",
                     }}
                   >
@@ -203,7 +203,7 @@ export default function HowItWorks() {
                         letterSpacing: "-0.02em",
                         textTransform: "uppercase",
                         fontStyle: "italic",
-                        color: isActive ? "#2a2822" : "#78746c",
+                        color: isActive ? "var(--ink)" : "var(--muted)",
                         opacity: isActive ? 1 : 0.5,
                         transition: "color 0.5s ease, opacity 0.5s ease",
                       }}
@@ -216,17 +216,17 @@ export default function HowItWorks() {
             })}
           </div>
 
-          {/* Bottom ticker — per-step progress */}
+          {/* Bottom ticker */}
           <div className="hidden md:block absolute bottom-0 left-6 md:left-16 right-6 md:right-16 pb-12">
             <div className="flex items-center justify-between mb-2">
               <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#7c3aed" }}>
                 {STEPS[active].number}
               </span>
-              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#b8b4ae" }}>
+              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "var(--faint)" }}>
                 {active < STEPS.length - 1 ? STEPS[active + 1].number : "—"}
               </span>
             </div>
-            <div className="relative w-full overflow-hidden" style={{ height: "1px", background: "#e8e8e8" }}>
+            <div className="relative w-full overflow-hidden" style={{ height: "1px", background: "var(--border)" }}>
               <div
                 ref={barRef}
                 className="absolute inset-y-0 left-0 bg-[#7c3aed]"
@@ -253,7 +253,7 @@ export default function HowItWorks() {
                   fontFamily: "var(--font-didot)",
                   fontSize: "clamp(12rem, 26vw, 22rem)",
                   color: "transparent",
-                  WebkitTextStroke: "1px #e2ddd6",
+                  WebkitTextStroke: "1px var(--border)",
                   lineHeight: 1,
                   userSelect: "none",
                   letterSpacing: "-0.04em",
@@ -274,36 +274,14 @@ export default function HowItWorks() {
                 style={{ maxWidth: "420px", marginLeft: "auto" }}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <span
-                    style={{
-                      fontFamily: "var(--font-fauna)",
-                      fontSize: "0.6rem",
-                      letterSpacing: "0.22em",
-                      color: "#7c3aed",
-                    }}
-                  >
+                  <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#7c3aed" }}>
                     {STEPS[active].number}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-didot)",
-                      fontSize: "0.85rem",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "#2a2822",
-                    }}
-                  >
+                  <span style={{ fontFamily: "var(--font-didot)", fontSize: "0.85rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink)" }}>
                     {STEPS[active].title}
                   </span>
                 </div>
-                <p
-                  style={{
-                    fontFamily: "var(--font-fauna)",
-                    fontSize: "1.05rem",
-                    lineHeight: 1.75,
-                    color: "#2a2822",
-                  }}
-                >
+                <p style={{ fontFamily: "var(--font-fauna)", fontSize: "1.05rem", lineHeight: 1.75, color: "var(--ink)" }}>
                   {STEPS[active].desc}
                 </p>
               </motion.div>

@@ -13,6 +13,17 @@
   --color-accent:  #7c3aed;
 }
 
+/* CSS variables used by components */
+:root {
+  --ink:       #2a2822;
+  --muted:     #78746c;
+  --subtle:    #a8a49e;
+  --faint:     #c4c0b8;
+  --border:    #e8e8e8;
+  --border-md: #d2cec4;
+  --bg-surface:#f0ede7;
+}
+
 html  { scroll-behavior: smooth; }
 
 @keyframes fadeUp {
@@ -26,7 +37,7 @@ html  { scroll-behavior: smooth; }
 }
 
 body {
-  background: #eceae4;
+  background: #ffffff;
   color: #2a2822;
   font-family: var(--font-fauna), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;

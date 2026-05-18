@@ -11,8 +11,8 @@ const WORKS = [
     title: "The Store That Ran Itself",
     desc: "How I turned five disconnected tools into one operating system for a D2C electronics store — so orders, payments, shipping, and customer messages all handled themselves without anyone in the middle.",
     pill: "Case Study →",
-    headerBg: "#2a2822",
-    textColor: "#eceae4",
+    headerBg: "#3A3A3A",
+    textColor: "#fdf5f3",
     hasImage: true,
     imgSrc: "/images/work/the-store-that-ran-itself/google-datacenter.jpg",
     rotation: "-1.8deg",
@@ -24,8 +24,8 @@ const WORKS = [
     title: "The Money Was Coming In. Nobody Knew Where It Was Going.",
     desc: "How I made every payment log itself automatically — fees, net amount, and all — so the daily copy-paste ritual disappeared and the numbers were always right without anyone checking.",
     pill: "Case Study →",
-    headerBg: "#302832",
-    textColor: "#ede8f0",
+    headerBg: "#143526",
+    textColor: "#e8f5ef",
     hasImage: true,
     imgSrc: "/images/work/razorpay-payment-automation/payments.jpg",
     rotation: "1.2deg",
@@ -37,8 +37,8 @@ const WORKS = [
     title: "The Order That Nobody Confirmed",
     desc: "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
     pill: "Case Study →",
-    headerBg: "#3d3028",
-    textColor: "#f0ebe0",
+    headerBg: "#7D3A14",
+    textColor: "#fdf6f0",
     hasImage: true,
     imgSrc: "/images/work/cod-order-confirmation/order-confirmatoin.jpg",
     rotation: "-0.7deg",
@@ -48,17 +48,17 @@ const WORKS = [
 
 export default function SelectedWorks() {
   return (
-    <section id="work" className="relative bg-white pt-16 md:pt-24 pb-0">
-      <div className="relative z-10 px-6 md:px-16 pb-10 md:pb-16 border-b border-[#e8e8e8]">
+    <section id="work" className="relative bg-transparent pt-16 md:pt-24 pb-0">
+      <div className="relative z-10 px-6 md:px-16 pb-10 md:pb-16" style={{ borderBottom: "1px solid var(--border)" }}>
         <p
-          className="text-[9px] uppercase text-[#78746c] tracking-[0.28em] mb-4"
-          style={{ fontFamily: "var(--font-fauna)" }}
+          className="text-[9px] uppercase tracking-[0.28em] mb-4"
+          style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
         >
           Selected Works
         </p>
         <HeadingReveal
           lines={[
-            { text: "Projects that", color: "#2a2822", delay: 0.05 },
+            { text: "Projects that", color: "var(--ink)", delay: 0.05 },
             { text: "stayed running.", color: "#7c3aed", italic: true, delay: 0.18 },
           ]}
         />
@@ -85,17 +85,9 @@ export default function SelectedWorks() {
               (e.currentTarget as HTMLDivElement).style.transform = `rotate(${work.rotation})`;
             }}
           >
-
             {/* Header */}
-            <div
-              className="relative overflow-hidden"
-              style={{ padding: "1.5rem 1.5rem" }}
-            >
-              {/* Mobile: stack. Desktop: 2-col grid */}
-              <div className="relative z-10 flex flex-col gap-3 md:grid md:gap-10 md:items-start"
-                style={{ gridTemplateColumns: "34% 1fr" }}
-              >
-                {/* Title */}
+            <div className="relative overflow-hidden" style={{ padding: "1.5rem 1.5rem" }}>
+              <div className="relative z-10 flex flex-col gap-3 md:grid md:gap-10 md:items-start" style={{ gridTemplateColumns: "34% 1fr" }}>
                 <h3
                   style={{
                     fontFamily: "var(--font-playfair)",
@@ -108,7 +100,6 @@ export default function SelectedWorks() {
                   {work.title}
                 </h3>
 
-                {/* Desc + button */}
                 <div className="flex flex-col gap-4">
                   <p
                     style={{
@@ -148,7 +139,7 @@ export default function SelectedWorks() {
               </div>
             </div>
 
-            {/* Image — inset with padding so card bg frames it */}
+            {/* Image */}
             {work.hasImage && (
               <div style={{ padding: "0 2rem 1.5rem 2rem" }}>
                 <div className="relative overflow-hidden" style={{ height: "200px" }}>
@@ -167,28 +158,20 @@ export default function SelectedWorks() {
       </div>
 
       {/* View all */}
-      <div className="relative z-10 px-6 md:px-16 py-8 flex justify-end border-b border-[#e8e8e8]">
+      <div className="relative z-10 px-6 md:px-16 py-8 flex justify-end" style={{ borderBottom: "1px solid var(--border)" }}>
         <Link
           href="/work"
-          className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200"
+          className="inline-flex items-center gap-2 hover:text-[#7c3aed] transition-colors duration-200"
           style={{
             fontFamily: "var(--font-fauna)",
             fontSize: "0.65rem",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
+            color: "var(--muted)",
           }}
         >
           View all works
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 17L17 7M17 7H7M17 7v10" />
           </svg>
         </Link>

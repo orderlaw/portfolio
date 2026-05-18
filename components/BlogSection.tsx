@@ -21,18 +21,18 @@ export default function BlogSection() {
   const preview = posts.slice(0, PREVIEW_COUNT);
 
   return (
-    <section id="blog" className="relative bg-white border-t border-[#e8e8e8]">
+    <section id="blog" className="relative bg-transparent" style={{ borderTop: "1px solid var(--border)" }}>
       {/* Heading */}
-      <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14 border-b border-[#e8e8e8]">
+      <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14" style={{ borderBottom: "1px solid var(--border)" }}>
         <p
-          className="text-[9px] uppercase text-[#78746c] tracking-[0.28em] mb-4"
-          style={{ fontFamily: "var(--font-fauna)" }}
+          className="text-[9px] uppercase tracking-[0.28em] mb-4"
+          style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
         >
           Writing
         </p>
         <HeadingReveal
           lines={[
-            { text: "Latest", color: "#2a2822", delay: 0.05 },
+            { text: "Latest", color: "var(--ink)", delay: 0.05 },
             { text: "from the blog.", color: "#7c3aed", italic: true, delay: 0.18 },
           ]}
         />
@@ -49,7 +49,8 @@ export default function BlogSection() {
           <motion.div key={post.slug} variants={row}>
             <Link
               href={`/blog/${post.slug}`}
-              className="group flex items-center gap-6 px-6 md:px-16 py-7 md:py-8 border-b border-[#e8e8e8] hover:bg-[#faf9f7] transition-colors duration-200"
+              className="group flex items-center gap-6 px-6 md:px-16 py-7 md:py-8 transition-colors duration-200"
+              style={{ borderBottom: "1px solid var(--border)" }}
             >
               {/* Number */}
               <span
@@ -58,7 +59,7 @@ export default function BlogSection() {
                   fontFamily: "var(--font-fauna)",
                   fontSize: "0.6rem",
                   letterSpacing: "0.22em",
-                  color: "#c4c0b8",
+                  color: "var(--faint)",
                   width: "1.8rem",
                 }}
               >
@@ -74,7 +75,7 @@ export default function BlogSection() {
                     fontSize: "0.6rem",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
-                    color: "#a8a49e",
+                    color: "var(--subtle)",
                   }}
                 >
                   {post.date}&nbsp;&nbsp;·&nbsp;&nbsp;{post.readTime} read
@@ -86,7 +87,7 @@ export default function BlogSection() {
                     fontSize: "clamp(1.1rem, 2vw, 1.55rem)",
                     fontStyle: "italic",
                     letterSpacing: "-0.01em",
-                    color: "#2a2822",
+                    color: "var(--ink)",
                   }}
                 >
                   {post.title}
@@ -96,7 +97,7 @@ export default function BlogSection() {
               {/* Arrow */}
               <svg
                 className="shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                style={{ color: "#c4c0b8" }}
+                style={{ color: "var(--faint)" }}
                 width="14"
                 height="14"
                 viewBox="0 0 24 24"
@@ -114,28 +115,20 @@ export default function BlogSection() {
       </motion.div>
 
       {/* View all */}
-      <div className="px-6 md:px-16 py-8 flex justify-end border-b border-[#e8e8e8]">
+      <div className="px-6 md:px-16 py-8 flex justify-end" style={{ borderBottom: "1px solid var(--border)" }}>
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-[#78746c] hover:text-[#7c3aed] transition-colors duration-200"
+          className="inline-flex items-center gap-2 hover:text-[#7c3aed] transition-colors duration-200"
           style={{
             fontFamily: "var(--font-fauna)",
             fontSize: "0.65rem",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
+            color: "var(--muted)",
           }}
         >
           View all posts
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 17L17 7M17 7H7M17 7v10" />
           </svg>
         </Link>
