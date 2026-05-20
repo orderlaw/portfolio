@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isAdmin = pathname.startsWith("/admin");
+
   useEffect(() => {
+    if (isAdmin) return;
+
     let lenis: import("lenis").default | null = null;
 
     const init = async () => {
@@ -27,7 +33,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     return () => {
       lenis?.destroy();
     };
-  }, []);
+  }, [isAdmin]);
 
   return <>{children}</>;
 }

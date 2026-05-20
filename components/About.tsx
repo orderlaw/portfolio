@@ -174,10 +174,10 @@ function AboutBody() {
               className="group relative inline-block text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
               style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem", border: "1px solid var(--ink)" }}
             >
-              <span className="block group-hover:-translate-y-[130%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
+              <span className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
                 Connect on LinkedIn
               </span>
-              <span className="absolute inset-0 flex items-center justify-center translate-y-[130%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
                 → View Profile
               </span>
             </a>

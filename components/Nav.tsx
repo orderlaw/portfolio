@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useScramble } from "./ScrambleText";
 
 const links = [
-  { label: "About",   href: "#about" },
-  { label: "Work",    href: "#work" },
-  { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
+  { label: "About",   href: "/#about" },
+  { label: "Work",    href: "/#work" },
+  { label: "Process", href: "/#process" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 function ScramblePill({ text, href }: { text: string; href: string }) {
@@ -81,7 +81,7 @@ export default function Nav() {
       </nav>
 
       <div className="relative z-10">
-        <ScramblePill text="Let's Talk" href="#contact" />
+        <ScramblePill text="Let's Talk" href="/#contact" />
       </div>
     </header>
   );

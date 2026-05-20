@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "the-store-that-ran-itself",
+    "title": "The Store That Ran Itself",
+    "description": "How I turned five disconnected tools into one operating system for a D2C electronics store — so orders, payments, shipping, and customer messages all handled themselves without anyone in the middle.",
+    "image": "/images/work/the-store-that-ran-itself/google-datacenter.jpg"
+  },
+  {
+    "slug": "inventory-single-source-of-truth",
+    "title": "The Inventory Number Was a Lie",
+    "description": "How I replaced a stock count the team was constantly correcting by hand with a number that was always right — so oversells stopped happening and nobody had to think about inventory again.",
+    "image": "/images/work/inventory-single-source-of-truth/warehouse.jpg"
+  },
+  {
+    "slug": "shipping-automation",
+    "title": "After the Order Shipped, the Store Went Silent",
+    "description": "How I connected the shipping platform to everything else — so customers always knew where their order was, returns showed up the moment they happened, and the \"where is my order?\" messages stopped.",
+    "image": "/images/work/shipping-automation/conveyer-belt.jpg"
+  },
+  {
+    "slug": "razorpay-payment-automation",
+    "title": "The Money Was Coming In. Nobody Knew Where It Was Going.",
+    "description": "How I made every payment log itself automatically — fees, net amount, and all — so the daily copy-paste ritual disappeared and the numbers were always right without anyone checking.",
+    "image": "/images/work/razorpay-payment-automation/payments.jpg"
+  },
+  {
+    "slug": "cod-order-confirmation",
+    "title": "The Order That Nobody Confirmed",
+    "description": "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
+    "image": "/images/work/cod-order-confirmation/order-confirmatoin.jpg"
+  }
+]

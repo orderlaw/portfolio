@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
+import { works } from "@/content/work/manifest";
 
 export const metadata: Metadata = {
   title: "Selected Works",
@@ -23,41 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
-const WORKS = [
-  {
-    slug: "the-store-that-ran-itself",
-    title: "The Store That Ran Itself",
-    description:
-      "How I turned five disconnected tools into one operating system for a D2C electronics store — so orders, payments, shipping, and customer messages all handled themselves without anyone in the middle.",
-  },
-  {
-    slug: "inventory-single-source-of-truth",
-    title: "The Inventory Number Was a Lie",
-    description:
-      "How I replaced a stock count the team was constantly correcting by hand with a number that was always right — so oversells stopped happening and nobody had to think about inventory again.",
-  },
-  {
-    slug: "shipping-automation",
-    title: "After the Order Shipped, the Store Went Silent",
-    description:
-      "How I connected the shipping platform to everything else — so customers always knew where their order was, returns showed up the moment they happened, and the \"where is my order?\" messages stopped.",
-  },
-  {
-    slug: "razorpay-payment-automation",
-    title: "The Money Was Coming In. Nobody Knew Where It Was Going.",
-    description:
-      "How I made every payment log itself automatically — fees, net amount, and all — so the daily copy-paste ritual disappeared and the numbers were always right without anyone checking.",
-  },
-  {
-    slug: "cod-order-confirmation",
-    title: "The Order That Nobody Confirmed",
-    description:
-      "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
-  },
-];
-
 export default function WorkPage() {
-  const works = WORKS.map((w, i) => ({ ...w, index: i }));
+  const workList = works.map((w, i) => ({ ...w, index: i }));
 
   return (
     <>
@@ -87,7 +55,7 @@ export default function WorkPage() {
 
         {/* Work list */}
         <div>
-          {works.map((work) => (
+          {workList.map((work) => (
             <Link
               key={work.slug}
               href={`/work/${work.slug}`}
@@ -175,7 +143,7 @@ export default function WorkPage() {
             © {new Date().getFullYear()} Law Levisay
           </span>
           <Link
-            href="/#contact"
+            href="/contact"
             className="text-[9px] uppercase tracking-[0.2em] text-[#2a2822] hover:text-[#7c3aed] transition-colors duration-200"
             style={{ fontFamily: "var(--font-fauna)" }}
           >

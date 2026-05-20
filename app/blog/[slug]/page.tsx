@@ -133,7 +133,7 @@ export default async function BlogPostPage({
             © {new Date().getFullYear()} Law Levisay
           </span>
           <Link
-            href="/#contact"
+            href="/contact"
             className="text-[9px] uppercase tracking-[0.2em] text-[#2a2822] hover:text-[#7c3aed] transition-colors duration-200"
             style={{ fontFamily: "var(--font-fauna)" }}
           >

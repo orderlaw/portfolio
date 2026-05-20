@@ -15,21 +15,20 @@ const stagger = {
 };
 
 const SERVICES = [
-  "n8n Workflow Automation",
-  "WooCommerce Integration",
-  "ERPNext Customisation",
-  "Supabase / Database Sync",
-  "Custom Backend Automation",
-  "Other",
+  "E-commerce Automation",
+  "Systems Integration",
+  "AI Implementation",
+  "ERP & Operations",
+  "CRM Setup & Automation",
+  "Custom Backend Build",
+  "Not sure yet",
 ];
 
 const BUDGETS = [
-  "Under $1,000",
   "$1,000 – $3,000",
   "$3,000 – $7,000",
   "$7,000 – $15,000",
   "$15,000+",
-  "Not sure yet",
 ];
 
 function RotatingBadge() {
@@ -276,13 +275,15 @@ export default function Contact() {
           <motion.div variants={fadeUp} className="pt-2">
             <button
               type="submit"
-              className="group relative inline-flex items-center gap-3 border border-[#eceae4] text-[#eceae4] text-xs md:text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors duration-300"
-              style={{ fontFamily: "var(--font-fauna)", padding: "0.65rem 1.75rem" }}
+              className="group relative inline-block text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.65rem 1.75rem", border: "1px solid #eceae4" }}
             >
-              Send Message
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 17L17 7M17 7H7M17 7v10" />
-              </svg>
+              <span className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                Send Message
+              </span>
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                Send Message
+              </span>
             </button>
           </motion.div>
         </motion.form>
@@ -330,6 +331,20 @@ export default function Contact() {
             >
               Typically respond within 24h. Happy to jump on a short discovery call first.
             </p>
+            <a
+              href="https://cal.com/lawlevisay"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-block self-start text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer mt-2"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.55rem 1.5rem", border: "1px solid #4e4a44" }}
+            >
+              <span className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                Book a Call
+              </span>
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                Book a Call
+              </span>
+            </a>
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col gap-3">

@@ -3,48 +3,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import HeadingReveal from "./HeadingReveal";
+import { works } from "@/content/work/manifest";
 
-const WORKS = [
-  {
-    id: "1",
-    slug: "the-store-that-ran-itself",
-    title: "The Store That Ran Itself",
-    desc: "How I turned five disconnected tools into one operating system for a D2C electronics store — so orders, payments, shipping, and customer messages all handled themselves without anyone in the middle.",
-    pill: "Case Study →",
-    headerBg: "#3A3A3A",
-    textColor: "#fdf5f3",
-    hasImage: true,
-    imgSrc: "/images/work/the-store-that-ran-itself/google-datacenter.jpg",
-    rotation: "-1.8deg",
-    zIndex: 10,
-  },
-  {
-    id: "2",
-    slug: "razorpay-payment-automation",
-    title: "The Money Was Coming In. Nobody Knew Where It Was Going.",
-    desc: "How I made every payment log itself automatically — fees, net amount, and all — so the daily copy-paste ritual disappeared and the numbers were always right without anyone checking.",
-    pill: "Case Study →",
-    headerBg: "#143526",
-    textColor: "#e8f5ef",
-    hasImage: true,
-    imgSrc: "/images/work/razorpay-payment-automation/payments.jpg",
-    rotation: "1.2deg",
-    zIndex: 20,
-  },
-  {
-    id: "3",
-    slug: "cod-order-confirmation",
-    title: "The Order That Nobody Confirmed",
-    desc: "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
-    pill: "Case Study →",
-    headerBg: "#7D3A14",
-    textColor: "#fdf6f0",
-    hasImage: true,
-    imgSrc: "/images/work/cod-order-confirmation/order-confirmatoin.jpg",
-    rotation: "-0.7deg",
-    zIndex: 30,
-  },
+const FEATURED_SLUGS = [
+  "the-store-that-ran-itself",
+  "razorpay-payment-automation",
+  "cod-order-confirmation",
 ];
+
+const VISUAL: Record<string, { headerBg: string; textColor: string; rotation: string; zIndex: number }> = {
+  "the-store-that-ran-itself":    { headerBg: "#3A3A3A",   textColor: "#fdf5f3", rotation: "-1.8deg", zIndex: 10 },
+  "razorpay-payment-automation":  { headerBg: "#7b5943",   textColor: "#e8f5ef", rotation: "1.2deg",  zIndex: 20 },
+  "cod-order-confirmation":       { headerBg: "#5a5451",   textColor: "#fdf6f0", rotation: "-0.7deg", zIndex: 30 },
+};
+
+const FEATURED = FEATURED_SLUGS.map((slug) => {
+  const work = works.find((w) => w.slug === slug)!;
+  return { ...work, ...VISUAL[slug] };
+});
 
 export default function SelectedWorks() {
   return (
@@ -65,9 +41,9 @@ export default function SelectedWorks() {
       </div>
 
       <div className="relative z-10 pt-16 md:pt-24">
-        {WORKS.map((work, i) => (
+        {FEATURED.map((work, i) => (
           <div
-            key={work.id}
+            key={work.slug}
             className="mx-6 md:mx-16 relative"
             style={{
               zIndex: work.zIndex,
@@ -112,7 +88,7 @@ export default function SelectedWorks() {
                       maxWidth: "58ch",
                     }}
                   >
-                    {work.desc}
+                    {work.description}
                   </p>
 
                   <div className="flex md:justify-end">
@@ -132,7 +108,7 @@ export default function SelectedWorks() {
                         textDecoration: "none",
                       }}
                     >
-                      {work.pill}
+                      Case Study →
                     </Link>
                   </div>
                 </div>
@@ -140,19 +116,17 @@ export default function SelectedWorks() {
             </div>
 
             {/* Image */}
-            {work.hasImage && (
-              <div style={{ padding: "0 2rem 1.5rem 2rem" }}>
-                <div className="relative overflow-hidden" style={{ height: "200px" }}>
-                  <Image
-                    src={work.imgSrc}
-                    alt={work.title}
-                    fill
-                    className="object-cover"
-                    sizes="82vw"
-                  />
-                </div>
+            <div style={{ padding: "0 2rem 1.5rem 2rem" }}>
+              <div className="relative overflow-hidden" style={{ height: "200px" }}>
+                <Image
+                  src={work.image}
+                  alt={work.title}
+                  fill
+                  className="object-cover"
+                  sizes="82vw"
+                />
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>

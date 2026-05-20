@@ -1,17 +1,10 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
-
-const SLUGS = [
-  "the-store-that-ran-itself",
-  "inventory-single-source-of-truth",
-  "shipping-automation",
-  "razorpay-payment-automation",
-  "cod-order-confirmation",
-];
+import { works } from "@/content/work/manifest";
 
 export function generateStaticParams() {
-  return SLUGS.map((slug) => ({ slug }));
+  return works.map((w) => ({ slug: w.slug }));
 }
 
 export const dynamicParams = false;
@@ -128,7 +121,7 @@ export default async function CaseStudyPage({
             © {new Date().getFullYear()} Law Levisay
           </span>
           <Link
-            href="/#contact"
+            href="/contact"
             className="text-[9px] uppercase tracking-[0.2em] text-[#2a2822] hover:text-[#7c3aed] transition-colors duration-200"
             style={{ fontFamily: "var(--font-fauna)" }}
           >
