@@ -31,20 +31,19 @@ export default function AdminLogin() {
   return (
     <main
       className="min-h-screen flex items-center justify-center"
-      style={{ background: "#080706" }}
+      style={{ background: "#eceae4" }}
     >
       <div className="w-full max-w-sm px-8">
-        {/* Logo */}
         <div className="text-center mb-10">
           <span
             className="text-2xl tracking-widest uppercase select-none"
-            style={{ fontFamily: "var(--font-didot)", color: "#eceae4" }}
+            style={{ fontFamily: "var(--font-didot)", color: "#2a2822" }}
           >
             LL
           </span>
           <p
             className="mt-2 text-[9px] uppercase tracking-[0.3em]"
-            style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
+            style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
           >
             Admin
           </p>
@@ -55,7 +54,7 @@ export default function AdminLogin() {
             <label
               htmlFor="password"
               className="text-[9px] uppercase tracking-[0.25em]"
-              style={{ fontFamily: "var(--font-fauna)", color: "#706c66" }}
+              style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
             >
               Password
             </label>
@@ -65,20 +64,18 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoFocus
-              className="w-full bg-transparent pb-2.5 text-sm outline-none text-[#eceae4] placeholder-[#706c66]"
+              className="w-full bg-transparent pb-2.5 text-sm outline-none placeholder-[#c4c0b8]"
               style={{
                 fontFamily: "var(--font-fauna)",
-                borderBottom: "1px solid #2a2822",
+                color: "#2a2822",
+                borderBottom: "1px solid #d2cec4",
               }}
               placeholder="Enter password"
             />
           </div>
 
           {error && (
-            <p
-              className="text-xs"
-              style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}
-            >
+            <p className="text-xs" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
               {error}
             </p>
           )}
@@ -95,13 +92,13 @@ export default function AdminLogin() {
           >
             <span
               className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ color: "#eceae4" }}
+              style={{ color: "#2a2822" }}
             >
               {loading ? "Entering…" : "Enter"}
             </span>
             <span
               className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ color: "#eceae4" }}
+              style={{ color: "#2a2822" }}
             >
               {loading ? "Entering…" : "Enter"}
             </span>

@@ -9,17 +9,17 @@ interface Props {
 }
 
 const SNIPPETS = [
-  { label: "H2",      insert: "## ",                     offset: 3  },
-  { label: "H3",      insert: "### ",                    offset: 4  },
-  { label: "Bold",    insert: "**text**",                offset: 2  },
-  { label: "Italic",  insert: "*text*",                  offset: 1  },
-  { label: "Quote",   insert: "> ",                      offset: 2  },
-  { label: "—",       insert: "\n---\n",                 offset: 5  },
-  { label: "Link",    insert: "[text](url)",             offset: 1  },
-  { label: "Code",    insert: "```\n\n```",              offset: 4  },
-  { label: "Slider",  insert: '<ImageSlider images={["url1", "url2"]} />', offset: 16 },
-  { label: "Flow",    insert: '<FlowDiagram id="n8n-stack" />',            offset: 13 },
-  { label: "Mermaid", insert: '<MermaidDiagram chart={`\ngraph TD\n  A --> B\n`} />', offset: 19 },
+  { label: "H2",      insert: "## ",                                                       offset: 3  },
+  { label: "H3",      insert: "### ",                                                      offset: 4  },
+  { label: "Bold",    insert: "**text**",                                                  offset: 2  },
+  { label: "Italic",  insert: "*text*",                                                    offset: 1  },
+  { label: "Quote",   insert: "> ",                                                        offset: 2  },
+  { label: "—",       insert: "\n---\n",                                                   offset: 5  },
+  { label: "Link",    insert: "[text](url)",                                               offset: 1  },
+  { label: "Code",    insert: "```\n\n```",                                                offset: 4  },
+  { label: "Slider",  insert: '<ImageSlider images={["url1", "url2"]} />',                 offset: 16 },
+  { label: "Flow",    insert: '<FlowDiagram id="n8n-stack" />',                            offset: 13 },
+  { label: "Mermaid", insert: '<MermaidDiagram chart={`\ngraph TD\n  A --> B\n`} />',      offset: 19 },
 ];
 
 export default function SnippetBar({ onInsert, onUpload, type }: Props) {
@@ -35,65 +35,44 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
 
   return (
     <div
-      className="flex flex-wrap items-center gap-1 px-3 py-2 border-b"
-      style={{ borderColor: "#1a1816", background: "#0d0b09" }}
+      className="flex flex-wrap items-center gap-1.5 px-4 py-2.5 border-b"
+      style={{ borderColor: "#e8e8e8", background: "#f7f5f2" }}
     >
       {SNIPPETS.map((s) => (
         <button
           key={s.label}
           type="button"
           onClick={() => onInsert(s.insert, s.offset)}
-          className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded transition-colors duration-150"
+          className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150 hover:border-[#7c3aed] hover:text-[#7c3aed]"
           style={{
             fontFamily: "var(--font-fauna)",
-            color: "#706c66",
-            background: "transparent",
-            border: "1px solid #1a1816",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#eceae4";
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "#2a2822";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#706c66";
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "#1a1816";
+            color: "#78746c",
+            background: "#fff",
+            borderColor: "#e8e8e8",
           }}
         >
           {s.label}
         </button>
       ))}
 
-      {/* Image upload */}
       <button
         type="button"
         onClick={() => fileRef.current?.click()}
-        className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded transition-colors duration-150"
+        className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150"
         style={{
           fontFamily: "var(--font-fauna)",
           color: "#7c3aed",
-          background: "transparent",
-          border: "1px solid #3b1d8a",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.background = "#3b1d8a22";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+          background: "#f5f0ff",
+          borderColor: "#d4b8ff",
         }}
       >
         ↑ Image
       </button>
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={handleFile}
-      />
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
       <span
         className="ml-auto text-[9px] uppercase tracking-[0.22em]"
-        style={{ fontFamily: "var(--font-fauna)", color: "#2a2822" }}
+        style={{ fontFamily: "var(--font-fauna)", color: "#c4c0b8" }}
       >
         {type === "blog" ? "Blog Post" : "Case Study"}
       </span>

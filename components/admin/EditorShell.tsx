@@ -6,23 +6,12 @@ import SnippetBar from "./SnippetBar";
 import MetadataPanel from "./MetadataPanel";
 
 const EMPTY_BLOG_META = {
-  slug: "",
-  title: "",
-  date: "",
-  readTime: "",
-  excerpt: "",
-  tags: [] as string[],
-  seoTitle: "",
-  seoDescription: "",
+  slug: "", title: "", date: "", readTime: "", excerpt: "",
+  tags: [] as string[], seoTitle: "", seoDescription: "",
 };
 
 const EMPTY_WORK_META = {
-  slug: "",
-  title: "",
-  description: "",
-  image: "",
-  seoTitle: "",
-  seoDescription: "",
+  slug: "", title: "", description: "", image: "", seoTitle: "", seoDescription: "",
 };
 
 type Meta = typeof EMPTY_BLOG_META | typeof EMPTY_WORK_META;
@@ -46,7 +35,6 @@ export default function EditorShell() {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load existing content
   useEffect(() => {
     if (isNew) return;
     fetch(`/api/admin/content/${slug}?type=${type}`)
@@ -59,23 +47,17 @@ export default function EditorShell() {
       .catch(() => setLoading(false));
   }, [slug, type, isNew]);
 
-  // Insert snippet at cursor
   const insertSnippet = useCallback((snippet: string, cursorOffset = 0) => {
     const el = textareaRef.current;
     if (!el) return;
     const start = el.selectionStart;
     const end = el.selectionEnd;
     const selected = el.value.slice(start, end);
-    const before = el.value.slice(0, start);
-    const after = el.value.slice(end);
-
-    const insertion = selected
-      ? snippet.replace("text", selected)
-      : snippet;
-
-    const newVal = before + insertion + after;
+    const newVal =
+      el.value.slice(0, start) +
+      (selected ? snippet.replace("text", selected) : snippet) +
+      el.value.slice(end);
     setBody(newVal);
-
     requestAnimationFrame(() => {
       el.focus();
       const pos = start + cursorOffset;
@@ -83,24 +65,20 @@ export default function EditorShell() {
     });
   }, []);
 
-  // Upload image
   const uploadImage = useCallback(async (file: File): Promise<string> => {
     const folder =
       type === "blog"
         ? `blog/${(meta as typeof EMPTY_BLOG_META).slug || "uploads"}`
         : `work/${(meta as typeof EMPTY_WORK_META).slug || "uploads"}`;
-
     const form = new FormData();
     form.append("file", file);
     form.append("folder", folder);
-
     const res = await fetch("/api/admin/upload", { method: "POST", body: form });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? "Upload failed");
     return data.url as string;
   }, [type, meta]);
 
-  // Tab key → 2 spaces
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Tab") {
       e.preventDefault();
@@ -114,10 +92,7 @@ export default function EditorShell() {
         ? (meta as typeof EMPTY_BLOG_META).slug
         : (meta as typeof EMPTY_WORK_META).slug;
 
-    if (!currentSlug) {
-      setError("Slug is required.");
-      return;
-    }
+    if (!currentSlug) { setError("Slug is required."); return; }
 
     setSaving(true);
     setError("");
@@ -126,21 +101,11 @@ export default function EditorShell() {
     const workMeta = type === "work" ? (meta as typeof EMPTY_WORK_META) : null;
 
     const payload = {
-      metadata:
-        type === "blog"
-          ? {
-              slug: blogMeta!.slug,
-              title: blogMeta!.title,
-              date: blogMeta!.date,
-              readTime: blogMeta!.readTime,
-              excerpt: blogMeta!.excerpt,
-              tags: blogMeta!.tags,
-            }
-          : {
-              title: workMeta!.title + " — Law Levisay",
-              description: workMeta!.description,
-              image: workMeta!.image,
-            },
+      metadata: type === "blog"
+        ? { slug: blogMeta!.slug, title: blogMeta!.title, date: blogMeta!.date,
+            readTime: blogMeta!.readTime, excerpt: blogMeta!.excerpt, tags: blogMeta!.tags }
+        : { title: workMeta!.title + " — Law Levisay", description: workMeta!.description,
+            image: workMeta!.image },
       body,
       isNew,
     };
@@ -151,16 +116,12 @@ export default function EditorShell() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error ?? "Save failed");
       }
-
       setSavedAt(new Date().toLocaleTimeString());
-      if (isNew) {
-        router.replace(`/admin/edit?type=${type}&slug=${currentSlug}`);
-      }
+      if (isNew) router.replace(`/admin/edit?type=${type}&slug=${currentSlug}`);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -170,16 +131,9 @@ export default function EditorShell() {
 
   if (loading) {
     return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "#080706" }}
-      >
-        <p
-          className="text-[10px] uppercase tracking-[0.3em]"
-          style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
-        >
-          Loading…
-        </p>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#eceae4" }}>
+        <p className="text-[10px] uppercase tracking-[0.3em]"
+          style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}>Loading…</p>
       </div>
     );
   }
@@ -190,31 +144,25 @@ export default function EditorShell() {
       : (meta as typeof EMPTY_WORK_META).title;
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: "#080706" }}>
+    <div className="flex flex-col min-h-screen" style={{ background: "#eceae4" }}>
       {/* Top bar */}
       <header
-        className="flex items-center justify-between px-6 h-14 border-b shrink-0"
-        style={{ borderColor: "#1a1816" }}
+        className="flex items-center justify-between px-6 h-14 border-b shrink-0 bg-white"
+        style={{ borderColor: "#e8e8e8" }}
       >
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.push("/admin/dashboard")}
-            className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150"
-            style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
+            className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-[#7c3aed]"
+            style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
           >
             ← Dashboard
           </button>
           {title && (
             <>
-              <span style={{ color: "#1a1816" }}>/</span>
-              <span
-                className="text-[10px] truncate max-w-[30ch]"
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  fontStyle: "italic",
-                  color: "#706c66",
-                }}
-              >
+              <span style={{ color: "#e8e8e8" }}>/</span>
+              <span className="text-[10px] truncate max-w-[30ch]"
+                style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "#a8a49e" }}>
                 {title}
               </span>
             </>
@@ -223,44 +171,31 @@ export default function EditorShell() {
 
         <div className="flex items-center gap-4">
           {savedAt && !error && (
-            <span
-              className="text-[9px] uppercase tracking-[0.2em]"
-              style={{ fontFamily: "var(--font-fauna)", color: "#2a8a3e" }}
-            >
+            <span className="text-[9px] uppercase tracking-[0.2em]"
+              style={{ fontFamily: "var(--font-fauna)", color: "#2a8a3e" }}>
               Saved {savedAt}
             </span>
           )}
           {error && (
-            <span
-              className="text-[9px]"
-              style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}
-            >
+            <span className="text-[9px]" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
               {error}
             </span>
           )}
-
-          {/* Preview */}
           {!isNew && (
             <a
               href={type === "blog" ? `/blog/${slug}` : `/work/${slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150"
-              style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
+              target="_blank" rel="noopener noreferrer"
+              className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-[#7c3aed]"
+              style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
             >
               Preview ↗
             </a>
           )}
-
           <button
             onClick={publish}
             disabled={saving}
             className="text-[9px] uppercase tracking-[0.22em] px-4 py-2 rounded-full transition-colors duration-150 disabled:opacity-50"
-            style={{
-              fontFamily: "var(--font-fauna)",
-              background: "#7c3aed",
-              color: "#fff",
-            }}
+            style={{ fontFamily: "var(--font-fauna)", background: "#7c3aed", color: "#fff" }}
           >
             {saving ? "Publishing…" : isNew ? "Publish" : "Update"}
           </button>
@@ -271,35 +206,26 @@ export default function EditorShell() {
       <div className="flex flex-1 overflow-hidden">
         {/* Metadata sidebar */}
         <aside
-          className="w-72 shrink-0 border-r px-6 py-8 overflow-y-auto"
-          style={{ borderColor: "#1a1816" }}
+          className="w-72 shrink-0 border-r bg-white px-6 py-8 overflow-y-auto"
+          style={{ borderColor: "#e8e8e8" }}
         >
-          <MetadataPanel
-            type={type}
-            meta={meta}
-            onChange={setMeta}
-            isNew={isNew}
-          />
+          <MetadataPanel type={type} meta={meta} onChange={setMeta} isNew={isNew} />
         </aside>
 
         {/* Editor */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <SnippetBar
-            onInsert={insertSnippet}
-            onUpload={uploadImage}
-            type={type}
-          />
+        <div className="flex-1 flex flex-col min-w-0 bg-white">
+          <SnippetBar onInsert={insertSnippet} onUpload={uploadImage} type={type} />
           <textarea
             ref={textareaRef}
             value={body}
             onChange={(e) => setBody(e.target.value)}
             onKeyDown={handleKeyDown}
             spellCheck
-            className="flex-1 w-full bg-transparent outline-none resize-none p-6 text-sm leading-relaxed"
+            className="flex-1 w-full bg-transparent outline-none resize-none p-8 text-sm leading-relaxed"
             style={{
               fontFamily: "'Geist Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace",
               fontSize: "0.82rem",
-              color: "#c4c0b8",
+              color: "#2a2822",
               caretColor: "#7c3aed",
               lineHeight: 1.8,
             }}

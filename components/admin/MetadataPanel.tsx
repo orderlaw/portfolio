@@ -3,10 +3,7 @@
 import { useState } from "react";
 
 function slugify(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 interface BlogMeta {
@@ -36,18 +33,12 @@ interface Props {
   isNew: boolean;
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label
         className="text-[9px] uppercase tracking-[0.25em]"
-        style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
+        style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
       >
         {label}
       </label>
@@ -56,12 +47,8 @@ function Field({
   );
 }
 
-const inputClass =
-  "w-full bg-transparent text-sm outline-none text-[#eceae4] placeholder-[#4a4642] pb-1.5";
-const inputStyle = {
-  fontFamily: "var(--font-fauna)",
-  borderBottom: "1px solid #1a1816",
-};
+const inputClass = "w-full bg-transparent text-sm outline-none placeholder-[#c4c0b8] pb-1.5";
+const inputStyle = { fontFamily: "var(--font-fauna)", color: "#2a2822", borderBottom: "1px solid #e8e8e8" };
 
 export default function MetadataPanel({ type, meta, onChange, isNew }: Props) {
   const [tagInput, setTagInput] = useState("");
@@ -82,136 +69,74 @@ export default function MetadataPanel({ type, meta, onChange, isNew }: Props) {
     const tag = tagInput.trim();
     if (!tag) return;
     const blogMeta = meta as BlogMeta;
-    if (!blogMeta.tags.includes(tag)) {
-      set("tags", [...blogMeta.tags, tag]);
-    }
+    if (!blogMeta.tags.includes(tag)) set("tags", [...blogMeta.tags, tag]);
     setTagInput("");
   }
 
   function removeTag(tag: string) {
-    const blogMeta = meta as BlogMeta;
-    set("tags", blogMeta.tags.filter((t) => t !== tag));
+    set("tags", (meta as BlogMeta).tags.filter((t) => t !== tag));
   }
+
+  const scrollStyle = { maxHeight: "calc(100vh - 56px)", overflowY: "auto" as const };
 
   if (type === "blog") {
     const m = meta as BlogMeta;
     return (
-      <div className="flex flex-col gap-7 overflow-y-auto" style={{ maxHeight: "calc(100vh - 56px)" }}>
+      <div className="flex flex-col gap-7" style={scrollStyle}>
         <Field label="Title">
-          <textarea
-            value={m.title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-            rows={2}
-            className={inputClass + " resize-none"}
-            style={inputStyle}
-            placeholder="Post title"
-          />
+          <textarea value={m.title} onChange={(e) => handleTitleChange(e.target.value)}
+            rows={2} className={inputClass + " resize-none"} style={inputStyle} placeholder="Post title" />
         </Field>
 
         <Field label="Slug">
-          <input
-            value={m.slug}
-            onChange={(e) => set("slug", e.target.value)}
-            className={inputClass}
-            style={inputStyle}
-            placeholder="post-slug"
-          />
+          <input value={m.slug} onChange={(e) => set("slug", e.target.value)}
+            className={inputClass} style={inputStyle} placeholder="post-slug" />
         </Field>
 
         <div className="grid grid-cols-2 gap-4">
           <Field label="Date">
-            <input
-              value={m.date}
-              onChange={(e) => set("date", e.target.value)}
-              className={inputClass}
-              style={inputStyle}
-              placeholder="May 2025"
-            />
+            <input value={m.date} onChange={(e) => set("date", e.target.value)}
+              className={inputClass} style={inputStyle} placeholder="May 2025" />
           </Field>
           <Field label="Read Time">
-            <input
-              value={m.readTime}
-              onChange={(e) => set("readTime", e.target.value)}
-              className={inputClass}
-              style={inputStyle}
-              placeholder="8 min"
-            />
+            <input value={m.readTime} onChange={(e) => set("readTime", e.target.value)}
+              className={inputClass} style={inputStyle} placeholder="8 min" />
           </Field>
         </div>
 
         <Field label="Excerpt">
-          <textarea
-            value={m.excerpt}
-            onChange={(e) => set("excerpt", e.target.value)}
-            rows={3}
-            className={inputClass + " resize-none"}
-            style={inputStyle}
-            placeholder="One-line hook for the post listing…"
-          />
+          <textarea value={m.excerpt} onChange={(e) => set("excerpt", e.target.value)}
+            rows={3} className={inputClass + " resize-none"} style={inputStyle}
+            placeholder="One-line hook for the post listing…" />
         </Field>
 
-        <Field label="Tags (Enter or comma to add)">
+        <Field label="Tags — Enter or comma to add">
           <div className="flex flex-wrap gap-1.5 mb-2">
             {m.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full"
-                style={{
-                  fontFamily: "var(--font-fauna)",
-                  background: "#1a1816",
-                  color: "#eceae4",
-                }}
-              >
+              <span key={tag} className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full"
+                style={{ fontFamily: "var(--font-fauna)", background: "#eceae4", color: "#2a2822" }}>
                 {tag}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="opacity-50 hover:opacity-100 transition-opacity"
-                >
-                  ×
-                </button>
+                <button type="button" onClick={() => removeTag(tag)}
+                  className="opacity-40 hover:opacity-100 transition-opacity leading-none">×</button>
               </span>
             ))}
           </div>
-          <input
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={addTag}
-            className={inputClass}
-            style={inputStyle}
-            placeholder="Add a tag…"
-          />
+          <input value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={addTag}
+            className={inputClass} style={inputStyle} placeholder="Add a tag…" />
         </Field>
 
-        <div
-          className="pt-4 border-t"
-          style={{ borderColor: "#1a1816" }}
-        >
-          <p
-            className="text-[9px] uppercase tracking-[0.25em] mb-5"
-            style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
-          >
-            SEO
-          </p>
+        <div className="pt-4 border-t" style={{ borderColor: "#e8e8e8" }}>
+          <p className="text-[9px] uppercase tracking-[0.25em] mb-5"
+            style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}>SEO</p>
           <div className="flex flex-col gap-5">
             <Field label="SEO Title">
-              <input
-                value={m.seoTitle}
-                onChange={(e) => set("seoTitle", e.target.value)}
-                className={inputClass}
-                style={inputStyle}
-                placeholder="Defaults to title"
-              />
+              <input value={m.seoTitle} onChange={(e) => set("seoTitle", e.target.value)}
+                className={inputClass} style={inputStyle} placeholder="Defaults to title" />
             </Field>
             <Field label="SEO Description">
-              <textarea
-                value={m.seoDescription}
-                onChange={(e) => set("seoDescription", e.target.value)}
-                rows={2}
-                className={inputClass + " resize-none"}
-                style={inputStyle}
-                placeholder="Defaults to excerpt"
-              />
+              <textarea value={m.seoDescription} onChange={(e) => set("seoDescription", e.target.value)}
+                rows={2} className={inputClass + " resize-none"} style={inputStyle}
+                placeholder="Defaults to excerpt" />
             </Field>
           </div>
         </div>
@@ -219,78 +144,42 @@ export default function MetadataPanel({ type, meta, onChange, isNew }: Props) {
     );
   }
 
-  // Work (case study)
   const m = meta as WorkMeta;
   return (
-    <div className="flex flex-col gap-7 overflow-y-auto" style={{ maxHeight: "calc(100vh - 56px)" }}>
+    <div className="flex flex-col gap-7" style={scrollStyle}>
       <Field label="Title">
-        <textarea
-          value={m.title}
-          onChange={(e) => handleTitleChange(e.target.value)}
-          rows={2}
-          className={inputClass + " resize-none"}
-          style={inputStyle}
-          placeholder="Case study title"
-        />
+        <textarea value={m.title} onChange={(e) => handleTitleChange(e.target.value)}
+          rows={2} className={inputClass + " resize-none"} style={inputStyle} placeholder="Case study title" />
       </Field>
 
       <Field label="Slug">
-        <input
-          value={m.slug}
-          onChange={(e) => set("slug", e.target.value)}
-          className={inputClass}
-          style={inputStyle}
-          placeholder="case-study-slug"
-        />
+        <input value={m.slug} onChange={(e) => set("slug", e.target.value)}
+          className={inputClass} style={inputStyle} placeholder="case-study-slug" />
       </Field>
 
       <Field label="Description">
-        <textarea
-          value={m.description}
-          onChange={(e) => set("description", e.target.value)}
-          rows={4}
-          className={inputClass + " resize-none"}
-          style={inputStyle}
-          placeholder="One-paragraph summary for the work listing…"
-        />
+        <textarea value={m.description} onChange={(e) => set("description", e.target.value)}
+          rows={4} className={inputClass + " resize-none"} style={inputStyle}
+          placeholder="One-paragraph summary for the work listing…" />
       </Field>
 
       <Field label="Cover Image Path">
-        <input
-          value={m.image}
-          onChange={(e) => set("image", e.target.value)}
-          className={inputClass}
-          style={inputStyle}
-          placeholder="/images/work/slug/cover.jpg"
-        />
+        <input value={m.image} onChange={(e) => set("image", e.target.value)}
+          className={inputClass} style={inputStyle} placeholder="/images/work/slug/cover.jpg" />
       </Field>
 
-      <div className="pt-4 border-t" style={{ borderColor: "#1a1816" }}>
-        <p
-          className="text-[9px] uppercase tracking-[0.25em] mb-5"
-          style={{ fontFamily: "var(--font-fauna)", color: "#4e4a44" }}
-        >
-          SEO
-        </p>
+      <div className="pt-4 border-t" style={{ borderColor: "#e8e8e8" }}>
+        <p className="text-[9px] uppercase tracking-[0.25em] mb-5"
+          style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}>SEO</p>
         <div className="flex flex-col gap-5">
           <Field label="SEO Title">
-            <input
-              value={m.seoTitle}
-              onChange={(e) => set("seoTitle", e.target.value)}
-              className={inputClass}
-              style={inputStyle}
-              placeholder="Defaults to title"
-            />
+            <input value={m.seoTitle} onChange={(e) => set("seoTitle", e.target.value)}
+              className={inputClass} style={inputStyle} placeholder="Defaults to title" />
           </Field>
           <Field label="SEO Description">
-            <textarea
-              value={m.seoDescription}
-              onChange={(e) => set("seoDescription", e.target.value)}
-              rows={2}
-              className={inputClass + " resize-none"}
-              style={inputStyle}
-              placeholder="Defaults to description"
-            />
+            <textarea value={m.seoDescription} onChange={(e) => set("seoDescription", e.target.value)}
+              rows={2} className={inputClass + " resize-none"} style={inputStyle}
+              placeholder="Defaults to description" />
           </Field>
         </div>
       </div>
