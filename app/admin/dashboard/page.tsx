@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen" style={{ background: "#eceae4" }}>
+    <main className="min-h-screen" style={{ background: "#fff" }}>
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-8 md:px-12 h-14 border-b bg-white"

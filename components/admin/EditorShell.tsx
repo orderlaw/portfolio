@@ -131,7 +131,7 @@ export default function EditorShell() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#eceae4" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#fff" }}>
         <p className="text-[10px] uppercase tracking-[0.3em]"
           style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}>Loading…</p>
       </div>
@@ -144,7 +144,7 @@ export default function EditorShell() {
       : (meta as typeof EMPTY_WORK_META).title;
 
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: "#eceae4" }}>
+    <div className="flex flex-col min-h-screen" style={{ background: "#fff" }}>
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-6 h-14 border-b shrink-0 bg-white"
