@@ -42,34 +42,34 @@ export default function AdminDashboard() {
     <main className="min-h-screen" style={{ background: "#fff" }}>
       {/* Top bar */}
       <header
-        className="flex items-center justify-between px-8 md:px-12 h-14 border-b bg-white"
+        className="flex items-center justify-between px-5 md:px-12 h-14 border-b bg-white gap-3"
         style={{ borderColor: "#e8e8e8" }}
       >
         <span
-          className="text-sm tracking-widest uppercase select-none"
+          className="shrink-0 text-sm tracking-widest uppercase select-none"
           style={{ fontFamily: "var(--font-didot)", color: "#2a2822" }}
         >
           LL
         </span>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 overflow-x-auto">
           <Link
             href="/admin/edit?type=blog&new=1"
-            className="text-[9px] uppercase tracking-[0.22em] px-4 py-2 rounded-full border transition-colors duration-200 hover:border-[#7c3aed] hover:text-[#7c3aed]"
+            className="shrink-0 text-[9px] uppercase tracking-[0.22em] px-3 md:px-4 py-2 rounded-full border transition-colors duration-200 hover:border-accent hover:text-accent"
             style={{ fontFamily: "var(--font-fauna)", color: "#2a2822", borderColor: "#d2cec4" }}
           >
-            + New Post
+            + Post
           </Link>
           <Link
             href="/admin/edit?type=work&new=1"
-            className="text-[9px] uppercase tracking-[0.22em] px-4 py-2 rounded-full transition-colors duration-200"
+            className="shrink-0 text-[9px] uppercase tracking-[0.22em] px-3 md:px-4 py-2 rounded-full transition-colors duration-200"
             style={{ fontFamily: "var(--font-fauna)", background: "#7c3aed", color: "#fff" }}
           >
-            + New Case Study
+            + Case Study
           </Link>
           <button
             onClick={logout}
-            className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-200 hover:text-[#7c3aed]"
+            className="shrink-0 text-[9px] uppercase tracking-[0.22em] transition-colors duration-200 hover:text-accent"
             style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
           >
             Log out
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
                 >
                   <div className="flex-1 min-w-0 pr-4">
                     <p
-                      className="text-sm leading-snug mb-1 group-hover:text-[#7c3aed] transition-colors duration-150"
+                      className="text-sm leading-snug mb-1 group-hover:text-accent transition-colors duration-150"
                       style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "#2a2822" }}
                     >
                       {post.title}
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                   style={{ borderColor: "#e8e8e8" }}
                 >
                   <p
-                    className="text-sm leading-snug group-hover:text-[#7c3aed] transition-colors duration-150"
+                    className="text-sm leading-snug group-hover:text-accent transition-colors duration-150"
                     style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "#2a2822" }}
                   >
                     {work.title}

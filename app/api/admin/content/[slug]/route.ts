@@ -22,27 +22,27 @@ export async function GET(
 
     const mdxFile = await readFile(mdxPath);
 
-    let metadata: Record<string, unknown> = {};
+    let metadata: Record<string, unknown> = { slug };
     let body = mdxFile?.content ?? "";
-
-    if (type === "work" && body) {
-      const metaMatch = body.match(/^export const metadata = (\{[\s\S]*?\});\n*/);
-      if (metaMatch) {
-        try {
-          metadata = JSON.parse(metaMatch[1]);
-        } catch {
-          // leave metadata empty
-        }
-        body = body.slice(metaMatch[0].length);
-      }
-    }
 
     if (type === "blog") {
       const manifestFile = await readFile("content/blog/posts.json");
       if (manifestFile) {
         const posts: Record<string, unknown>[] = JSON.parse(manifestFile.content);
         const entry = posts.find((p) => p.slug === slug);
-        if (entry) metadata = entry;
+        if (entry) metadata = { ...entry, slug };
+      }
+    } else {
+      // Strip the export const metadata header from body
+      const metaMatch = body.match(/^export const metadata = \{[\s\S]*?\};\n*/);
+      if (metaMatch) body = body.slice(metaMatch[0].length);
+
+      // Read metadata from works.json (source of truth, same pattern as blog)
+      const manifestFile = await readFile("content/work/works.json");
+      if (manifestFile) {
+        const works: Record<string, unknown>[] = JSON.parse(manifestFile.content);
+        const entry = works.find((w) => w.slug === slug);
+        if (entry) metadata = { ...entry, slug };
       }
     }
 

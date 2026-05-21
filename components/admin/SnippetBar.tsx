@@ -35,7 +35,7 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
 
   return (
     <div
-      className="flex flex-wrap items-center gap-1.5 px-4 py-2.5 border-b"
+      className="flex items-center gap-1.5 px-4 py-2.5 border-b overflow-x-auto"
       style={{ borderColor: "#e8e8e8", background: "#f7f5f2" }}
     >
       {SNIPPETS.map((s) => (
@@ -43,7 +43,7 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
           key={s.label}
           type="button"
           onClick={() => onInsert(s.insert, s.offset)}
-          className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150 hover:border-[#7c3aed] hover:text-[#7c3aed]"
+          className="shrink-0 text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150 hover:border-accent hover:text-accent"
           style={{
             fontFamily: "var(--font-fauna)",
             color: "#78746c",
@@ -58,7 +58,7 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
       <button
         type="button"
         onClick={() => fileRef.current?.click()}
-        className="text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150"
+        className="shrink-0 text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150"
         style={{
           fontFamily: "var(--font-fauna)",
           color: "#7c3aed",
@@ -71,7 +71,7 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
       <span
-        className="ml-auto text-[9px] uppercase tracking-[0.22em]"
+        className="ml-auto shrink-0 text-[9px] uppercase tracking-[0.22em]"
         style={{ fontFamily: "var(--font-fauna)", color: "#c4c0b8" }}
       >
         {type === "blog" ? "Blog Post" : "Case Study"}

@@ -32,6 +32,7 @@ export default function EditorShell() {
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [mobileTab, setMobileTab] = useState<"write" | "meta">("write");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -40,7 +41,8 @@ export default function EditorShell() {
     fetch(`/api/admin/content/${slug}?type=${type}`)
       .then((r) => r.json())
       .then((data) => {
-        setMeta(data.metadata ?? (type === "blog" ? { ...EMPTY_BLOG_META } : { ...EMPTY_WORK_META }));
+        const empty = type === "blog" ? { ...EMPTY_BLOG_META } : { ...EMPTY_WORK_META };
+        setMeta({ ...empty, ...(data.metadata ?? {}), slug: data.slug ?? data.metadata?.slug ?? "" });
         setBody(data.body ?? "");
         setLoading(false);
       })
@@ -147,21 +149,21 @@ export default function EditorShell() {
     <div className="flex flex-col min-h-screen" style={{ background: "#fff" }}>
       {/* Top bar */}
       <header
-        className="flex items-center justify-between px-6 h-14 border-b shrink-0 bg-white"
+        className="flex items-center justify-between px-4 md:px-6 h-14 border-b shrink-0 bg-white"
         style={{ borderColor: "#e8e8e8" }}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={() => router.push("/admin/dashboard")}
-            className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-[#7c3aed]"
+            className="shrink-0 text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-accent"
             style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
           >
             ← Dashboard
           </button>
           {title && (
             <>
-              <span style={{ color: "#e8e8e8" }}>/</span>
-              <span className="text-[10px] truncate max-w-[30ch]"
+              <span className="hidden sm:inline" style={{ color: "#e8e8e8" }}>/</span>
+              <span className="hidden sm:inline text-[10px] truncate max-w-[20ch] md:max-w-[30ch]"
                 style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "#a8a49e" }}>
                 {title}
               </span>
@@ -169,15 +171,15 @@ export default function EditorShell() {
           )}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 shrink-0">
           {savedAt && !error && (
-            <span className="text-[9px] uppercase tracking-[0.2em]"
+            <span className="hidden sm:inline text-[9px] uppercase tracking-[0.2em]"
               style={{ fontFamily: "var(--font-fauna)", color: "#2a8a3e" }}>
               Saved {savedAt}
             </span>
           )}
           {error && (
-            <span className="text-[9px]" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
+            <span className="text-[9px] max-w-[12ch] truncate" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
               {error}
             </span>
           )}
@@ -185,7 +187,7 @@ export default function EditorShell() {
             <a
               href={type === "blog" ? `/blog/${slug}` : `/work/${slug}`}
               target="_blank" rel="noopener noreferrer"
-              className="text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-[#7c3aed]"
+              className="hidden sm:inline text-[9px] uppercase tracking-[0.22em] transition-colors duration-150 hover:text-accent"
               style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
             >
               Preview ↗
@@ -197,23 +199,41 @@ export default function EditorShell() {
             className="text-[9px] uppercase tracking-[0.22em] px-4 py-2 rounded-full transition-colors duration-150 disabled:opacity-50"
             style={{ fontFamily: "var(--font-fauna)", background: "#7c3aed", color: "#fff" }}
           >
-            {saving ? "Publishing…" : isNew ? "Publish" : "Update"}
+            {saving ? "Saving…" : isNew ? "Publish" : "Update"}
           </button>
         </div>
       </header>
 
+      {/* Mobile tab bar */}
+      <div className="flex md:hidden border-b shrink-0" style={{ borderColor: "#e8e8e8" }}>
+        {(["write", "meta"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setMobileTab(tab)}
+            className="flex-1 py-2.5 text-[9px] uppercase tracking-[0.22em] transition-colors duration-150"
+            style={{
+              fontFamily: "var(--font-fauna)",
+              color: mobileTab === tab ? "#7c3aed" : "#78746c",
+              borderBottom: mobileTab === tab ? "2px solid #7c3aed" : "2px solid transparent",
+            }}
+          >
+            {tab === "write" ? "Write" : "Metadata"}
+          </button>
+        ))}
+      </div>
+
       {/* Body */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Metadata sidebar */}
+        {/* Metadata sidebar — always visible on desktop, tab-controlled on mobile */}
         <aside
-          className="w-72 shrink-0 border-r bg-white px-6 py-8 overflow-y-auto"
+          className={`${mobileTab === "meta" ? "flex" : "hidden"} md:flex w-full md:w-72 shrink-0 border-r bg-white px-6 py-8 overflow-y-auto flex-col`}
           style={{ borderColor: "#e8e8e8" }}
         >
           <MetadataPanel type={type} meta={meta} onChange={setMeta} isNew={isNew} />
         </aside>
 
-        {/* Editor */}
-        <div className="flex-1 flex flex-col min-w-0 bg-white">
+        {/* Editor — always visible on desktop, tab-controlled on mobile */}
+        <div className={`${mobileTab === "write" ? "flex" : "hidden"} md:flex flex-1 flex-col min-w-0 bg-white`}>
           <SnippetBar onInsert={insertSnippet} onUpload={uploadImage} type={type} />
           <textarea
             ref={textareaRef}
@@ -221,7 +241,7 @@ export default function EditorShell() {
             onChange={(e) => setBody(e.target.value)}
             onKeyDown={handleKeyDown}
             spellCheck
-            className="flex-1 w-full bg-transparent outline-none resize-none p-8 text-sm leading-relaxed"
+            className="flex-1 w-full bg-transparent outline-none resize-none p-4 md:p-8 text-sm leading-relaxed"
             style={{
               fontFamily: "'Geist Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace",
               fontSize: "0.82rem",
