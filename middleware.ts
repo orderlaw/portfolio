@@ -1,34 +1,18 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-async function sha256(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text);
-  const buf = await globalThis.crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
+const isProtected = createRouteMatcher([
+  "/admin/dashboard(.*)",
+  "/admin/edit(.*)",
+  "/api/admin/(.*)",
+]);
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  if (pathname === "/admin" || pathname === "/api/admin/login") {
-    return NextResponse.next();
-  }
-
-  const auth = request.cookies.get("admin_auth")?.value;
-  const expected = await sha256(process.env.ADMIN_PASSWORD ?? "");
-
-  if (!auth || auth !== expected) {
-    if (pathname.startsWith("/api/")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    return NextResponse.redirect(new URL("/admin", request.url));
-  }
-
-  return NextResponse.next();
-}
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtected(req)) await auth.protect();
+});
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };

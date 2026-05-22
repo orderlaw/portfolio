@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 
 interface Post {
@@ -18,6 +19,7 @@ interface Work {
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const { signOut } = useClerk();
   const [posts, setPosts] = useState<Post[]>([]);
   const [works, setWorks] = useState<Work[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,11 +34,6 @@ export default function AdminDashboard() {
       })
       .catch(() => setLoading(false));
   }, []);
-
-  async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin");
-  }
 
   return (
     <main className="min-h-screen" style={{ background: "#fff" }}>
@@ -68,7 +65,7 @@ export default function AdminDashboard() {
             + Case Study
           </Link>
           <button
-            onClick={logout}
+            onClick={() => signOut({ redirectUrl: "/admin" })}
             className="shrink-0 text-[9px] uppercase tracking-[0.22em] transition-colors duration-200 hover:text-accent"
             style={{ fontFamily: "var(--font-fauna)", color: "#78746c" }}
           >

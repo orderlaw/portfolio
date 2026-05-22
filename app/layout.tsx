@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GFS_Didot, Fauna_One, Playfair_Display } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 
@@ -68,6 +69,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
+    <ClerkProvider>
     <html lang="en" className={`${gfsDidot.variable} ${faunaOne.variable} ${playfair.variable}`}>
       <body className="antialiased">
         <div className="fixed inset-0 pointer-events-none z-[9999]" aria-hidden>
@@ -82,5 +84,6 @@ export default function RootLayout({
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
