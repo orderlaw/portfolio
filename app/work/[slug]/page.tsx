@@ -17,18 +17,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const { metadata } = await import(`@/content/${slug}.mdx`);
   const url = `https://lawlevisay.com/work/${slug}`;
+  const cleanTitle = (metadata.title as string).replace(/ — Law Levisay$/, "");
   return {
-    title: metadata.title,
+    title: cleanTitle,
     description: metadata.description,
     alternates: { canonical: url },
     openGraph: {
-      title: metadata.title,
+      title: `${cleanTitle} — Law Levisay`,
       description: metadata.description,
       url,
+      type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: metadata.title,
+      title: `${cleanTitle} — Law Levisay`,
       description: metadata.description,
     },
   };

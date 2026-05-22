@@ -400,7 +400,7 @@ export default function Contact() {
           className="text-[9px] uppercase tracking-[0.22em]"
           style={{ fontFamily: "var(--font-fauna)", color: "#706c66" }}
         >
-          © 2025 Law Levisay
+          © {new Date().getFullYear()} Law Levisay
         </p>
         <p
           className="text-[9px] uppercase tracking-[0.22em]"
