@@ -1,6 +1,7 @@
 export const metadata = {
-  title: "The Order That Nobody Confirmed — Law Levisay",
-  description: "How a WhatsApp-based COD confirmation system with four security checks turned ghost orders from a constant drain on inventory and ops into a problem that handles itself.",
+  "title": "The Order That Nobody Confirmed — Law Levisay",
+  "description": "How I built a COD confirmation flow that turned ghost orders from a constant inventory drain into a problem that handles itself — automatically, every day, without anyone watching it.",
+  "image": "/images/work/cod-order-confirmation/order-confirmation.jpg"
 };
 
 Every day, orders were coming in that weren't real.
@@ -29,9 +30,15 @@ Four checks, every single time:
 
 **Right person?** The phone number sending the confirmation has to match the phone number on the order. Someone else can't confirm your order.
 
+![alt text](/images/work/cod-order-confirmation/scrreen-3-case-study-1.png)
+
+![alt text](/images/work/cod-order-confirmation/case-study-1-flow.jpg)
+
 All four pass — order moves to processing, customer gets a confirmation, invoice gets generated. Any one fails — nothing happens and nobody gets through.
 
 At 4pm every day, a scheduled job runs and finds every order whose 3-day window has expired with no response. Cancels them in WooCommerce. Sends the customer a message explaining what happened. Frees up the inventory.
+
+![alt text](/images/work/cod-order-confirmation/visual-case-study-1.jpg)
 
 ---
 
