@@ -53,3 +53,27 @@ export async function putFile(
     throw new Error(`GitHub PUT ${path}: ${res.status} — ${text}`);
   }
 }
+
+export async function putBinaryFile(
+  path: string,
+  base64Content: string,
+  message: string,
+  sha?: string
+): Promise<void> {
+  const body: Record<string, string> = {
+    message,
+    content: base64Content,
+    branch: BRANCH,
+  };
+  if (sha) body.sha = sha;
+
+  const res = await fetch(`${API}/${path}`, {
+    method: "PUT",
+    headers: headers(),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub PUT ${path}: ${res.status} — ${text}`);
+  }
+}

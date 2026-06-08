@@ -1,5 +1,5 @@
 import { readFile } from "@/lib/content-store";
-import { putFile } from "@/lib/github";
+import { putBinaryFile } from "@/lib/github";
 import path from "path";
 import fs from "fs";
 
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     } else {
       const base64 = buffer.toString("base64");
       const existing = await readFile(filePath);
-      await putFile(filePath, base64, `upload image: ${safeName}`, existing?.sha);
+      await putBinaryFile(filePath, base64, `upload image: ${safeName}`, existing?.sha);
     }
 
     const publicUrl = `/${filePath.replace(/^public\//, "")}`;
