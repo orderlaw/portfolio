@@ -14,7 +14,7 @@ export default clerkMiddleware(async (auth, req) => {
 
   const allowedId = process.env.ALLOWED_CLERK_USER_ID;
   if (allowedId && userId !== allowedId) {
-    return NextResponse.redirect(new URL("/admin", req.url));
+    return NextResponse.redirect(new URL("/admin/unauthorized", req.url));
   }
 });
 

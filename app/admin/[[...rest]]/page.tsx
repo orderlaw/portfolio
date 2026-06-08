@@ -7,6 +7,8 @@ export default function AdminLogin() {
       style={{ background: "#fff" }}
     >
       <SignIn
+        fallbackRedirectUrl="/admin/dashboard"
+        signUpFallbackRedirectUrl="/admin/dashboard"
         appearance={{
           variables: {
             colorPrimary: "#7c3aed",
