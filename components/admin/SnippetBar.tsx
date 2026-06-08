@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
   onInsert: (snippet: string, cursorOffset?: number) => void;
@@ -24,13 +24,23 @@ const SNIPPETS = [
 
 export default function SnippetBar({ onInsert, onUpload, type }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = await onUpload(file);
-    onInsert(`![alt text](${url})`, 2);
-    e.target.value = "";
+    setUploading(true);
+    setUploadError("");
+    try {
+      const url = await onUpload(file);
+      onInsert(`![alt text](${url})`, 2);
+    } catch (err) {
+      setUploadError((err as Error).message || "Upload failed");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
   }
 
   return (
@@ -58,7 +68,8 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
       <button
         type="button"
         onClick={() => fileRef.current?.click()}
-        className="shrink-0 text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150"
+        disabled={uploading}
+        className="shrink-0 text-[9px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border transition-colors duration-150 disabled:opacity-50"
         style={{
           fontFamily: "var(--font-fauna)",
           color: "#7c3aed",
@@ -66,9 +77,15 @@ export default function SnippetBar({ onInsert, onUpload, type }: Props) {
           borderColor: "#d4b8ff",
         }}
       >
-        ↑ Image
+        {uploading ? "Uploading…" : "↑ Image"}
       </button>
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+      {uploadError && (
+        <span className="shrink-0 text-[9px]" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
+          {uploadError}
+        </span>
+      )}
 
       <span
         className="ml-auto shrink-0 text-[9px] uppercase tracking-[0.22em]"
