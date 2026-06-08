@@ -14,8 +14,6 @@ This is the story of how I fixed that for a D2C electronics store — and what I
 
 ![alt text](/images/work/the-store-that-ran-itself/master-main-flow.jpg)
 
-![alt text](/images/work/the-store-that-ran-itself/copy-of-logo.png)
-
 ---
 
 ## The Store
@@ -50,6 +48,8 @@ Eleven workflows. One central operations database. Every system talking to every
 
 The first thing I built was the order pipeline.
 
+![alt text](/images/work/the-store-that-ran-itself/grouped-all-workflows.png)
+
 Every time a customer placed an order, a chain of things needed to happen immediately — log it, identify the customer, figure out what kind of order it was, and take the right next step. Before, a person was doing all of that. After, it happened in under 30 seconds without anyone touching it.
 
 New customer? Tagged in WooCommerce automatically, added to the leads sheet. Returning customer? Tagged differently, messaging adjusted. Every order landed in the central Google Sheet the moment it was placed — not when someone got around to entering it.
@@ -62,9 +62,9 @@ Shipping worked the same way. Every status change from Shiprocket — pickup, ou
 
 That's the foundation. Everything connected. Data flowing. No humans in the middle doing jobs software could do.
 
----
+<ImageSlider images={["/images/work/the-store-that-ran-itself/grouped-all-workflows.png", "/images/work/the-store-that-ran-itself/grouped-all-workflows.png"]} />
 
-<FlowDiagram id="order-lifecycle" />
+---
 
 ## Act Two — The Intelligence
 
