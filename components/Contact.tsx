@@ -227,6 +227,27 @@ function UnderlineTextarea({
 }
 
 export default function Contact() {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("sent");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
   return (
     <section
       id="contact"
@@ -258,7 +279,7 @@ export default function Contact() {
 
         {/* Form */}
         <motion.form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
           variants={stagger}
           initial="hidden"
           whileInView="show"
@@ -272,19 +293,25 @@ export default function Contact() {
           <motion.div variants={fadeUp}><UnderlineSelect num="05" label="What have you budgeted for this project?" name="budget" options={BUDGETS} /></motion.div>
           <motion.div variants={fadeUp}><UnderlineTextarea num="06" label="Tell us about your project." name="message" placeholder="Walk me through what you're trying to automate..." /></motion.div>
 
-          <motion.div variants={fadeUp} className="pt-2">
+          <motion.div variants={fadeUp} className="pt-2 flex flex-col gap-3">
             <button
               type="submit"
-              className="group relative inline-block text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer"
+              disabled={status === "sending" || status === "sent"}
+              className="group relative inline-block text-[10px] tracking-[0.2em] uppercase rounded-full overflow-hidden cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ fontFamily: "var(--font-fauna)", padding: "0.65rem 1.75rem", border: "1px solid #eceae4" }}
             >
-              <span className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
-                Send Message
+              <span className="block group-hover:-translate-y-[150%] transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                {status === "sending" ? "Sending…" : status === "sent" ? "Sent ✓" : "Send Message"}
               </span>
-              <span className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
-                Send Message
+              <span className="absolute inset-0 flex items-center justify-center translate-y-[150%] group-hover:translate-y-0 transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "#eceae4" }}>
+                {status === "sending" ? "Sending…" : status === "sent" ? "Sent ✓" : "Send Message"}
               </span>
             </button>
+            {status === "error" && (
+              <p className="text-[10px] tracking-[0.15em]" style={{ fontFamily: "var(--font-fauna)", color: "#ef4444" }}>
+                Something went wrong. Try emailing directly.
+              </p>
+            )}
           </motion.div>
         </motion.form>
 

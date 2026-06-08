@@ -127,7 +127,7 @@ function AboutBody() {
         >
           <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
             <Image
-              src="/me.jpg"
+              src="/me.png"
               alt="Law Levisay"
               fill
               unoptimized

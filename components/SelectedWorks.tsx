@@ -13,8 +13,8 @@ const FEATURED_SLUGS = [
 
 const VISUAL: Record<string, { headerBg: string; textColor: string; rotation: string; zIndex: number }> = {
   "the-store-that-ran-itself":    { headerBg: "#3A3A3A",   textColor: "#fdf5f3", rotation: "-1.8deg", zIndex: 10 },
-  "razorpay-payment-automation":  { headerBg: "#7b5943",   textColor: "#e8f5ef", rotation: "1.2deg",  zIndex: 20 },
-  "cod-order-confirmation":       { headerBg: "#5a5451",   textColor: "#fdf6f0", rotation: "-0.7deg", zIndex: 30 },
+  "razorpay-payment-automation":  { headerBg: "#1e3a38",   textColor: "#eef5f4", rotation: "1.2deg",  zIndex: 20 },
+  "cod-order-confirmation":       { headerBg: "#7a3b2e",   textColor: "#fdf6f0", rotation: "-0.7deg", zIndex: 30 },
 };
 
 const FEATURED = FEATURED_SLUGS.map((slug) => {
