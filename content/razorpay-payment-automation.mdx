@@ -20,17 +20,25 @@ And at the end of the month, reconciliation — hours of cross-checking to make 
 
 The moment Razorpay confirms a payment, the system wakes up.
 
+![alt text](/images/work/razorpay-payment-automation/case-study-3-screen.png)
+
 First thing it does — verify the webhook signature using HMAC-SHA256. Every Razorpay event is cryptographically signed. If the signature doesn't match, the request gets dropped immediately. No exceptions. Fake payment confirmations don't get through.
 
 Then it finds the matching WooCommerce order. This sounds simple but there's a real edge case here — Razorpay sometimes fires the webhook before WooCommerce has fully created the order. A naive system fails here and moves on silently. This one retries. 15 seconds. Then 30. Three attempts before it gives up and alerts the admin. In practice it almost never reaches attempt three.
 
+![alt text](/images/work/razorpay-payment-automation/retry-logic.jpg)
+
 Once the order is matched, fees get calculated automatically — the gateway percentage, the GST on that fee, the actual net amount the store receives. All of it logged to a settlement sheet without anyone touching it.
+
+![alt text](/images/work/razorpay-payment-automation/payment-breakdown.jpg)
 
 The ops sheet gets updated. The customer gets a WhatsApp confirmation. Done, in seconds.
 
 Failed payments work the same way — card declined, bank error, UPI timeout, whatever — the customer gets a WhatsApp message immediately asking them to retry. Most stores do nothing here. That's a recoverable sale just walking out the door.
 
 And every day, a reconciliation job runs in the background. It calls Razorpay's reconciliation API directly, pulls every transaction for that period, and cross-checks against the ops sheet. Anything that's in Razorpay but missing from the sheet gets flagged for review. Nothing falls through the cracks — not even the edge cases the real-time system missed.
+
+![alt text](/images/work/razorpay-payment-automation/razorpay-payment-settlement.jpeg)
 
 ---
 
