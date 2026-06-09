@@ -12,6 +12,8 @@ You didn't do anything wrong. Your tools didn't malfunction. This is just what h
 
 This is called the duplicate identity problem. And it's happening in almost every store running more than two or three tools simultaneously.
 
+![alt text](/images/blog/customer-identity/fragmentation-diagram.jpg)
+
 ---
 
 ## Why This Happens
@@ -54,6 +56,8 @@ The technical approach uses two types of matching:
 
 The output of both approaches is the same: one master profile per customer, connected to every identifier they've ever used, accessible to every tool in your stack.
 
+![alt text](/images/blog/customer-identity/golden-record.jpg)
+
 This is called a **Golden Record** in the industry. One authoritative, unified customer record that everything else reads from.
 
 ---
@@ -63,6 +67,8 @@ This is called a **Golden Record** in the industry. One authoritative, unified c
 Here's the part nobody talks about.
 
 Segment starts at $120/month but gets expensive fast at scale. Salesforce Data Cloud runs six figures annually. Amperity is built for enterprises with millions of customers and teams of data engineers to run it.
+
+![alt text](/images/blog/customer-identity/cost-comparison.jpg)
 
 The implementation alone — just getting the thing connected to your stack — takes months and costs more than most growing D2C brands spend on their entire tech stack in a year.
 
@@ -83,6 +89,8 @@ Here's how I build this for growing D2C stores.
 **The sync layer** pushes the unified profile back to every tool. Your email tool gets updated with the customer's full order history. Your CRM gets the correct lifetime value. Your ad platform gets a clean, deduplicated customer list.
 
 **The result** is that every tool in your stack is working from the same understanding of who your customers are. Win-back campaigns reach real lapsed customers. Discount logic can check actual order history across all identifiers. Metrics reflect reality.
+
+![alt text](/images/blog/customer-identity/solution-architecture.jpg)
 
 ---
 
