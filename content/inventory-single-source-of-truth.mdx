@@ -1,6 +1,7 @@
 export const metadata = {
-  title: "The Inventory Number Was a Lie — Law Levisay",
-  description: "How we replaced a manually-updated, always-drifting WooCommerce stock count with a single source of truth — real-time sync, safety buffers, and hourly reconciliation so the number on the storefront is always right.",
+  "title": "The Inventory Number Was a Lie — Law Levisay",
+  "description": "How I replaced a stock count the team was constantly correcting by hand with a number that was always right — so oversells stopped happening and nobody had to think about inventory again.",
+  "image": "/images/work/inventory-single-source-of-truth/warehouse.jpg"
 };
 
 The stock count said 50 units.
@@ -12,6 +13,8 @@ Nobody had done anything wrong exactly. Stock had moved — a bulk order here, a
 Then a customer ordered something that didn't exist anymore. Got a confirmation. Waited two days. Got an apology.
 
 That's not a logistics problem. That's a trust problem. And trust is hard to rebuild.
+
+![alt text](/images/work/inventory-single-source-of-truth/inventory-drift-problem.jpg)
 
 ---
 
@@ -31,6 +34,8 @@ One system holds the truth. Everything else is downstream of it.
 
 Not "two systems syncing with each other" — that's exactly where drift comes from, two sources of truth fighting each other. One system, one number, everything else reads from it. That's the SSoT — Single Source of Truth.
 
+![alt text](/images/work/inventory-single-source-of-truth/ssot-architecture.jpg)
+
 ---
 
 ## What I Built
@@ -40,6 +45,8 @@ The inventory management system became the source of truth. That's where stock i
 **Fast stock deduction.** Order comes in through WooCommerce. The system pulls the current count from the source of truth, deducts what was sold, pushes the updated number back. WooCommerce always shows the real number, not a number that was accurate three hours ago.
 
 **Safety buffers.** The system doesn't sync the raw count. It syncs actual stock minus a buffer. 10 units in the warehouse — WooCommerce shows 7. That buffer absorbs the tiny timing gap that exists in any real-time system — the window between a purchase and the stock update — and prevents overselling completely. Buffer size is configurable per product category.
+
+![alt text](/images/work/inventory-single-source-of-truth/safety-buffer-explained.jpg)
 
 **Hourly detective sync.** Every hour, a background job compares WooCommerce stock against the source of truth for every single product. If anything is off beyond the allowed tolerance, it gets corrected automatically. This is the safety net for whatever the real-time system missed.
 
