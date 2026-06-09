@@ -1,0 +1,143 @@
+# The Stuck Order Problem: Why Ecommerce Brands Always Find Out Too Late
+
+There's an order sitting in your system right now.
+
+Payment went through. Confirmation email sent. Customer is waiting.
+
+But nothing is happening.
+
+No one on your team knows. No alert fired. No flag raised. The dashboard looks clean.
+
+The first person to find out will be the customer — four days from now, frustrated, writing an angry support email.
+
+This is the stuck order problem. And it's costing ecommerce brands far more than they realise.
+
+---
+
+<!-- IMAGE 1: A split screen showing a happy customer on one side waiting for a package, and a chaotic ecommerce dashboard on the other with orders stuck in "processing" — convey the disconnect between what the customer expects and what's actually happening behind the scenes -->
+
+---
+
+## Why Orders Get Stuck
+
+Orders don't get stuck because someone made a mistake. They get stuck because of the gaps between systems.
+
+Here's exactly how it happens:
+
+**Webhook failure.** Your payment gateway captures the payment and fires a webhook to update the order status. The webhook times out. Payment is in the bank. Order is still sitting at "pending."
+
+**Race condition.** The payment confirmation arrives before the order is fully created in your system. The lookup fails. Nobody retried it. Order stays unprocessed.
+
+**Fulfilment gap.** The order confirmation triggers a fulfilment task. The connection between your store and your warehouse system drops for 30 seconds. Task never created. Order never fulfilled.
+
+**Status mismatch.** WooCommerce says the order is "processing." Your ERP says it doesn't exist yet. Your team is looking at two different systems and neither is flagging the problem.
+
+Each one looks like a one-off. Something that rarely happens.
+
+But at 100 orders a day, even a 2% exception rate means 2 orders stuck in limbo every single day. With real customers on the other end waiting.
+
+---
+
+<!-- IMAGE 2: A simple flow diagram showing a normal order lifecycle (placed → payment → processing → fulfilled → delivered) with a red "stuck" marker at the processing stage, and a small ghost icon showing the order is invisible to the team -->
+
+---
+
+## The Real Cost Nobody Calculates
+
+Most brands think of stuck orders as a support problem. Customer emails. Team fixes it. Done.
+
+That's the wrong way to look at it.
+
+Here's what a stuck order actually costs:
+
+**The customer experience hit.** A customer who ordered and heard nothing for 4 days doesn't know there was a technical issue. They just know your brand went silent after taking their money. That feeling doesn't go away when you fix it.
+
+**The support cost.** Someone on your team has to stop what they're doing, investigate the order, figure out what broke, fix it manually, and respond to the customer. At scale, this adds up fast.
+
+**The review risk.** Some customers don't email first. They leave a review. A 1-star review about "never received my order" is out in public before your team even knew there was a problem.
+
+**The repeat purchase impact.** A customer who had a bad first experience doesn't come back. That's not just one lost order. That's every future order from that customer — gone.
+
+Only 6% of companies have full operational visibility into their order flow. The other 94% find out about problems the same way: from customers who are already frustrated.
+
+---
+
+<!-- IMAGE 3: A visual showing the "cost iceberg" — the visible tip is "one stuck order" and the hidden mass underneath shows: customer trust lost, support hours wasted, repeat purchase gone, potential bad review — make it feel like a real business impact not just a small technical issue -->
+
+---
+
+## Why Checking Dashboards Doesn't Work
+
+The natural response is to check more often. Open Shopify every hour. Review the order list manually. Have someone on the team scan for anything that looks off.
+
+This doesn't work. For three reasons.
+
+**It's reactive.** By the time you open the dashboard and see a problem, it's already been sitting there for hours.
+
+**It's inconsistent.** People forget. Weekends happen. Peak sale periods hit and the team is too busy to do manual checks.
+
+**It doesn't scale.** At 50 orders a day, manual review is painful. At 500 orders a day, it's impossible.
+
+The only system that works is one that watches everything automatically and tells you the moment something breaks — not after you think to look.
+
+---
+
+<!-- IMAGE 4: Side by side comparison — Left: "Manual monitoring" showing a stressed person checking multiple dashboards every hour, clock showing time passing, order stuck for 4 hours before found. Right: "Automated exception handling" showing a phone receiving an instant alert, clock showing 3 minutes to detection, same stuck order caught immediately -->
+
+---
+
+## What Automated Exception Handling Actually Looks Like
+
+The fix isn't a better dashboard. It's a layer of logic that runs in the background and monitors for anything that falls outside normal.
+
+Here's what that looks like in practice:
+
+**Order stuck in processing for more than 2 hours** — alert fires to the ops team with the order ID, customer details, and last known status.
+
+**Payment captured but order status not updated after 30 minutes** — alert fires with the transaction ID and payment amount so the team can manually reconcile.
+
+**Fulfilment not triggered within 1 hour of order confirmation** — alert fires before the customer has any reason to worry.
+
+**Webhook delivery confirmed failed** — immediate retry triggered automatically. If retry fails three times — alert fires.
+
+None of these require someone to be watching. The system watches. The team gets notified only when something actually needs human attention.
+
+The result: exception resolution time drops from hours to minutes. Support tickets about stuck orders drop significantly. And customers never experience the silence that damages trust.
+
+---
+
+<!-- IMAGE 5: A clean diagram showing the exception handling system — n8n workflow in the center, arrows coming in from WooCommerce, payment gateway, and fulfilment system, and an arrow going out to a Telegram/Slack alert with a sample message: "⚠️ Order #4521 — stuck in processing for 2hrs. Payment captured ✓. Fulfilment not triggered." — make it look like a real operational system not a generic flowchart -->
+
+---
+
+## The Broader Pattern
+
+Stuck orders are one symptom of a larger problem.
+
+Most ecommerce operations are built tool by tool, integration by integration, until the whole thing holds together — most of the time. The gaps between tools are where things fall through. And because those gaps aren't visible, nobody builds a safety net for them.
+
+The brands that scale without operational chaos aren't using better tools. They're using the same tools with a custom logic layer on top that handles everything the tools themselves can't.
+
+That layer monitors, retries, alerts, and catches. It knows what normal looks like and tells you when something isn't.
+
+That's not a feature you turn on. It's infrastructure you build.
+
+---
+
+## What To Do Right Now
+
+If you're running more than 50 orders a day and you don't have automated exception handling — here's a starting point.
+
+**Audit your current gaps.** Look at your last 30 days of orders. Find any that were delayed, manually fixed, or flagged by a customer. These are your failure points.
+
+**Define what "stuck" looks like for your business.** For most brands: any order in "processing" for more than 2 hours without a fulfilment trigger is an exception worth flagging.
+
+**Build the alert before the fix.** You don't need to automate the resolution immediately. Start by just getting notified when something goes wrong. Awareness is the first step.
+
+**Work backwards from your support tickets.** If you're getting "where is my order" tickets, trace them back. Most have a stuck order somewhere in the chain.
+
+The goal isn't zero exceptions. Exceptions will always happen. The goal is finding out about them before your customers do.
+
+---
+
+*I build custom automation infrastructure for ecommerce businesses — order operations, payment processing, exception handling, and everything in between. If your ops team is spending time on problems that a system should be catching automatically, [let's talk](https://lawlevisay.com).*
