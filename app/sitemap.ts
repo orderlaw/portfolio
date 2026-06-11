@@ -1,10 +1,23 @@
 import type { MetadataRoute } from "next";
-import { posts } from "@/content/blog/manifest";
-import { works } from "@/content/work/manifest";
+import { readFile } from "@/lib/content-store";
 
 const BASE = "https://lawlevisay.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [postsFile, worksFile] = await Promise.all([
+    readFile("content/blog/posts.json"),
+    readFile("content/work/works.json"),
+  ]);
+
+  const posts: { slug: string }[] = postsFile
+    ? JSON.parse(postsFile.content)
+    : [];
+  const works: { slug: string }[] = worksFile
+    ? JSON.parse(worksFile.content)
+    : [];
+
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, priority: 1.0, changeFrequency: "monthly" },
     { url: `${BASE}/work`, priority: 0.9, changeFrequency: "monthly" },

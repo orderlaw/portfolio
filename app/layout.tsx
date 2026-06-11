@@ -29,7 +29,7 @@ const playfair = Playfair_Display({
 const SITE_URL = "https://lawlevisay.com";
 const OG_TITLE = "Law Levisay — E-commerce Automation & Systems";
 const OG_DESCRIPTION =
-  "I build systems that make e-commerce operations run themselves.";
+  "Law Levisay builds systems that make e-commerce operations run themselves.";
 const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 export const metadata: Metadata = {
