@@ -48,8 +48,6 @@ function BlurReveal({
   );
 }
 
-// Bio
-
 const BIO =
   "I work with founders and ops teams who are tired of doing the same shit twice. I find the money being lost, the time being wasted, the opportunities slipping through, and build the automation and AI systems that stop all of it.";
 
