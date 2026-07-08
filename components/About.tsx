@@ -5,9 +5,9 @@ import { useRef, useEffect } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
 function AnimLabel({ children }: { children: string }) {
-  const ref    = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLParagraphElement>(null);
   const reduced = useReducedMotion();
-  const inView  = useInView(ref, { once: true, margin: "-5%" });
+  const inView = useInView(ref, { once: true, margin: "-5%" });
   return (
     <motion.p
       ref={ref}
@@ -31,9 +31,9 @@ function BlurReveal({
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const ref    = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
-  const inView  = useInView(ref, { once: true, margin: "-10%" });
+  const inView = useInView(ref, { once: true, margin: "-10%" });
   return (
     <motion.div
       ref={ref}
@@ -48,14 +48,16 @@ function BlurReveal({
   );
 }
 
+// Bio
+
 const BIO =
   "I work with founders and ops teams who are tired of doing the same shit twice. I find the money being lost, the time being wasted, the opportunities slipping through, and build the automation and AI systems that stop all of it.";
 
 function AboutBody() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const imgRef     = useRef<HTMLDivElement>(null);
-  const textRef    = useRef<HTMLParagraphElement>(null);
-  const reduced    = useReducedMotion();
+  const imgRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (reduced) return;
@@ -64,7 +66,7 @@ function AboutBody() {
     let ctx: any;
 
     const init = async () => {
-      const gsap              = (await import("gsap")).default;
+      const gsap = (await import("gsap")).default;
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
 
@@ -78,9 +80,9 @@ function AboutBody() {
               duration: 0.35,
               ease: "power4.out",
               scrollTrigger: {
-                trigger:             imgRef.current,
-                start:               "top 88%",
-                toggleActions:       "play none none none",
+                trigger: imgRef.current,
+                start: "top 88%",
+                toggleActions: "play none none none",
                 invalidateOnRefresh: true,
               },
             }
@@ -93,14 +95,14 @@ function AboutBody() {
             letters,
             { opacity: 0.08 },
             {
-              opacity:   1,
-              stagger:   0.01,
-              ease:      "none",
+              opacity: 1,
+              stagger: 0.01,
+              ease: "none",
               scrollTrigger: {
-                trigger:             sectionRef.current,
-                start:               "top bottom",
-                end:                 "center center",
-                scrub:               1,
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "center center",
+                scrub: 1,
                 invalidateOnRefresh: true,
               },
             }
@@ -190,9 +192,9 @@ function AboutBody() {
 }
 
 export default function About() {
-  const reduced    = useReducedMotion();
+  const reduced = useReducedMotion();
   const headingRef = useRef<HTMLDivElement>(null);
-  const headingIn  = useInView(headingRef, { once: true, margin: "-5%" });
+  const headingIn = useInView(headingRef, { once: true, margin: "-5%" });
 
   const didot = { fontFamily: "var(--font-didot)" };
 
