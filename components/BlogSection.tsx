@@ -25,8 +25,8 @@ export default function BlogSection() {
       {/* Heading */}
       <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14" style={{ borderBottom: "1px solid var(--border)" }}>
         <p
-          className="text-[9px] uppercase tracking-[0.28em] mb-4"
-          style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
+          className="text-[11px] uppercase tracking-[0.16em] mb-4"
+          style={{ fontFamily: "var(--font-fauna)", color: "var(--ink)", opacity: 0.6 }}
         >
           Writing
         </p>

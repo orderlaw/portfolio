@@ -257,8 +257,8 @@ export default function Contact() {
       <div className="px-6 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14 border-b border-[#4e4a44] flex items-end justify-between gap-6">
         <div>
           <p
-            className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-4"
-            style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+            className="text-[11px] uppercase tracking-[0.16em] mb-4"
+            style={{ fontFamily: "var(--font-fauna)", color: "#eceae4", opacity: 0.6 }}
           >
             Contact
           </p>
@@ -325,8 +325,8 @@ export default function Contact() {
         >
           <motion.div variants={fadeUp} className="flex flex-col gap-2">
             <p
-              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
-              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+              className="text-[11px] uppercase tracking-[0.16em] mb-3"
+              style={{ fontFamily: "var(--font-fauna)", color: "#eceae4", opacity: 0.6 }}
             >
               Email
             </p>
@@ -341,8 +341,8 @@ export default function Contact() {
 
           <motion.div variants={fadeUp} className="flex flex-col gap-2">
             <p
-              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em] mb-3"
-              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+              className="text-[11px] uppercase tracking-[0.16em] mb-3"
+              style={{ fontFamily: "var(--font-fauna)", color: "#eceae4", opacity: 0.6 }}
             >
               Availability
             </p>
@@ -376,8 +376,8 @@ export default function Contact() {
 
           <motion.div variants={fadeUp} className="flex flex-col gap-3">
             <p
-              className="text-[11px] md:text-[9px] uppercase tracking-[0.28em]"
-              style={{ fontFamily: "var(--font-fauna)", color: "#a8a49e" }}
+              className="text-[11px] uppercase tracking-[0.16em]"
+              style={{ fontFamily: "var(--font-fauna)", color: "#eceae4", opacity: 0.6 }}
             >
               Connect
             </p>

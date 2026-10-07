@@ -49,7 +49,7 @@ function BlurReveal({
 }
 
 const BIO =
-  "I work with founders and ops teams who are tired of doing the same shit twice. I find the money being lost, the time being wasted, the opportunities slipping through, and build the automation and AI systems that stop all of it.";
+  "I work with founders and ops teams who are tired of doing the same shit twice. I find the money being lost, the time being wasted, the opportunities slipping through, and build the systems that stop it.";
 
 function AboutBody() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -122,10 +122,10 @@ function AboutBody() {
         {/* Left — image + caption */}
         <div
           ref={imgRef}
-          className="shrink-0 w-full max-w-[220px] md:w-52"
+          className="shrink-0 w-full max-w-[260px] md:w-64"
           style={{ filter: reduced ? "none" : "blur(22px)" }}
         >
-          <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
+          <div className="relative overflow-hidden" style={{ aspectRatio: "3/4", border: "1px solid var(--border-md)" }}>
             <Image
               src="/me.png"
               alt="Law Levisay"
@@ -133,22 +133,22 @@ function AboutBody() {
               unoptimized
               className="object-cover object-top"
               priority
-              sizes="(max-width: 768px) 220px, 208px"
+              sizes="(max-width: 768px) 260px, 256px"
             />
           </div>
           <p
-            className="mt-4 text-[9px] tracking-[0.28em] uppercase"
-            style={{ fontFamily: "var(--font-fauna)", color: "var(--muted)" }}
+            className="mt-4 text-[11px] tracking-[0.16em] uppercase"
+            style={{ fontFamily: "var(--font-fauna)", color: "var(--ink)", opacity: 0.6 }}
           >
             Remote · Since 2022
           </p>
         </div>
 
         {/* Right — bio text + LinkedIn */}
-        <div className="flex-1 flex flex-col justify-between gap-10">
+        <div className="flex-1 flex flex-col justify-between gap-10 md:min-h-[341px]">
           <p
             ref={textRef}
-            className="text-[clamp(1.35rem,2.8vw,2.6rem)] leading-[1.35] tracking-tight"
+            className="text-[clamp(1.95rem,3.1vw,2.9rem)] leading-[1.5] md:leading-[1.3] tracking-normal md:tracking-tight"
             style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", color: "var(--ink)", overflowWrap: "break-word" }}
           >
             {BIO.split(" ").map((word, wi) => (
@@ -171,8 +171,8 @@ function AboutBody() {
               href="https://linkedin.com/in/lawlevisay"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-block text-[10px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
-              style={{ fontFamily: "var(--font-fauna)", padding: "0.5rem 1.75rem", border: "1px solid var(--ink)" }}
+              className="group relative inline-block text-[11px] tracking-[0.18em] uppercase rounded-full overflow-hidden cursor-pointer"
+              style={{ fontFamily: "var(--font-fauna)", padding: "0.75rem 2.25rem", border: "1px solid var(--ink)" }}
             >
               <span className="block group-hover:-translate-y-[150%] transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ color: "var(--ink)" }}>
                 Connect on LinkedIn
