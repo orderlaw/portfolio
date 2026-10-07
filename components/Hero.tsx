@@ -8,8 +8,7 @@ export default function Hero() {
 
   return (
     <section
-      className="bg-white flex flex-col pt-14 relative overflow-hidden"
-      style={{ minHeight: "100dvh" }}
+      className="bg-white flex flex-col pt-14 md:min-h-[100dvh] relative overflow-hidden"
     >
       {/* Oversized ghost monogram — fills the dead space without a stock asset */}
       <div
@@ -26,7 +25,7 @@ export default function Hero() {
         LL
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-16">
+      <div className="relative z-10 flex-1 flex flex-col justify-start md:justify-center pt-16 md:pt-0 pb-20 md:pb-0 px-6 md:px-16">
 
         {/* Signature line */}
         <motion.p
