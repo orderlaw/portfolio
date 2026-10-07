@@ -20,7 +20,7 @@ export default function HeadingReveal({ lines }: { lines: Line[] }) {
       {lines.map(({ text, color, italic, delay }) => (
         <div key={text} className="overflow-hidden leading-[0.95]">
           <motion.div
-            className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase"
+            className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight"
             style={{
               fontFamily: "var(--font-didot)",
               color,

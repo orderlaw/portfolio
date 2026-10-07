@@ -203,7 +203,7 @@ export default function About() {
         <div ref={headingRef} className="mt-4">
           <div className="overflow-hidden leading-[0.95]">
             <motion.div
-              className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight uppercase"
+              className="text-[clamp(3rem,6.5vw,5.5rem)] tracking-tight"
               style={{ ...didot, color: "var(--ink)" }}
               initial={{ y: reduced ? "0%" : "108%" }}
               animate={headingIn ? { y: "0%" } : {}}
@@ -220,8 +220,8 @@ export default function About() {
               animate={headingIn ? { y: "0%" } : {}}
               transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span style={{ color: "var(--ink)", textTransform: "uppercase" }}>are </span>
-              <span style={{ color: "#7c3aed", fontStyle: "italic", textTransform: "uppercase" }}>hiring.</span>
+              <span style={{ color: "var(--ink)" }}>are </span>
+              <span style={{ color: "#7c3aed", fontStyle: "italic" }}>hiring.</span>
             </motion.div>
           </div>
         </div>
