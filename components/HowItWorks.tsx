@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import HeadingReveal from "./HeadingReveal";
+import Threads from "./Threads";
 
 const STEPS = [
   {
     number: "01",
     title: "Consult",
-    desc: "You walk me through how your business operates — what's working, what isn't, and where your team is losing time to repetitive work. No prep needed. Just an honest conversation.",
+    desc: "You walk me through how your business operates, what's working, what isn't, and where your team is losing time to repetitive work. No prep needed. Just an honest conversation.",
   },
   {
     number: "02",
@@ -18,7 +19,7 @@ const STEPS = [
   {
     number: "03",
     title: "Execute",
-    desc: "I handle the entire build. When it's ready, we test it with your actual data — real orders, real scenarios — before anything goes live. Nothing ships without your sign-off.",
+    desc: "I handle the entire build. When it's ready, we test it with your actual data (real orders, real scenarios) before anything goes live. Nothing ships without your sign-off.",
   },
   {
     number: "04",
@@ -27,32 +28,33 @@ const STEPS = [
   },
 ];
 
+// One visual personality per step: calm/sparse -> dense/structured -> fast/turbulent -> resolved/calm
+const THREAD_VISUALS = [
+  { amplitude: 1, distance: 0.2, angle: -36, lineWidth: 4, lineBlur: 4 },
+  { amplitude: 1.2, distance: 0.3, angle: -12, lineWidth: 6, lineBlur: 8 },
+  { amplitude: 1.5, distance: 0.45, angle: 12, lineWidth: 10, lineBlur: 16 },
+  { amplitude: 0.8, distance: 0.15, angle: 36, lineWidth: 5, lineBlur: 6 },
+];
+
 const NAV_H = 56;
 
 export default function HowItWorks() {
   const [active, setActive] = useState(0);
+  const [hovered, setHovered] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const onScroll = () => {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const scrolledIn = -(rect.top - NAV_H);
-      const scrollable = el.offsetHeight - (window.innerHeight - NAV_H);
-      if (scrollable <= 0) return;
-      const p = Math.max(0, Math.min(1, scrolledIn / scrollable));
-      const currentStep = Math.min(Math.floor(p * STEPS.length), STEPS.length - 1);
-      const sp = Math.max(0, Math.min(1, p * STEPS.length - currentStep));
-      setActive(currentStep);
-      if (barRef.current) barRef.current.style.width = `${sp * 100}%`;
-    };
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useMotionValueEvent(scrollYProgress, "change", (p) => {
+    const currentStep = Math.min(Math.max(Math.floor(p * STEPS.length), 0), STEPS.length - 1);
+    const sp = Math.max(0, Math.min(1, p * STEPS.length - currentStep));
+    setActive(currentStep);
+    if (barRef.current) barRef.current.style.width = `${sp * 100}%`;
+  });
 
   const scrollToStep = (i: number) => {
     const el = containerRef.current;
@@ -152,26 +154,33 @@ export default function HowItWorks() {
         >
           {/* Left — steps */}
           <div
-            className="flex flex-col justify-between md:w-[45%] pt-10 pb-24"
+            className="flex flex-col justify-center md:w-[45%] gap-[6%] pt-10 pb-24"
             style={{ height: "100%" }}
           >
             {STEPS.map((step, i) => {
               const isActive = i === active;
+              const isHover = hovered === i && !isActive;
               return (
                 <div
                   key={step.number}
                   className="cursor-pointer select-none"
                   onClick={() => scrollToStep(i)}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{
+                    transform: isHover ? "translateX(6px)" : "translateX(0)",
+                    transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1)",
+                  }}
                 >
                   <span
                     style={{
                       fontFamily: "var(--font-fauna)",
-                      fontSize: "0.6rem",
-                      letterSpacing: "0.22em",
+                      fontSize: "0.7rem",
+                      letterSpacing: "0.14em",
                       display: "block",
                       marginBottom: "0.25rem",
-                      color: isActive ? "var(--ink)" : "var(--faint)",
-                      transition: "color 0.5s ease",
+                      color: isActive || isHover ? "var(--ink)" : "var(--muted)",
+                      transition: "color 0.3s ease",
                     }}
                   >
                     {step.number}
@@ -183,8 +192,8 @@ export default function HowItWorks() {
                         fontFamily: "var(--font-didot)",
                         fontSize: "clamp(3rem, 6.5vw, 5.5rem)",
                         color: "#7c3aed",
-                        opacity: isActive ? 1 : 0,
-                        transform: isActive ? "translateX(0)" : "translateX(-8px)",
+                        opacity: isActive ? 1 : isHover ? 0.45 : 0,
+                        transform: isActive || isHover ? "translateX(0)" : "translateX(-8px)",
                         transition: "opacity 0.3s ease, transform 0.3s ease",
                         marginRight: "0.5rem",
                         lineHeight: 1,
@@ -203,9 +212,8 @@ export default function HowItWorks() {
                         letterSpacing: "-0.02em",
                         textTransform: "uppercase",
                         fontStyle: "italic",
-                        color: isActive ? "var(--ink)" : "var(--muted)",
-                        opacity: isActive ? 1 : 0.5,
-                        transition: "color 0.5s ease, opacity 0.5s ease",
+                        color: isActive || isHover ? "var(--ink)" : "var(--muted)",
+                        transition: "color 0.3s ease",
                       }}
                     >
                       {step.title}
@@ -219,11 +227,11 @@ export default function HowItWorks() {
           {/* Bottom ticker */}
           <div className="hidden md:block absolute bottom-0 left-6 md:left-16 right-6 md:right-16 pb-12">
             <div className="flex items-center justify-between mb-2">
-              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#7c3aed" }}>
+              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.7rem", letterSpacing: "0.14em", color: "#7c3aed" }}>
                 {STEPS[active].number}
               </span>
-              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "var(--faint)" }}>
-                {active < STEPS.length - 1 ? STEPS[active + 1].number : "—"}
+              <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.7rem", letterSpacing: "0.14em", color: "var(--muted)" }}>
+                {active < STEPS.length - 1 ? STEPS[active + 1].number : "Done"}
               </span>
             </div>
             <div className="relative w-full overflow-hidden" style={{ height: "1px", background: "var(--border)" }}>
@@ -237,55 +245,53 @@ export default function HowItWorks() {
 
           {/* Right — background number + description */}
           <div
-            className="hidden md:flex md:w-[55%] flex-col justify-end pt-10 pb-24 relative"
+            className="hidden md:flex md:w-[55%] flex-col pt-10 pb-24 relative"
             style={{ height: "100%" }}
           >
             <div
-              className="absolute inset-0 flex items-center justify-start pointer-events-none"
-              style={{ paddingBottom: "6rem" }}
+              className="flex-1 min-h-0 relative pointer-events-none overflow-hidden"
+              style={{ marginRight: "-4rem" }}
             >
-              <motion.span
-                key={active}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.15 }}
-                style={{
-                  fontFamily: "var(--font-didot)",
-                  fontSize: "clamp(12rem, 26vw, 22rem)",
-                  color: "transparent",
-                  WebkitTextStroke: "1px var(--border)",
-                  lineHeight: 1,
-                  userSelect: "none",
-                  letterSpacing: "-0.04em",
-                }}
-              >
-                {STEPS[active].number}
-              </motion.span>
+              <Threads
+                color={[0.47, 0.44, 0.4]}
+                amplitude={THREAD_VISUALS[active].amplitude}
+                distance={THREAD_VISUALS[active].distance}
+                angle={THREAD_VISUALS[active].angle}
+                converge={0.25}
+                opacity={0.5}
+                lineWidth={THREAD_VISUALS[active].lineWidth}
+                lineBlur={THREAD_VISUALS[active].lineBlur}
+                enableMouseInteraction={false}
+              />
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="relative z-10"
-                style={{ maxWidth: "420px", marginLeft: "auto" }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.6rem", letterSpacing: "0.22em", color: "#7c3aed" }}>
-                    {STEPS[active].number}
-                  </span>
-                  <span style={{ fontFamily: "var(--font-didot)", fontSize: "0.85rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink)" }}>
-                    {STEPS[active].title}
-                  </span>
-                </div>
-                <p style={{ fontFamily: "var(--font-fauna)", fontSize: "1.05rem", lineHeight: 1.75, color: "var(--ink)" }}>
-                  {STEPS[active].desc}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+            <div
+              className="shrink-0 pt-8 flex flex-col justify-center"
+              style={{ maxWidth: "520px", marginLeft: "auto", minHeight: "17rem" }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="relative z-10"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <span style={{ fontFamily: "var(--font-fauna)", fontSize: "0.7rem", letterSpacing: "0.14em", color: "#7c3aed" }}>
+                      {STEPS[active].number}
+                    </span>
+                    <span style={{ fontFamily: "var(--font-didot)", fontSize: "1rem", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink)" }}>
+                      {STEPS[active].title}
+                    </span>
+                  </div>
+                  <p style={{ fontFamily: "var(--font-fauna)", fontSize: "1.3rem", lineHeight: 1.7, color: "var(--ink)" }}>
+                    {STEPS[active].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
