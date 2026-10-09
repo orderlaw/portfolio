@@ -30,16 +30,19 @@ const STEPS = [
 
 // One visual personality per step: calm/sparse -> dense/structured -> fast/turbulent -> resolved/calm
 const THREAD_VISUALS = [
-  { amplitude: 1, distance: 0.2, angle: -36, lineWidth: 4, lineBlur: 4 },
-  { amplitude: 1.2, distance: 0.3, angle: -12, lineWidth: 6, lineBlur: 8 },
-  { amplitude: 1.5, distance: 0.45, angle: 12, lineWidth: 10, lineBlur: 16 },
-  { amplitude: 0.8, distance: 0.15, angle: 36, lineWidth: 5, lineBlur: 6 },
+  { amplitude: 1, distance: 0.32, angle: -36, lineWidth: 4, lineBlur: 4 },
+  { amplitude: 1.2, distance: 0.45, angle: -12, lineWidth: 6, lineBlur: 8 },
+  { amplitude: 1.5, distance: 0.62, angle: 12, lineWidth: 10, lineBlur: 16 },
+  { amplitude: 0.8, distance: 0.25, angle: 36, lineWidth: 5, lineBlur: 6 },
 ];
 
 const NAV_H = 56;
 
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
 export default function HowItWorks() {
   const [active, setActive] = useState(0);
+  const [subProgress, setSubProgress] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -53,8 +56,19 @@ export default function HowItWorks() {
     const currentStep = Math.min(Math.max(Math.floor(p * STEPS.length), 0), STEPS.length - 1);
     const sp = Math.max(0, Math.min(1, p * STEPS.length - currentStep));
     setActive(currentStep);
+    setSubProgress(sp);
     if (barRef.current) barRef.current.style.width = `${sp * 100}%`;
   });
+
+  const nextVisual = THREAD_VISUALS[Math.min(active + 1, THREAD_VISUALS.length - 1)];
+  const currentVisual = THREAD_VISUALS[active];
+  const threadVisual = {
+    amplitude: lerp(currentVisual.amplitude, nextVisual.amplitude, subProgress),
+    distance: lerp(currentVisual.distance, nextVisual.distance, subProgress),
+    angle: lerp(currentVisual.angle, nextVisual.angle, subProgress),
+    lineWidth: lerp(currentVisual.lineWidth, nextVisual.lineWidth, subProgress),
+    lineBlur: lerp(currentVisual.lineBlur, nextVisual.lineBlur, subProgress),
+  };
 
   const scrollToStep = (i: number) => {
     const el = containerRef.current;
@@ -254,13 +268,13 @@ export default function HowItWorks() {
             >
               <Threads
                 color={[0.47, 0.44, 0.4]}
-                amplitude={THREAD_VISUALS[active].amplitude}
-                distance={THREAD_VISUALS[active].distance}
-                angle={THREAD_VISUALS[active].angle}
+                amplitude={threadVisual.amplitude}
+                distance={threadVisual.distance}
+                angle={threadVisual.angle}
                 converge={0.25}
                 opacity={0.5}
-                lineWidth={THREAD_VISUALS[active].lineWidth}
-                lineBlur={THREAD_VISUALS[active].lineBlur}
+                lineWidth={threadVisual.lineWidth}
+                lineBlur={threadVisual.lineBlur}
                 enableMouseInteraction={false}
               />
             </div>
